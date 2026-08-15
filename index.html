@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WW Casino</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
       background: #0d0d0d;
       font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
@@ -30,17 +34,23 @@
       z-index: 100;
       pointer-events: none;
     }
-    .global-header * { pointer-events: auto; }
+    .global-header * {
+      pointer-events: auto;
+    }
     .global-header h1 {
       font-weight: 700;
       letter-spacing: 2px;
       font-size: 18px;
       color: #ffffff;
-      text-shadow: 0 0 20px #cc000066, 0 2px 10px rgba(0,0,0,0.8);
+      text-shadow: 0 0 20px #cc000066, 0 2px 10px rgba(0, 0, 0, 0.8);
     }
-    .global-header .header-right { display: flex; align-items: center; gap: 8px; }
+    .global-header .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
     .global-header .btn-deposit-header {
-      background: rgba(179,0,0,0.85);
+      background: rgba(179, 0, 0, 0.85);
       border: 1px solid #ff3333;
       backdrop-filter: blur(8px);
       border-radius: 40px;
@@ -50,11 +60,14 @@
       font-size: 12px;
       cursor: pointer;
       transition: 0.15s;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
-    .global-header .btn-deposit-header:hover { background: rgba(212,0,0,0.95); transform: scale(0.97); }
+    .global-header .btn-deposit-header:hover {
+      background: rgba(212, 0, 0, 0.95);
+      transform: scale(0.97);
+    }
     .global-header .header-balance {
-      background: rgba(17,17,17,0.85);
+      background: rgba(17, 17, 17, 0.85);
       border: 1px solid #3a1a1a;
       backdrop-filter: blur(8px);
       border-radius: 40px;
@@ -65,12 +78,17 @@
       cursor: pointer;
       transition: 0.15s;
       user-select: none;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
-    .global-header .header-balance:hover { border-color: #cc3333; background: rgba(26,26,26,0.9); }
-    .global-header .header-balance.rub-mode { color: #ffb3b3; }
+    .global-header .header-balance:hover {
+      border-color: #cc3333;
+      background: rgba(26, 26, 26, 0.9);
+    }
+    .global-header .header-balance.rub-mode {
+      color: #ffb3b3;
+    }
     .global-header .btn-profile {
-      background: rgba(42,42,58,0.85);
+      background: rgba(42, 42, 58, 0.85);
       border: 1px solid #4a4a5a;
       backdrop-filter: blur(8px);
       border-radius: 40px;
@@ -83,9 +101,32 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
-    .global-header .btn-profile:hover { background: rgba(58,58,74,0.9); border-color: #6a6a8a; }
+    .global-header .btn-profile:hover {
+      background: rgba(58, 58, 74, 0.9);
+      border-color: #6a6a8a;
+    }
+    .global-header .header-leaderboard-btn {
+      background: rgba(17, 17, 17, 0.85);
+      border: 1px solid #3a1a1a;
+      backdrop-filter: blur(8px);
+      border-radius: 40px;
+      padding: 4px 12px;
+      color: #ffd700;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: 0.15s;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .global-header .header-leaderboard-btn:hover {
+      border-color: #ffd700;
+      background: rgba(26, 26, 26, 0.9);
+    }
     .casino-card {
       max-width: 100%;
       width: 100%;
@@ -93,7 +134,7 @@
       border-radius: 24px;
       padding: 16px 16px 20px;
       margin-top: 60px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px #b30000 inset, 0 0 0 2px #2a2a2a inset;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px #b30000 inset, 0 0 0 2px #2a2a2a inset;
       border: 2px solid #cc0000;
       color: #f0f0f0;
     }
@@ -124,14 +165,48 @@
     .game-menu .game-card:hover {
       border-color: #cc3333;
       transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(204,0,0,0.15);
+      box-shadow: 0 8px 30px rgba(204, 0, 0, 0.15);
     }
-    .game-menu .game-card .game-icon { font-size: 32px; margin-bottom: 6px; }
-    .game-menu .game-card .game-name { font-size: 14px; font-weight: 600; color: #f0f0f0; }
-    .game-menu .game-card .game-desc { font-size: 11px; color: #665555; margin-top: 2px; }
-    .game-content { display: none; animation: fadeSlideIn 0.4s ease; }
-    .game-content.active { display: block; }
-    @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .game-menu .game-card .game-icon {
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+    .game-menu .game-card .game-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f0f0f0;
+    }
+    .game-menu .game-card .game-desc {
+      font-size: 11px;
+      color: #665555;
+      margin-top: 2px;
+    }
+    .game-card.coming {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .game-card.coming:hover {
+      transform: none;
+      border-color: #2a2a2a;
+      box-shadow: none;
+    }
+    .game-content {
+      display: none;
+      animation: fadeSlideIn 0.4s ease;
+    }
+    .game-content.active {
+      display: block;
+    }
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
     .game-content .game-back {
       background: none;
       border: none;
@@ -145,7 +220,9 @@
       gap: 6px;
       transition: color 0.2s;
     }
-    .game-content .game-back:hover { color: #ffcccc; }
+    .game-content .game-back:hover {
+      color: #ffcccc;
+    }
     .game-content .game-header {
       display: flex;
       justify-content: space-between;
@@ -154,9 +231,21 @@
       flex-wrap: wrap;
       gap: 6px;
     }
-    .game-content .game-header h2 { color: #ffcccc; font-size: 16px; font-weight: 600; }
-    .game-content .game-header .game-bet { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .game-content .game-header .game-bet label { color: #aa8888; font-size: 12px; }
+    .game-content .game-header h2 {
+      color: #ffcccc;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .game-content .game-header .game-bet {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .game-content .game-header .game-bet label {
+      color: #aa8888;
+      font-size: 12px;
+    }
     .game-content .game-header .game-bet input {
       background: #1a1a1a;
       border: 1px solid #3a2a2a;
@@ -170,7 +259,10 @@
       appearance: textfield;
     }
     .game-content .game-header .game-bet input::-webkit-outer-spin-button,
-    .game-content .game-header .game-bet input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .game-content .game-header .game-bet input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 
     /* Блэкджек */
     .bj-table {
@@ -180,9 +272,24 @@
       border: 2px solid #1a4a2a;
       min-height: 180px;
     }
-    .bj-hand { margin: 6px 0; padding: 6px 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
-    .bj-hand .hand-label { font-size: 11px; color: #88aa99; margin-bottom: 3px; }
-    .bj-hand .hand-cards { display: flex; gap: 6px; flex-wrap: wrap; min-height: 34px; align-items: center; }
+    .bj-hand {
+      margin: 6px 0;
+      padding: 6px 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+    .bj-hand .hand-label {
+      font-size: 11px;
+      color: #88aa99;
+      margin-bottom: 3px;
+    }
+    .bj-hand .hand-cards {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-height: 34px;
+      align-items: center;
+    }
     .bj-hand .hand-cards .card {
       background: white;
       color: #1a1a1a;
@@ -192,19 +299,56 @@
       font-size: 16px;
       min-width: 36px;
       text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     }
-    .bj-hand .hand-cards .card.red { color: #cc0000; }
-    .bj-hand .hand-cards .card.black { color: #1a1a1a; }
-    .bj-hand .hand-cards .card.hidden { background: #2a1a1a; color: #2a1a1a; border: 2px solid #4a2a2a; }
-    .bj-hand .hand-total { font-size: 14px; font-weight: 700; margin-top: 3px; color: #88aa99; }
-    .bj-hand .hand-total .total-value { color: #ffd700; }
-    .bj-actions { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
-    .bj-actions .btn { padding: 8px 18px; font-size: 13px; min-width: 70px; }
-    .bj-result { text-align: center; margin-top: 10px; font-size: 18px; font-weight: 700; min-height: 28px; }
-    .bj-result.win { color: #ffd700; }
-    .bj-result.lose { color: #ff6b6b; }
-    .bj-result.push { color: #88aa99; }
+    .bj-hand .hand-cards .card.red {
+      color: #cc0000;
+    }
+    .bj-hand .hand-cards .card.black {
+      color: #1a1a1a;
+    }
+    .bj-hand .hand-cards .card.hidden {
+      background: #2a1a1a;
+      color: #2a1a1a;
+      border: 2px solid #4a2a2a;
+    }
+    .bj-hand .hand-total {
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 3px;
+      color: #88aa99;
+    }
+    .bj-hand .hand-total .total-value {
+      color: #ffd700;
+    }
+    .bj-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .bj-actions .btn {
+      padding: 8px 18px;
+      font-size: 13px;
+      min-width: 70px;
+    }
+    .bj-result {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      min-height: 28px;
+    }
+    .bj-result.win {
+      color: #ffd700;
+    }
+    .bj-result.lose {
+      color: #ff6b6b;
+    }
+    .bj-result.push {
+      color: #88aa99;
+    }
 
     .btn {
       background: #2a1a1a;
@@ -223,24 +367,61 @@
       justify-content: center;
       gap: 4px;
     }
-    .btn:hover { transform: scale(0.97); }
-    .btn-primary { background: #b30000; border-color: #ff3333; box-shadow: 0 2px 0 #660000; color: white; }
-    .btn-primary:hover { background: #d40000; }
-    .btn-success { background: #1a4a2a; border-color: #2a7a4a; box-shadow: 0 2px 0 #0a2a1a; }
-    .btn-success:hover { background: #2a5a3a; }
-    .btn-danger { background: #6b1a1a; border-color: #aa3333; box-shadow: 0 2px 0 #3a0a0a; }
-    .btn-danger:hover { background: #8a2a2a; }
-    .btn-warning { background: #7a4a1a; border-color: #b37a2a; box-shadow: 0 2px 0 #4a2a0a; }
-    .btn-warning:hover { background: #9a5a2a; }
-    .btn-gray { background: #2a2a3a; border-color: #4a4a5a; box-shadow: 0 2px 0 #1a1a2a; }
-    .btn-gray:hover { background: #3a3a4a; }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn:hover {
+      transform: scale(0.97);
+    }
+    .btn-primary {
+      background: #b30000;
+      border-color: #ff3333;
+      box-shadow: 0 2px 0 #660000;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #d40000;
+    }
+    .btn-success {
+      background: #1a4a2a;
+      border-color: #2a7a4a;
+      box-shadow: 0 2px 0 #0a2a1a;
+    }
+    .btn-success:hover {
+      background: #2a5a3a;
+    }
+    .btn-danger {
+      background: #6b1a1a;
+      border-color: #aa3333;
+      box-shadow: 0 2px 0 #3a0a0a;
+    }
+    .btn-danger:hover {
+      background: #8a2a2a;
+    }
+    .btn-warning {
+      background: #7a4a1a;
+      border-color: #b37a2a;
+      box-shadow: 0 2px 0 #4a2a0a;
+    }
+    .btn-warning:hover {
+      background: #9a5a2a;
+    }
+    .btn-gray {
+      background: #2a2a3a;
+      border-color: #4a4a5a;
+      box-shadow: 0 2px 0 #1a1a2a;
+    }
+    .btn-gray:hover {
+      background: #3a3a4a;
+    }
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
 
     /* Модалки */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(6px);
       display: flex;
       justify-content: center;
@@ -250,7 +431,10 @@
       opacity: 0;
       transition: opacity 0.3s ease, visibility 0.3s ease;
     }
-    .modal-overlay.active { visibility: visible; opacity: 1; }
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
     .modal-window {
       background: #1a1a1a;
       max-width: 380px;
@@ -259,14 +443,21 @@
       border-radius: 32px;
       text-align: center;
       border: 1px solid #cc3333;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
       max-height: 90vh;
       overflow-y: auto;
       transform: scale(0.95);
       transition: transform 0.3s ease;
     }
-    .modal-overlay.active .modal-window { transform: scale(1); }
-    .modal-window h2 { font-weight: 600; font-size: 18px; margin-bottom: 8px; color: #ffcccc; }
+    .modal-overlay.active .modal-window {
+      transform: scale(1);
+    }
+    .modal-window h2 {
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: #ffcccc;
+    }
     .loader-circle {
       width: 50px;
       height: 50px;
@@ -276,9 +467,23 @@
       animation: spin 0.9s linear infinite;
       margin: 10px auto 8px;
     }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .modal-text { font-size: 15px; color: #ddc0c0; margin: 4px 0; }
-    .modal-sub { color: #aa7a7a; font-size: 12px; }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .modal-text {
+      font-size: 15px;
+      color: #ddc0c0;
+      margin: 4px 0;
+    }
+    .modal-sub {
+      color: #aa7a7a;
+      font-size: 12px;
+    }
     .modal-btn {
       background: #b30000;
       border: none;
@@ -292,9 +497,17 @@
       transition: background 0.2s;
       border: 1px solid #ff4d4d;
     }
-    .modal-btn:hover { background: #d40000; }
-    .hidden { display: none !important; }
-    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .modal-btn:hover {
+      background: #d40000;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .modal-close-icon {
       background: none;
       border: none;
@@ -304,8 +517,11 @@
       padding: 0 4px;
       transition: color 0.2s;
     }
-    .modal-close-icon:hover { color: #ff8888; }
+    .modal-close-icon:hover {
+      color: #ff8888;
+    }
 
+    /* Профиль */
     .profile-avatar {
       width: 70px;
       height: 70px;
@@ -322,23 +538,39 @@
       overflow: hidden;
       position: relative;
     }
-    .profile-avatar:hover { border-color: #ff5555; }
-    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-avatar:hover {
+      border-color: #ff5555;
+    }
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     .profile-avatar .avatar-edit-hint {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
       font-size: 9px;
       color: #aaa;
       padding: 2px 0;
       opacity: 0;
       transition: opacity 0.2s;
     }
-    .profile-avatar:hover .avatar-edit-hint { opacity: 1; }
-    .profile-field { margin: 5px 0; text-align: left; }
-    .profile-field label { color: #aa8888; font-size: 10px; display: block; margin-bottom: 2px; }
+    .profile-avatar:hover .avatar-edit-hint {
+      opacity: 1;
+    }
+    .profile-field {
+      margin: 5px 0;
+      text-align: left;
+    }
+    .profile-field label {
+      color: #aa8888;
+      font-size: 10px;
+      display: block;
+      margin-bottom: 2px;
+    }
     .profile-field input {
       background: #0f0f0f;
       border: 1px solid #3a2a2a;
@@ -350,8 +582,16 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    .profile-field input:focus { border-color: #cc3333; }
-    .profile-title { text-align: center; margin: 3px 0 8px; font-size: 13px; color: #ffd700; font-weight: 600; }
+    .profile-field input:focus {
+      border-color: #cc3333;
+    }
+    .profile-title {
+      text-align: center;
+      margin: 3px 0 8px;
+      font-size: 13px;
+      color: #ffd700;
+      font-weight: 600;
+    }
     .profile-title select {
       background: #1a1a1a;
       border: 1px solid #3a2a2a;
@@ -363,7 +603,10 @@
       outline: none;
       cursor: pointer;
     }
-    .profile-title select option { background: #1a1a1a; color: #f0f0f0; }
+    .profile-title select option {
+      background: #1a1a1a;
+      color: #f0f0f0;
+    }
     .profile-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -376,10 +619,26 @@
       padding: 6px;
       border: 1px solid #2a1a1a;
     }
-    .profile-stats .stat-item .label { color: #aa8888; font-size: 9px; }
-    .profile-stats .stat-item .value { font-size: 14px; font-weight: 700; color: #ffb3b3; }
-    .profile-actions { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
-    .profile-actions .btn { flex: 1; padding: 8px; font-size: 13px; }
+    .profile-stats .stat-item .label {
+      color: #aa8888;
+      font-size: 9px;
+    }
+    .profile-stats .stat-item .value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffb3b3;
+    }
+    .profile-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 8px;
+    }
+    .profile-actions .btn {
+      flex: 1;
+      padding: 8px;
+      font-size: 13px;
+    }
     .profile-ref-link {
       background: #0f0f0f;
       border-radius: 12px;
@@ -392,11 +651,29 @@
       justify-content: center;
       flex-wrap: wrap;
     }
-    .profile-ref-link .ref-code { color: #ffd700; font-weight: 700; font-size: 14px; cursor: pointer; }
-    .profile-ref-link .ref-label { color: #aa8888; font-size: 11px; }
+    .profile-ref-link .ref-code {
+      color: #ffd700;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .profile-ref-link .ref-label {
+      color: #aa8888;
+      font-size: 11px;
+    }
 
-    .admin-login { margin-top: 8px; padding-top: 8px; border-top: 1px solid #2a1a1a; }
-    .admin-login .admin-row { display: flex; gap: 5px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .admin-login {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #2a1a1a;
+    }
+    .admin-login .admin-row {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
     .admin-login input {
       background: #0f0f0f;
       border: 1px solid #3a2a2a;
@@ -411,11 +688,37 @@
       appearance: textfield;
     }
     .admin-login input::-webkit-outer-spin-button,
-    .admin-login input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    .admin-login .btn { flex: 0 1 auto; padding: 5px 14px; font-size: 11px; }
-    .admin-panel-inline { margin-top: 8px; padding: 8px; background: #0f0f0f; border-radius: 14px; border: 1px solid #3a1a1a; }
-    .admin-panel-inline .admin-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; justify-content: center; }
-    .admin-panel-inline .admin-row-group { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; justify-content: center; width: 100%; }
+    .admin-login input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .admin-login .btn {
+      flex: 0 1 auto;
+      padding: 5px 14px;
+      font-size: 11px;
+    }
+    .admin-panel-inline {
+      margin-top: 8px;
+      padding: 8px;
+      background: #0f0f0f;
+      border-radius: 14px;
+      border: 1px solid #3a1a1a;
+    }
+    .admin-panel-inline .admin-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+      justify-content: center;
+    }
+    .admin-panel-inline .admin-row-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+      justify-content: center;
+      width: 100%;
+    }
     .admin-panel-inline .admin-controls input {
       background: #1a1a1a;
       border: 1px solid #4a2a2a;
@@ -429,9 +732,21 @@
       appearance: textfield;
     }
     .admin-panel-inline .admin-controls input::-webkit-outer-spin-button,
-    .admin-panel-inline .admin-controls input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    .admin-panel-inline .admin-controls .btn { flex: 0 1 auto; padding: 5px 12px; font-size: 10px; }
-    .admin-panel-inline .admin-divider { width: 100%; height: 1px; background: #2a1a1a; margin: 3px 0; }
+    .admin-panel-inline .admin-controls input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .admin-panel-inline .admin-controls .btn {
+      flex: 0 1 auto;
+      padding: 5px 12px;
+      font-size: 10px;
+    }
+    .admin-panel-inline .admin-divider {
+      width: 100%;
+      height: 1px;
+      background: #2a1a1a;
+      margin: 3px 0;
+    }
     .avatar-upload-area {
       display: flex;
       flex-direction: column;
@@ -454,7 +769,11 @@
       cursor: pointer;
       transition: background 0.2s, color 0.2s;
     }
-    .avatar-upload-area .upload-btn:hover { background: #3a3a4a; border-color: #6a6a8a; color: white; }
+    .avatar-upload-area .upload-btn:hover {
+      background: #3a3a4a;
+      border-color: #6a6a8a;
+      color: white;
+    }
     .avatar-upload-area .avatar-preview {
       width: 70px;
       height: 70px;
@@ -467,7 +786,11 @@
       font-size: 28px;
       background: #1a1a1a;
     }
-    .avatar-upload-area .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-upload-area .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     .avatar-upload-area .clear-avatar {
       background: transparent;
       border: none;
@@ -476,7 +799,9 @@
       cursor: pointer;
       transition: color 0.2s;
     }
-    .avatar-upload-area .clear-avatar:hover { color: #ff5555; }
+    .avatar-upload-area .clear-avatar:hover {
+      color: #ff5555;
+    }
     .history-list-modal {
       background: #0f0f0f;
       border-radius: 12px;
@@ -488,19 +813,36 @@
       color: #aa8888;
       margin-top: 5px;
     }
-    .history-list-modal::-webkit-scrollbar { width: 3px; }
-    .history-list-modal::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
-    .history-list-modal::-webkit-scrollbar-thumb { background: #4a2a2a; border-radius: 10px; }
+    .history-list-modal::-webkit-scrollbar {
+      width: 3px;
+    }
+    .history-list-modal::-webkit-scrollbar-track {
+      background: #1a1a1a;
+      border-radius: 10px;
+    }
+    .history-list-modal::-webkit-scrollbar-thumb {
+      background: #4a2a2a;
+      border-radius: 10px;
+    }
     .history-item-modal {
       display: flex;
       justify-content: space-between;
       padding: 3px 0;
       border-bottom: 1px solid #1a1a1a;
     }
-    .history-item-modal .amount { font-weight: 600; }
-    .history-item-modal .amount.positive { color: #80ffaa; }
-    .history-item-modal .amount.negative { color: #ff6b6b; }
-    .history-item-modal .date { color: #665555; font-size: 9px; }
+    .history-item-modal .amount {
+      font-weight: 600;
+    }
+    .history-item-modal .amount.positive {
+      color: #80ffaa;
+    }
+    .history-item-modal .amount.negative {
+      color: #ff6b6b;
+    }
+    .history-item-modal .date {
+      color: #665555;
+      font-size: 9px;
+    }
     .deposit-modal .deposit-input-group {
       background: #1a1a1a;
       border-radius: 60px;
@@ -524,7 +866,10 @@
       appearance: textfield;
     }
     .deposit-modal .deposit-input-group input::-webkit-outer-spin-button,
-    .deposit-modal .deposit-input-group input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .deposit-modal .deposit-input-group input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
     .deposit-modal .deposit-input-group select {
       background: #1a1a1a;
       border: 1px solid #4a2a2a;
@@ -550,8 +895,16 @@
       border: 1px solid #ff4d4d;
       transition: background 0.2s;
     }
-    .deposit-modal .btn-deposit-confirm:hover { background: #e60000; }
-    .deposit-modal .quick-amounts { display: flex; gap: 5px; margin: 6px 0; flex-wrap: wrap; justify-content: center; }
+    .deposit-modal .btn-deposit-confirm:hover {
+      background: #e60000;
+    }
+    .deposit-modal .quick-amounts {
+      display: flex;
+      gap: 5px;
+      margin: 6px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
     .deposit-modal .quick-amounts .quick-item {
       display: flex;
       align-items: center;
@@ -571,7 +924,9 @@
       padding: 3px 4px;
       transition: color 0.2s;
     }
-    .deposit-modal .quick-amounts .quick-item button:hover { color: white; }
+    .deposit-modal .quick-amounts .quick-item button:hover {
+      color: white;
+    }
     .deposit-modal .quick-amounts .remove-btn {
       background: transparent;
       border: none;
@@ -581,7 +936,9 @@
       cursor: pointer;
       transition: color 0.2s;
     }
-    .deposit-modal .quick-amounts .remove-btn:hover { color: #ff5555; }
+    .deposit-modal .quick-amounts .remove-btn:hover {
+      color: #ff5555;
+    }
     .deposit-modal .quick-amounts .add-quick {
       background: #1a2a3a;
       border: 1px dashed #4a5a6a;
@@ -593,7 +950,11 @@
       cursor: pointer;
       transition: background 0.2s, color 0.2s;
     }
-    .deposit-modal .quick-amounts .add-quick:hover { background: #2a3a4a; border-color: #6a8aaa; color: white; }
+    .deposit-modal .quick-amounts .add-quick:hover {
+      background: #2a3a4a;
+      border-color: #6a8aaa;
+      color: white;
+    }
     .deposit-modal .quick-amounts .add-quick-input {
       background: #1a1a1a;
       border: 1px solid #4a2a2a;
@@ -607,7 +968,10 @@
       appearance: textfield;
     }
     .deposit-modal .quick-amounts .add-quick-input::-webkit-outer-spin-button,
-    .deposit-modal .quick-amounts .add-quick-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .deposit-modal .quick-amounts .add-quick-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 
     /* Лидеры */
     .leaderboard-table {
@@ -631,11 +995,22 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    .leaderboard-table td:hover { background: rgba(204,51,51,0.1); }
-    .leaderboard-table tr.highlight td { color: #ffd700; }
-    .leaderboard-table .rank { color: #665555; font-weight: 600; }
-    .leaderboard-table .name { color: #f0f0f0; }
-    .leaderboard-table .value { color: #80ffaa; }
+    .leaderboard-table td:hover {
+      background: rgba(204, 51, 51, 0.1);
+    }
+    .leaderboard-table tr.highlight td {
+      color: #ffd700;
+    }
+    .leaderboard-table .rank {
+      color: #665555;
+      font-weight: 600;
+    }
+    .leaderboard-table .name {
+      color: #f0f0f0;
+    }
+    .leaderboard-table .value {
+      color: #80ffaa;
+    }
     .leaderboard-tabs {
       display: flex;
       gap: 5px;
@@ -653,10 +1028,18 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .leaderboard-tabs .tab:hover { border-color: #cc3333; }
-    .leaderboard-tabs .tab.active { border-color: #ffd700; color: #ffd700; }
+    .leaderboard-tabs .tab:hover {
+      border-color: #cc3333;
+    }
+    .leaderboard-tabs .tab.active {
+      border-color: #ffd700;
+      color: #ffd700;
+    }
 
-    .player-card { text-align: left; padding: 4px 0; }
+    .player-card {
+      text-align: left;
+      padding: 4px 0;
+    }
     .player-card .player-row {
       display: flex;
       justify-content: space-between;
@@ -664,10 +1047,19 @@
       border-bottom: 1px solid #1a1a1a;
       font-size: 13px;
     }
-    .player-card .player-row .label { color: #aa8888; }
-    .player-card .player-row .value { color: #f0f0f0; font-weight: 600; }
-    .player-card .player-row .value.gold { color: #ffd700; }
-    .player-card .player-row .value.green { color: #80ffaa; }
+    .player-card .player-row .label {
+      color: #aa8888;
+    }
+    .player-card .player-row .value {
+      color: #f0f0f0;
+      font-weight: 600;
+    }
+    .player-card .player-row .value.gold {
+      color: #ffd700;
+    }
+    .player-card .player-row .value.green {
+      color: #80ffaa;
+    }
     .player-card .player-avatar-big {
       width: 80px;
       height: 80px;
@@ -681,28 +1073,23 @@
       font-size: 40px;
       overflow: hidden;
     }
-    .player-card .player-avatar-big img { width: 100%; height: 100%; object-fit: cover; }
-    .player-card .player-name-big { text-align: center; font-size: 20px; font-weight: 700; color: #ffd700; margin-bottom: 3px; }
-    .player-card .player-title-big { text-align: center; font-size: 13px; color: #aa8888; margin-bottom: 10px; }
-
-    .game-card.coming { opacity: 0.5; cursor: not-allowed; }
-    .game-card.coming:hover { transform: none; border-color: #2a2a2a; box-shadow: none; }
-
-    @media (max-width: 480px) {
-      .global-header h1 { font-size: 16px; }
-      .global-header .btn-deposit-header { font-size: 11px; padding: 3px 10px; }
-      .global-header .header-balance { font-size: 12px; padding: 3px 10px; }
-      .global-header .btn-profile { font-size: 11px; padding: 3px 10px; }
-      .game-menu { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .game-menu .game-card { padding: 12px 10px; }
-      .game-menu .game-card .game-icon { font-size: 28px; }
-      .game-menu .game-card .game-name { font-size: 13px; }
-      .bj-hand .hand-cards .card { font-size: 14px; padding: 3px 8px; min-width: 30px; }
-      .slot-reels .reel .reel-cell { height: 40px; }
-      .slot-reels .reel .reel-cell .cell-symbol { font-size: 24px; }
-      .modal-window { max-width: 95%; padding: 16px 12px 14px; }
-      .casino-card { padding: 12px; }
-      .games-area { padding: 12px; }
+    .player-card .player-avatar-big img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .player-card .player-name-big {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffd700;
+      margin-bottom: 3px;
+    }
+    .player-card .player-title-big {
+      text-align: center;
+      font-size: 13px;
+      color: #aa8888;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -710,6 +1097,7 @@
   <div class="global-header">
     <div class="header-left">
       <h1>♛ WW CASINO</h1>
+      <button class="header-leaderboard-btn" id="leaderboardHeaderBtn">🏆 Топ</button>
     </div>
     <div class="header-right">
       <button class="btn-deposit-header" id="depositBtnHeader">💰 Пополнить</button>
@@ -765,7 +1153,7 @@
     </div>
   </div>
 
-  <!-- Модалка пополнения (статус) -->
+  <!-- Модалки -->
   <div class="modal-overlay" id="statusModalOverlay">
     <div class="modal-window">
       <div id="statusProcessing">
@@ -782,7 +1170,7 @@
           <h2>✅ Платеж оформлен</h2>
           <button class="modal-close-icon" id="statusCloseIconSuccess">✕</button>
         </div>
-        <div style="font-size:36px;margin:4px 0;">💵</div>
+        <div style="font-size: 36px; margin: 4px 0;">💵</div>
         <div class="modal-text" id="statusAmountInfo">+ 0.00 USD</div>
         <div class="modal-sub" id="statusRubInfo">0.00 ₽</div>
         <button class="modal-btn" id="statusCloseBtn">Отлично</button>
@@ -790,14 +1178,13 @@
     </div>
   </div>
 
-  <!-- Модалка выбора суммы пополнения -->
   <div class="modal-overlay" id="depositModalOverlay">
     <div class="modal-window deposit-modal">
       <div class="flex-between">
         <h2>💳 Пополнение</h2>
         <button class="modal-close-icon" id="depositModalClose">✕</button>
       </div>
-      <div style="margin:4px 0 2px;color:#ccaaaa;font-size:13px;">Выберите сумму</div>
+      <div style="margin: 4px 0 2px; color: #ccaaaa; font-size: 13px;">Выберите сумму</div>
       <div class="quick-amounts" id="quickAmountsContainer"></div>
       <div class="deposit-input-group">
         <input type="number" id="depositAmountInput" value="50" step="0.01" min="0.01" placeholder="Сумма">
@@ -810,7 +1197,6 @@
     </div>
   </div>
 
-  <!-- Модалка Профиль -->
   <div class="modal-overlay" id="profileModalOverlay">
     <div class="modal-window">
       <div class="flex-between">
@@ -834,38 +1220,54 @@
         <input type="text" id="profileNickname" placeholder="Введите ник" maxlength="20">
       </div>
       <div class="profile-title">
-        <span style="color:#aa8888;font-size:11px;">Титул: </span>
+        <span style="color: #aa8888; font-size: 11px;">Титул: </span>
         <select id="profileTitleSelect">
           <option value="Игрок">Игрок</option>
           <option value="VIP">VIP</option>
-          <option value="Администратор">Администратор</option>
         </select>
       </div>
       <div class="profile-stats">
-        <div class="stat-item"><div class="label">Операций</div><div class="value" id="profileTotalTransactions">0</div></div>
-        <div class="stat-item"><div class="label">Всего пополнено</div><div class="value" id="profileTotalDeposited">0.00 $</div></div>
-        <div class="stat-item"><div class="label">Текущий баланс</div><div class="value" id="profileBalance">0.00 $</div></div>
-        <div class="stat-item"><div class="label">Выигрышей</div><div class="value" id="profileWins">0</div></div>
+        <div class="stat-item">
+          <div class="label">Операций</div>
+          <div class="value" id="profileTotalTransactions">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="label">Всего пополнено</div>
+          <div class="value" id="profileTotalDeposited">0.00 $</div>
+        </div>
+        <div class="stat-item">
+          <div class="label">Текущий баланс</div>
+          <div class="value" id="profileBalance">0.00 $</div>
+        </div>
+        <div class="stat-item">
+          <div class="label">Выигрышей</div>
+          <div class="value" id="profileWins">0</div>
+        </div>
       </div>
       <div class="profile-ref-link">
         <span class="ref-label">🔗 Реферальная ссылка:</span>
         <span class="ref-code" id="refLink">ww-casino.com/ref/FaWW</span>
-        <button class="btn btn-gray" id="copyRefBtn" style="padding:3px 10px;font-size:10px;">📋 Копировать</button>
+        <button class="btn btn-gray" id="copyRefBtn" style="padding: 3px 10px; font-size: 10px;">📋 Копировать</button>
       </div>
-      <div style="margin:6px 0;text-align:left;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
-          <span style="color:#aa8888;font-size:10px;">📋 История операций</span>
-          <button class="btn btn-gray" id="showHistoryBtn" style="padding:3px 10px;font-size:10px;flex:0 1 auto;">Показать все</button>
+      <div style="margin: 6px 0; text-align: left;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+          <span style="color: #aa8888; font-size: 10px;">📋 История операций</span>
+          <button class="btn btn-gray" id="showHistoryBtn" style="padding: 3px 10px; font-size: 10px; flex: 0 1 auto;">Показать все</button>
         </div>
-        <div id="profileHistoryList" class="history-list-modal" style="max-height:70px;"><div style="color:#665555;text-align:center;padding:6px 0;">Нет операций</div></div>
+        <div id="profileHistoryList" class="history-list-modal" style="max-height: 70px;">
+          <div style="color: #665555; text-align: center; padding: 6px 0;">Нет операций</div>
+        </div>
       </div>
+
+      <!-- АДМИН-ПАНЕЛЬ (скрыта, доступ по коду 1973) -->
       <div class="admin-login">
         <div class="admin-row">
           <input type="password" id="adminCodeInput" placeholder="Код" maxlength="4">
-          <button class="btn btn-warning" id="adminLoginBtn">🔑 Войти</button>
+          <button class="btn btn-warning" id="adminLoginBtn">🔑 Админ</button>
         </div>
         <div id="adminPanelContainer" class="hidden">
           <div class="admin-panel-inline">
+            <div style="color: #ff6b6b; font-size: 11px; text-align: center; margin-bottom: 6px;">⚙️ Админ панель</div>
             <div class="admin-controls">
               <div class="admin-row-group">
                 <input type="number" id="adminAmountGive" value="100" step="0.01" min="0" placeholder="Сумма">
@@ -884,24 +1286,32 @@
           </div>
         </div>
       </div>
+
       <div class="profile-actions">
         <button class="btn btn-primary" id="profileSaveBtn">💾 Сохранить</button>
       </div>
     </div>
   </div>
 
-  <!-- Модалка полной истории -->
   <div class="modal-overlay" id="historyModalOverlay">
-    <div class="modal-window" style="max-width:400px;">
-      <div class="flex-between"><h2>📋 Полная история</h2><button class="modal-close-icon" id="historyModalClose">✕</button></div>
-      <div id="fullHistoryList" class="history-list-modal" style="max-height:300px;margin-top:6px;"><div style="color:#665555;text-align:center;padding:6px 0;">Нет операций</div></div>
+    <div class="modal-window" style="max-width: 400px;">
+      <div class="flex-between">
+        <h2>📋 Полная история</h2>
+        <button class="modal-close-icon" id="historyModalClose">✕</button>
+      </div>
+      <div id="fullHistoryList" class="history-list-modal" style="max-height: 300px; margin-top: 6px;">
+        <div style="color: #665555; text-align: center; padding: 6px 0;">Нет операций</div>
+      </div>
     </div>
   </div>
 
   <!-- Модалка Топ -->
   <div class="modal-overlay" id="leaderboardModalOverlay">
-    <div class="modal-window" style="max-width:450px;">
-      <div class="flex-between"><h2>🏆 Топ игроков</h2><button class="modal-close-icon" id="leaderboardModalClose">✕</button></div>
+    <div class="modal-window" style="max-width: 450px;">
+      <div class="flex-between">
+        <h2>🏆 Топ игроков</h2>
+        <button class="modal-close-icon" id="leaderboardModalClose">✕</button>
+      </div>
       <div class="leaderboard-tabs" id="lbTabsModal">
         <button class="tab active" data-tab="balance">💰 По балансу</button>
         <button class="tab" data-tab="wins">🏆 По выигрышам</button>
@@ -913,8 +1323,11 @@
 
   <!-- Модалка карточки игрока -->
   <div class="modal-overlay" id="playerCardModalOverlay">
-    <div class="modal-window" style="max-width:400px;">
-      <div class="flex-between"><h2>👤 Карточка игрока</h2><button class="modal-close-icon" id="playerCardModalClose">✕</button></div>
+    <div class="modal-window" style="max-width: 400px;">
+      <div class="flex-between">
+        <h2>👤 Карточка игрока</h2>
+        <button class="modal-close-icon" id="playerCardModalClose">✕</button>
+      </div>
       <div id="playerCardContent"></div>
     </div>
   </div>
@@ -930,7 +1343,7 @@
     let history = [];
     let quickAmounts = [];
     let profileNickname = 'Игрок';
-    let profileTitle = 'Администратор';
+    let profileTitle = 'Игрок';
     let profileAvatar = null;
     let adminAccess = false;
     let showRub = false;
@@ -944,75 +1357,63 @@
     let gameActive = false;
     let gameFinished = false;
 
-    // Лидеры
-    let leaderboardData = [];
+    // Список игроков (топ)
+    let players = [];
 
-    // ===== ГЕНЕРАЦИЯ ЛИДЕРОВ =====
-    function generateLeaderboard() {
-      const names = [
-        'xAlexPro', 'Mike_TV', 'DimaS', 'SergeyQ', 'Andrey_23', 'EvgeniyZ', 'Ivan4ik', 'NikolayK', 'VladimirO', 'Pavel_N',
-        'KatyaFox', 'OlgaM', 'Anna_B', 'TanyaS', 'Natali_W', 'Marina_D', 'Elena_R', 'Viktoria_T', 'Anastasia_L', 'Daria_K',
-        'Maxim_G', 'Artem_R', 'Roman_P', 'Kirill_C', 'Gleb_B', 'Ilya_K', 'Alexandr_D', 'Yuriy_S', 'Vasiliy_P', 'Fedor_T',
-        'Svetlana_M', 'Lyudmila_V', 'Irina_Z', 'Evgeniya_S', 'Alisa_F', 'Polina_G', 'Sofia_A', 'Arina_P', 'Vera_I', 'Nadezhda_B',
-        'Kostya_L', 'Viktor_H', 'Nikita_M', 'Matvey_R', 'Grigoriy_O', 'Oleg_D', 'Stas_G', 'Semen_L', 'Timofey_N', 'Arseniy_M',
-        'Valentina_K', 'Liza_V', 'Inna_S', 'Zoya_A', 'Larisa_R', 'Galina_O', 'Emilia_T', 'Margarita_B', 'Ksenia_W', 'Varvara_F',
-        'Boris_L', 'Gennadiy_S', 'Leonid_M', 'Ruslan_K', 'Daniil_H', 'Egor_R', 'Petr_V', 'Valeriy_Z', 'Georgiy_P', 'Denis_O',
-        'Tonya_D', 'Raya_B', 'Nina_G', 'Klava_K', 'Frosya_L', 'Vasilisa_W', 'Mira_S', 'Stasya_B', 'Vlada_T', 'Bozhena_K',
-        'Vitalik_M', 'Igor_X', 'Marat_S', 'Rostik_P', 'Filip_D', 'Arkadiy_L', 'Nazar_K', 'Taras_S', 'Zakhar_R', 'Yaroslav_D',
-        'Polly_A', 'Glafira_K', 'Milana_V', 'Agata_R', 'Taisia_M', 'Yulia_S', 'Oksana_O', 'Alevtina_G', 'Diana_B', 'Alina_K'
-      ];
-
-      const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань', 'Нижний Новгород', 'Красноярск',
-        'Челябинск', 'Уфа', 'Самара', 'Ростов-на-Дону', 'Омск', 'Краснодар', 'Воронеж', 'Пермь', 'Волгоград'
-      ];
-      const streets = ['Ленина', 'Пушкина', 'Советская', 'Мира', 'Победы', 'Гагарина', 'Кирова', 'Лермонтова', 'Невский', 'Тверская'];
-
-      leaderboardData = [];
-      for (let i = 0; i < 100; i++) {
-        const balance = Math.round((Math.random() * 50000 + 100) * 100) / 100;
-        const wins = Math.floor(Math.random() * 200 + 5);
-        const refs = Math.floor(Math.random() * 50 + 1);
-        let title = 'Игрок';
-        if (i === 0) title = 'Администратор';
-        else if (i < 8) title = 'VIP';
-        else title = 'Игрок';
-
-        const gender = Math.random() > 0.5 ? 'Мужской' : 'Женский';
-        const age = Math.floor(Math.random() * 12 + 18);
-        const city = cities[Math.floor(Math.random() * cities.length)];
-        const street = streets[Math.floor(Math.random() * streets.length)];
-        const house = Math.floor(Math.random() * 100 + 1);
-        const apartment = Math.floor(Math.random() * 200 + 1);
-        const phone = '+7' + (Math.floor(Math.random() * 9000000000) + 1000000000);
-        const email = names[i % names.length].toLowerCase() + Math.floor(Math.random() * 1000) + '@mail.ru';
-        const regDate = `${Math.floor(Math.random() * 28 + 1)}.${Math.floor(Math.random() * 12 + 1)}.${Math.floor(Math.random() * 5 + 2020)}`;
-        const lastLogin = `${Math.floor(Math.random() * 28 + 1)}.${Math.floor(Math.random() * 12 + 1)}.2026`;
-
-        leaderboardData.push({
-          name: names[i % names.length] + (i >= names.length ? `_${Math.floor(i / names.length)}` : ''),
-          balance: balance,
-          wins: wins,
-          referrals: refs,
-          title: title,
-          gender: gender,
-          age: age,
-          city: city,
-          address: `${street}, д. ${house}, кв. ${apartment}`,
-          phone: phone,
-          email: email,
-          regDate: regDate,
-          lastLogin: lastLogin,
-          avatar: ['🎰','🎲','🃏','💰','💎','🔥','⭐','👑','🦊','🐺','🦁','🐉','🚀','🎯','🏆'][Math.floor(Math.random()*15)]
-        });
-      }
-      leaderboardData.sort((a,b) => b.balance - a.balance);
+    // ===== РАБОТА С ИГРОКАМИ =====
+    function loadPlayers() {
+      try {
+        const saved = localStorage.getItem('wwCasinoPlayers');
+        if (saved) {
+          players = JSON.parse(saved);
+          return;
+        }
+      } catch (e) {}
+      players = [];
     }
 
+    function savePlayers() {
+      try {
+        localStorage.setItem('wwCasinoPlayers', JSON.stringify(players));
+      } catch (e) {}
+    }
+
+    function registerOrUpdatePlayer(name, balance, wins, refs) {
+      const existing = players.find(p => p.name === name);
+      if (existing) {
+        existing.balance = balance;
+        existing.wins = wins;
+        existing.referrals = refs;
+      } else {
+        players.push({
+          name: name,
+          balance: balance,
+          wins: wins,
+          referrals: refs || 0,
+          title: 'Игрок',
+          avatar: '👤',
+          gender: Math.random() > 0.5 ? 'Мужской' : 'Женский',
+          age: Math.floor(Math.random() * 12 + 18),
+          city: ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань'][Math.floor(Math.random() * 5)],
+          regDate: new Date().toLocaleDateString('ru-RU'),
+          lastLogin: new Date().toLocaleDateString('ru-RU')
+        });
+      }
+      savePlayers();
+    }
+
+    // ===== ГЕНЕРАЦИЯ ТОПА =====
     function renderLeaderboardModal(sortBy = 'balance') {
-      let sorted = [...leaderboardData];
-      if (sortBy === 'balance') sorted.sort((a,b) => b.balance - a.balance);
-      else if (sortBy === 'wins') sorted.sort((a,b) => b.wins - a.wins);
-      else if (sortBy === 'refs') sorted.sort((a,b) => b.referrals - a.referrals);
+      if (players.length === 0) {
+        document.getElementById('leaderboardModalContent').innerHTML =
+          '<div style="color:#665555;text-align:center;padding:20px 0;">Нет игроков. Пригласите друзей!</div>';
+        return;
+      }
+
+      let sorted = [...players];
+      if (sortBy === 'balance') sorted.sort((a, b) => b.balance - a.balance);
+      else if (sortBy === 'wins') sorted.sort((a, b) => b.wins - a.wins);
+      else if (sortBy === 'refs') sorted.sort((a, b) => b.referrals - a.referrals);
 
       let html = `
         <table class="leaderboard-table">
@@ -1021,13 +1422,14 @@
       `;
       sorted.forEach((player, index) => {
         const isHighlight = player.name === profileNickname;
-        const value = sortBy === 'balance' ? '$' + player.balance.toFixed(2) : sortBy === 'wins' ? player.wins : player.referrals;
+        const value = sortBy === 'balance' ? '$' + player.balance.toFixed(2) :
+          sortBy === 'wins' ? player.wins : player.referrals;
         html += `
           <tr class="${isHighlight ? 'highlight' : ''}" data-player="${encodeURIComponent(player.name)}">
             <td class="rank">${index + 1}</td>
             <td class="name">${player.name}</td>
             <td class="value">${value}</td>
-            <td style="color:#ffd700;font-size:10px;">${player.title}</td>
+            <td style="color:#ffd700;font-size:10px;">${player.title || 'Игрок'}</td>
           </tr>
         `;
       });
@@ -1037,7 +1439,7 @@
       document.querySelectorAll('#leaderboardModalContent .leaderboard-table tbody tr').forEach(row => {
         row.addEventListener('click', function() {
           const name = decodeURIComponent(this.dataset.player);
-          const player = leaderboardData.find(p => p.name === name);
+          const player = players.find(p => p.name === name);
           if (player) showPlayerCard(player);
         });
       });
@@ -1050,18 +1452,14 @@
         <div class="player-card">
           <div class="player-avatar-big">${player.avatar || '👤'}</div>
           <div class="player-name-big">${player.name}</div>
-          <div class="player-title-big">${player.title}</div>
+          <div class="player-title-big">${player.title || 'Игрок'}</div>
           <div class="player-row"><span class="label">💰 Баланс</span><span class="value gold">$${player.balance.toFixed(2)}</span></div>
           <div class="player-row"><span class="label">🏆 Выигрышей</span><span class="value green">${player.wins}</span></div>
-          <div class="player-row"><span class="label">👥 Рефералов</span><span class="value">${player.referrals}</span></div>
-          <div class="player-row"><span class="label">📅 Регистрация</span><span class="value">${player.regDate}</span></div>
-          <div class="player-row"><span class="label">🕐 Последний вход</span><span class="value">${player.lastLogin}</span></div>
-          <div class="player-row"><span class="label">👤 Пол</span><span class="value">${player.gender}</span></div>
-          <div class="player-row"><span class="label">🎂 Возраст</span><span class="value">${player.age} лет</span></div>
-          <div class="player-row"><span class="label">📍 Город</span><span class="value">${player.city}</span></div>
-          <div class="player-row"><span class="label">🏠 Адрес</span><span class="value">${player.address}</span></div>
-          <div class="player-row"><span class="label">📞 Телефон</span><span class="value">${player.phone}</span></div>
-          <div class="player-row"><span class="label">📧 Email</span><span class="value">${player.email}</span></div>
+          <div class="player-row"><span class="label">👥 Рефералов</span><span class="value">${player.referrals || 0}</span></div>
+          <div class="player-row"><span class="label">📅 Регистрация</span><span class="value">${player.regDate || '--'}</span></div>
+          <div class="player-row"><span class="label">🕐 Последний вход</span><span class="value">${player.lastLogin || '--'}</span></div>
+          <div class="player-row"><span class="label">🎂 Возраст</span><span class="value">${player.age || 25} лет</span></div>
+          <div class="player-row"><span class="label">📍 Город</span><span class="value">${player.city || 'Не указан'}</span></div>
         </div>
       `;
       document.getElementById('playerCardModalOverlay').classList.add('active');
@@ -1079,12 +1477,12 @@
           wins = data.wins || 0;
           history = data.history || [];
           profileNickname = data.profileNickname || 'Игрок';
-          profileTitle = data.profileTitle || 'Администратор';
+          profileTitle = data.profileTitle || 'Игрок';
           profileAvatar = data.profileAvatar || null;
           refCode = data.refCode || 'FaWW';
           referrals = data.referrals || 0;
         }
-      } catch(e) {}
+      } catch (e) {}
       try {
         const savedQuick = localStorage.getItem('wwCasinoQuickAmounts');
         if (savedQuick) {
@@ -1092,19 +1490,38 @@
         } else {
           quickAmounts = [10, 25, 50, 100, 500];
         }
-      } catch(e) { quickAmounts = [10, 25, 50, 100, 500]; }
-      generateLeaderboard();
+      } catch (e) {
+        quickAmounts = [10, 25, 50, 100, 500];
+      }
+      loadPlayers();
+      // Регистрируем текущего игрока
+      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals);
     }
 
     function saveData() {
       try {
-        const data = { usdBalance, totalTransactions, totalDepositedUSD, wins, history, profileNickname, profileTitle, profileAvatar, refCode, referrals };
+        const data = {
+          usdBalance,
+          totalTransactions,
+          totalDepositedUSD,
+          wins,
+          history,
+          profileNickname,
+          profileTitle,
+          profileAvatar,
+          refCode,
+          referrals
+        };
         localStorage.setItem('wwCasinoData', JSON.stringify(data));
-      } catch(e) {}
+      } catch (e) {}
+      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals);
+      savePlayers();
     }
 
     function saveQuickAmounts() {
-      try { localStorage.setItem('wwCasinoQuickAmounts', JSON.stringify(quickAmounts)); } catch(e) {}
+      try {
+        localStorage.setItem('wwCasinoQuickAmounts', JSON.stringify(quickAmounts));
+      } catch (e) {}
     }
 
     function updateUI() {
@@ -1140,6 +1557,8 @@
       renderProfileHistory();
       const refLink = document.getElementById('refLink');
       if (refLink) refLink.textContent = 'ww-casino.com/ref/' + refCode;
+      // Обновляем игрока в топе
+      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals);
     }
 
     function renderProfileHistory(limit = 5) {
@@ -1208,7 +1627,9 @@
       } else if (currency === 'RUB') {
         usdAmount = amount / EXCHANGE_RATE;
         usdBalance += usdAmount;
-      } else { return false; }
+      } else {
+        return false;
+      }
       if (recordHistory) {
         totalTransactions++;
         totalDepositedUSD += usdAmount;
@@ -1226,7 +1647,9 @@
         usdAmount = amount;
       } else if (currency === 'RUB') {
         usdAmount = amount / EXCHANGE_RATE;
-      } else { return false; }
+      } else {
+        return false;
+      }
       if (usdAmount > usdBalance) {
         alert(`Недостаточно средств! Доступно: ${usdBalance.toFixed(2)} USD`);
         return false;
@@ -1243,8 +1666,8 @@
 
     // ===== ОБЩИЕ ФУНКЦИИ =====
     function createDeck() {
-      const suits = ['♠','♥','♦','♣'];
-      const ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+      const suits = ['♠', '♥', '♦', '♣'];
+      const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
       const deck = [];
       for (const suit of suits) {
         for (const rank of ranks) {
@@ -1264,7 +1687,7 @@
 
     function getCardValue(card) {
       if (card.rank === 'A') return 11;
-      if (['J','Q','K'].includes(card.rank)) return 10;
+      if (['J', 'Q', 'K'].includes(card.rank)) return 10;
       return parseInt(card.rank);
     }
 
@@ -1676,6 +2099,26 @@
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
     document.addEventListener('DOMContentLoaded', function() {
+      // Определяем, открыто ли в Telegram Mini App
+      const isTelegram = window.Telegram && window.Telegram.WebApp;
+      if (isTelegram) {
+        Telegram.WebApp.expand();
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        if (user) {
+          const username = user.username || user.first_name || 'Игрок';
+          profileNickname = username;
+          // Обновляем данные в localStorage
+          try {
+            const saved = localStorage.getItem('wwCasinoData');
+            if (saved) {
+              const data = JSON.parse(saved);
+              data.profileNickname = username;
+              localStorage.setItem('wwCasinoData', JSON.stringify(data));
+            }
+          } catch (e) {}
+        }
+      }
+
       loadData();
       renderQuickAmounts();
       updateUI();
@@ -1833,6 +2276,7 @@
         if (e.key === 'Enter') startBjGame();
       });
 
+      // АДМИН-ПАНЕЛЬ (только по коду 1973)
       document.getElementById('adminLoginBtn')?.addEventListener('click', function() {
         const code = document.getElementById('adminCodeInput')?.value?.trim() || '';
         if (code === '1973') {
@@ -1840,9 +2284,9 @@
           document.getElementById('adminPanelContainer').classList.remove('hidden');
           const input = document.getElementById('adminCodeInput');
           if (input) input.value = '';
-          alert('Доступ получен!');
+          alert('🔑 Доступ к админ-панели получен!');
         } else {
-          alert('Неверный код доступа');
+          alert('❌ Неверный код доступа');
           const input = document.getElementById('adminCodeInput');
           if (input) input.value = '';
         }
