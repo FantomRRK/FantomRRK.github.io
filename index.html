@@ -147,8 +147,6 @@
       position: relative;
       overflow: hidden;
     }
-
-    /* Только Блэкджек - на всю ширину */
     .game-menu {
       display: block;
       max-width: 100%;
@@ -185,7 +183,6 @@
       color: #665555;
       margin-top: 4px;
     }
-
     .game-content {
       display: none;
       animation: fadeSlideIn 0.4s ease;
@@ -786,6 +783,19 @@
       color: #aa8888;
       font-size: 11px;
     }
+    .admin-panel-inline .admin-reset-btn {
+      background: #7a1a1a;
+      border: 1px solid #aa3333;
+      border-radius: 30px;
+      padding: 4px 14px;
+      color: white;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .admin-panel-inline .admin-reset-btn:hover {
+      background: #9a2a2a;
+    }
 
     .history-list-modal {
       background: #0f0f0f;
@@ -1083,7 +1093,6 @@
 
   <div class="casino-card">
     <div class="games-area" id="gamesArea">
-      <!-- Меню с одной картой по центру -->
       <div class="game-menu" id="gameMenu">
         <div class="game-card" data-game="blackjack">
           <div class="game-icon">♠️</div>
@@ -1271,6 +1280,12 @@
                 <button class="btn btn-danger" id="adminTakeRubProfile">Забрать RUB</button>
               </div>
             </div>
+            <div class="admin-divider"></div>
+            <div class="admin-controls">
+              <div class="admin-row-group">
+                <button class="admin-reset-btn" id="adminResetLimitBtn">🔄 Сбросить лимит</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1349,6 +1364,18 @@
           used: used
         }));
       } catch (e) {}
+    }
+
+    function resetDailyLimit() {
+      const today = new Date().toDateString();
+      try {
+        localStorage.setItem('wwDepositLimit', JSON.stringify({
+          date: today,
+          used: 0
+        }));
+      } catch (e) {}
+      updateRemainingDisplay();
+      updateTimerDisplay();
     }
 
     function getRemainingLimit() {
@@ -2060,7 +2087,7 @@
         if (newNick) profileNickname = newNick;
       }
       saveData();
-      alert('Профиль сохранен!');
+      alert('✅ Профиль сохранен!');
     }
 
     function openDepositModal() {
@@ -2195,9 +2222,10 @@
         }
       });
 
+      // ===== ФИКС СМЕНЫ ТИТУЛА =====
       document.getElementById('adminSetTitleBtn')?.addEventListener('click', function() {
         if (!adminAccess) {
-          alert('Нет доступа. Введите код 1973');
+          alert('❌ Нет доступа. Введите код 1973');
           return;
         }
         const title = document.getElementById('adminTitleSelect').value;
@@ -2212,7 +2240,25 @@
         saveData();
         const titleDisplay = document.getElementById('profileTitleDisplay');
         if (titleDisplay) titleDisplay.textContent = title;
+        // Обновляем топ если он открыт
+        if (document.getElementById('leaderboardModalOverlay').classList.contains('active')) {
+          renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+        }
         alert(`✅ Титул изменен на "${title}"`);
+      });
+
+      // ===== СБРОС ЛИМИТА =====
+      document.getElementById('adminResetLimitBtn')?.addEventListener('click', function() {
+        if (!adminAccess) {
+          alert('❌ Нет доступа. Введите код 1973');
+          return;
+        }
+        if (confirm('⚠️ Вы уверены, что хотите сбросить дневной лимит пополнения?')) {
+          resetDailyLimit();
+          alert('✅ Лимит успешно сброшен!');
+          updateRemainingDisplay();
+          updateTimerDisplay();
+        }
       });
 
       document.getElementById('headerBalance')?.addEventListener('click', function() {
@@ -2274,7 +2320,7 @@
         const text = document.getElementById('refLink')?.textContent || '';
         if (navigator.clipboard) {
           navigator.clipboard.writeText(text).then(() => {
-            alert('Реферальная ссылка скопирована!');
+            alert('📋 Реферальная ссылка скопирована!');
           }).catch(() => fallbackCopy(text));
         } else {
           fallbackCopy(text);
@@ -2288,7 +2334,7 @@
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
-        alert('Реферальная ссылка скопирована!');
+        alert('📋 Реферальная ссылка скопирована!');
       }
 
       document.getElementById('showHistoryBtn')?.addEventListener('click', function() {
@@ -2310,15 +2356,15 @@
         const rawAmount = parseFloat(document.getElementById('depositAmountInput')?.value || 0);
         const currency = document.getElementById('depositCurrencySelect')?.value || 'USD';
         if (isNaN(rawAmount) || rawAmount <= 0) {
-          alert('Введите сумму больше 0');
+          alert('❌ Введите сумму больше 0');
           return;
         }
         if (currency === 'RUB' && rawAmount < 1) {
-          alert('Минимальная сумма: 1 RUB');
+          alert('❌ Минимальная сумма: 1 RUB');
           return;
         }
         if (currency === 'USD' && rawAmount < 0.01) {
-          alert('Минимальная сумма: 0.01 USD');
+          alert('❌ Минимальная сумма: 0.01 USD');
           return;
         }
         startDeposit(rawAmount, currency);
@@ -2369,7 +2415,7 @@
 
       document.getElementById('adminAddUsdProfile')?.addEventListener('click', function() {
         if (!adminAccess) {
-          alert('Нет доступа. Введите код 1973');
+          alert('❌ Нет доступа. Введите код 1973');
           return;
         }
         const val = parseFloat(document.getElementById('adminAmountGive')?.value || 0);
@@ -2377,12 +2423,12 @@
           addBalance(val, 'USD');
           const input = document.getElementById('adminAmountGive');
           if (input) input.value = '';
-        } else alert('Введите число > 0');
+        } else alert('❌ Введите число > 0');
       });
 
       document.getElementById('adminAddRubProfile')?.addEventListener('click', function() {
         if (!adminAccess) {
-          alert('Нет доступа. Введите код 1973');
+          alert('❌ Нет доступа. Введите код 1973');
           return;
         }
         const val = parseFloat(document.getElementById('adminAmountGive')?.value || 0);
@@ -2390,12 +2436,12 @@
           addBalance(val, 'RUB');
           const input = document.getElementById('adminAmountGive');
           if (input) input.value = '';
-        } else alert('Введите число > 0');
+        } else alert('❌ Введите число > 0');
       });
 
       document.getElementById('adminTakeUsdProfile')?.addEventListener('click', function() {
         if (!adminAccess) {
-          alert('Нет доступа. Введите код 1973');
+          alert('❌ Нет доступа. Введите код 1973');
           return;
         }
         const val = parseFloat(document.getElementById('adminAmountTake')?.value || 0);
@@ -2403,12 +2449,12 @@
           takeBalance(val, 'USD');
           const input = document.getElementById('adminAmountTake');
           if (input) input.value = '';
-        } else alert('Введите число > 0');
+        } else alert('❌ Введите число > 0');
       });
 
       document.getElementById('adminTakeRubProfile')?.addEventListener('click', function() {
         if (!adminAccess) {
-          alert('Нет доступа. Введите код 1973');
+          alert('❌ Нет доступа. Введите код 1973');
           return;
         }
         const val = parseFloat(document.getElementById('adminAmountTake')?.value || 0);
@@ -2416,7 +2462,7 @@
           takeBalance(val, 'RUB');
           const input = document.getElementById('adminAmountTake');
           if (input) input.value = '';
-        } else alert('Введите число > 0');
+        } else alert('❌ Введите число > 0');
       });
 
       renderBjGame();
