@@ -147,22 +147,24 @@
       position: relative;
       overflow: hidden;
     }
+
+    /* Только Блэкджек - на всю ширину */
     .game-menu {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      max-width: 400px;
-      margin: 0 auto;
+      display: block;
+      max-width: 100%;
+      margin: 0;
     }
     .game-menu .game-card {
       background: #1a1a1a;
       border: 1px solid #2a2a2a;
       border-radius: 14px;
-      padding: 20px 16px;
+      padding: 24px 20px;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
       user-select: none;
+      max-width: 300px;
+      margin: 0 auto;
     }
     .game-menu .game-card:hover {
       border-color: #cc3333;
@@ -170,19 +172,20 @@
       box-shadow: 0 8px 30px rgba(204, 0, 0, 0.15);
     }
     .game-menu .game-card .game-icon {
-      font-size: 40px;
-      margin-bottom: 6px;
+      font-size: 48px;
+      margin-bottom: 8px;
     }
     .game-menu .game-card .game-name {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 600;
       color: #f0f0f0;
     }
     .game-menu .game-card .game-desc {
-      font-size: 12px;
+      font-size: 13px;
       color: #665555;
-      margin-top: 2px;
+      margin-top: 4px;
     }
+
     .game-content {
       display: none;
       animation: fadeSlideIn 0.4s ease;
@@ -1080,6 +1083,7 @@
 
   <div class="casino-card">
     <div class="games-area" id="gamesArea">
+      <!-- Меню с одной картой по центру -->
       <div class="game-menu" id="gameMenu">
         <div class="game-card" data-game="blackjack">
           <div class="game-icon">♠️</div>
@@ -1184,7 +1188,6 @@
         <span id="avatarEmoji">👤</span>
         <div class="avatar-edit-hint">Нажмите для смены</div>
       </div>
-      <!-- Скрытые элементы загрузки аватара -->
       <input type="file" id="avatarFileInput" accept="image/*">
       <div class="profile-field">
         <label>Никнейм</label>
@@ -1689,7 +1692,6 @@
         return false;
       }
 
-      // Проверка дневного лимита
       const used = getDailyLimit();
       const remaining = MAX_DEPOSIT - used;
       if (usdAmount > remaining) {
@@ -1981,7 +1983,7 @@
 
     function showMenu() {
       const menu = document.getElementById('gameMenu');
-      if (menu) menu.style.display = 'grid';
+      if (menu) menu.style.display = 'block';
       document.querySelectorAll('.game-content').forEach(el => el.classList.remove('active'));
     }
 
@@ -2081,7 +2083,6 @@
       let usdAmount = currency === 'USD' ? amount : amount / EXCHANGE_RATE;
       if (isNaN(usdAmount) || usdAmount <= 0) usdAmount = 10;
 
-      // Проверка дневного лимита
       const used = getDailyLimit();
       const remaining = MAX_DEPOSIT - used;
       if (usdAmount > remaining) {
@@ -2158,7 +2159,6 @@
 
       // ===== ОБРАБОТЧИКИ =====
 
-      // Быстрые суммы в пополнении
       document.querySelectorAll('.quick-item').forEach(item => {
         item.addEventListener('click', function() {
           const input = document.getElementById('depositAmountInput');
@@ -2195,34 +2195,23 @@
         }
       });
 
-      // ===== ФИКС СМЕНЫ ТИТУЛА =====
       document.getElementById('adminSetTitleBtn')?.addEventListener('click', function() {
         if (!adminAccess) {
           alert('Нет доступа. Введите код 1973');
           return;
         }
         const title = document.getElementById('adminTitleSelect').value;
-
-        // Обновляем титул в профиле
         profileTitle = title;
-
-        // Обновляем титул в списке игроков
         const player = players.find(p => p.name === profileNickname);
         if (player) {
           player.title = title;
           savePlayers();
         } else {
-          // Если игрока нет в списке — добавляем
           registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, title);
         }
-
-        // Сохраняем все данные
         saveData();
-
-        // Обновляем отображение в профиле
         const titleDisplay = document.getElementById('profileTitleDisplay');
         if (titleDisplay) titleDisplay.textContent = title;
-
         alert(`✅ Титул изменен на "${title}"`);
       });
 
@@ -2263,7 +2252,6 @@
 
       document.getElementById('profileSaveBtn')?.addEventListener('click', saveProfile);
 
-      // Смена аватара по клику
       document.getElementById('avatarContainer')?.addEventListener('click', function() {
         document.getElementById('avatarFileInput')?.click();
       });
@@ -2279,7 +2267,6 @@
           };
           reader.readAsDataURL(file);
         }
-        // Сбрасываем input, чтобы можно было выбрать тот же файл снова
         this.value = '';
       });
 
@@ -2344,11 +2331,9 @@
         if (e.target === this) closeStatusModal();
       });
 
-      document.querySelectorAll('.game-card').forEach(card => {
-        card.addEventListener('click', function() {
-          const game = this.dataset.game;
-          showGame(game);
-        });
+      document.querySelector('.game-card')?.addEventListener('click', function() {
+        const game = this.dataset.game;
+        showGame(game);
       });
       document.getElementById('backToMenuBj')?.addEventListener('click', showMenu);
 
@@ -2442,7 +2427,6 @@
       if (standBtn) standBtn.disabled = true;
       if (dealBtn) dealBtn.disabled = false;
 
-      // Обновляем профиль при загрузке
       updateProfileStats();
     });
   </script>
