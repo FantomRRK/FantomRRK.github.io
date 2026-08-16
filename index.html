@@ -151,12 +151,14 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
+      max-width: 400px;
+      margin: 0 auto;
     }
     .game-menu .game-card {
       background: #1a1a1a;
       border: 1px solid #2a2a2a;
       border-radius: 14px;
-      padding: 16px 12px;
+      padding: 20px 16px;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -168,16 +170,16 @@
       box-shadow: 0 8px 30px rgba(204, 0, 0, 0.15);
     }
     .game-menu .game-card .game-icon {
-      font-size: 32px;
+      font-size: 40px;
       margin-bottom: 6px;
     }
     .game-menu .game-card .game-name {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
       color: #f0f0f0;
     }
     .game-menu .game-card .game-desc {
-      font-size: 11px;
+      font-size: 12px;
       color: #665555;
       margin-top: 2px;
     }
@@ -514,16 +516,16 @@
 
     /* Профиль */
     .profile-avatar {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: #2a1a1a;
       border: 2px solid #cc3333;
-      margin: 0 auto 8px;
+      margin: 0 auto 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
+      font-size: 36px;
       cursor: pointer;
       transition: border-color 0.2s;
       overflow: hidden;
@@ -543,7 +545,7 @@
       left: 0;
       right: 0;
       background: rgba(0, 0, 0, 0.7);
-      font-size: 9px;
+      font-size: 10px;
       color: #aaa;
       padding: 2px 0;
       opacity: 0;
@@ -553,12 +555,12 @@
       opacity: 1;
     }
     .profile-field {
-      margin: 5px 0;
+      margin: 6px 0;
       text-align: left;
     }
     .profile-field label {
       color: #aa8888;
-      font-size: 10px;
+      font-size: 11px;
       display: block;
       margin-bottom: 2px;
     }
@@ -566,9 +568,9 @@
       background: #0f0f0f;
       border: 1px solid #3a2a2a;
       border-radius: 30px;
-      padding: 6px 12px;
+      padding: 8px 14px;
       color: white;
-      font-size: 13px;
+      font-size: 14px;
       width: 100%;
       outline: none;
       transition: border-color 0.2s;
@@ -579,41 +581,41 @@
     .profile-title {
       text-align: center;
       margin: 3px 0 8px;
-      font-size: 13px;
+      font-size: 14px;
       color: #ffd700;
       font-weight: 600;
     }
     .profile-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 5px;
-      margin: 8px 0;
+      gap: 6px;
+      margin: 10px 0;
     }
     .profile-stats .stat-item {
       background: #0f0f0f;
       border-radius: 12px;
-      padding: 6px;
+      padding: 8px;
       border: 1px solid #2a1a1a;
     }
     .profile-stats .stat-item .label {
       color: #aa8888;
-      font-size: 9px;
+      font-size: 10px;
     }
     .profile-stats .stat-item .value {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
       color: #ffb3b3;
     }
     .profile-actions {
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      margin-top: 8px;
+      gap: 6px;
+      margin-top: 10px;
     }
     .profile-actions .btn {
       flex: 1;
-      padding: 8px;
-      font-size: 13px;
+      padding: 10px;
+      font-size: 14px;
     }
     .profile-ref-link {
       background: #0f0f0f;
@@ -679,13 +681,13 @@
     }
 
     .admin-login {
-      margin-top: 8px;
-      padding-top: 8px;
+      margin-top: 10px;
+      padding-top: 10px;
       border-top: 1px solid #2a1a1a;
     }
     .admin-login .admin-row {
       display: flex;
-      gap: 5px;
+      gap: 6px;
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
@@ -694,9 +696,9 @@
       background: #0f0f0f;
       border: 1px solid #3a2a2a;
       border-radius: 30px;
-      padding: 5px 12px;
+      padding: 6px 12px;
       color: white;
-      font-size: 12px;
+      font-size: 13px;
       width: 80px;
       outline: none;
       text-align: center;
@@ -710,12 +712,12 @@
     }
     .admin-login .btn {
       flex: 0 1 auto;
-      padding: 5px 14px;
-      font-size: 11px;
+      padding: 6px 14px;
+      font-size: 12px;
     }
     .admin-panel-inline {
-      margin-top: 8px;
-      padding: 8px;
+      margin-top: 10px;
+      padding: 10px;
       background: #0f0f0f;
       border-radius: 14px;
       border: 1px solid #3a1a1a;
@@ -724,14 +726,14 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       justify-content: center;
     }
     .admin-panel-inline .admin-row-group {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       justify-content: center;
       width: 100%;
     }
@@ -739,10 +741,10 @@
       background: #1a1a1a;
       border: 1px solid #4a2a2a;
       border-radius: 40px;
-      padding: 5px 10px;
+      padding: 6px 12px;
       color: white;
-      font-size: 12px;
-      width: 70px;
+      font-size: 13px;
+      width: 80px;
       outline: none;
       -moz-appearance: textfield;
       appearance: textfield;
@@ -754,14 +756,14 @@
     }
     .admin-panel-inline .admin-controls .btn {
       flex: 0 1 auto;
-      padding: 5px 12px;
-      font-size: 10px;
+      padding: 6px 14px;
+      font-size: 11px;
     }
     .admin-panel-inline .admin-divider {
       width: 100%;
       height: 1px;
       background: #2a1a1a;
-      margin: 3px 0;
+      margin: 4px 0;
     }
     .admin-panel-inline .admin-title-select {
       background: #1a1a1a;
@@ -782,61 +784,6 @@
       font-size: 11px;
     }
 
-    .avatar-upload-area {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      margin: 6px 0;
-      padding: 10px;
-      background: #0f0f0f;
-      border-radius: 16px;
-      border: 1px dashed #4a2a2a;
-    }
-    .avatar-upload-area .upload-btn {
-      background: #2a2a3a;
-      border: 1px solid #4a4a5a;
-      border-radius: 30px;
-      padding: 6px 20px;
-      color: #ccaaaa;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .avatar-upload-area .upload-btn:hover {
-      background: #3a3a4a;
-      border-color: #6a6a8a;
-      color: white;
-    }
-    .avatar-upload-area .avatar-preview {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      border: 2px solid #3a2a2a;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      background: #1a1a1a;
-    }
-    .avatar-upload-area .avatar-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .avatar-upload-area .clear-avatar {
-      background: transparent;
-      border: none;
-      color: #885555;
-      font-size: 11px;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    .avatar-upload-area .clear-avatar:hover {
-      color: #ff5555;
-    }
     .history-list-modal {
       background: #0f0f0f;
       border-radius: 12px;
@@ -881,20 +828,20 @@
     .deposit-modal .deposit-input-group {
       background: #1a1a1a;
       border-radius: 60px;
-      padding: 3px 3px 3px 12px;
+      padding: 4px 4px 4px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border: 1px solid #3a2a2a;
-      margin: 8px 0 6px;
+      margin: 10px 0 8px;
     }
     .deposit-modal .deposit-input-group input {
       background: transparent;
       border: none;
-      padding: 8px 0;
+      padding: 10px 0;
       color: white;
-      font-size: 16px;
-      width: 100px;
+      font-size: 18px;
+      width: 130px;
       outline: none;
       font-weight: 600;
       -moz-appearance: textfield;
@@ -909,24 +856,24 @@
       background: #1a1a1a;
       border: 1px solid #4a2a2a;
       border-radius: 40px;
-      padding: 6px 12px;
+      padding: 8px 12px;
       color: white;
       font-weight: 600;
       outline: none;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
     }
     .deposit-modal .btn-deposit-confirm {
       background: #cc0000;
       border: none;
       border-radius: 60px;
-      padding: 10px 16px;
+      padding: 12px 20px;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 16px;
       color: white;
       cursor: pointer;
       width: 100%;
-      margin-top: 4px;
+      margin-top: 6px;
       border: 1px solid #ff4d4d;
       transition: background 0.2s;
     }
@@ -935,77 +882,47 @@
     }
     .deposit-modal .quick-amounts {
       display: flex;
-      gap: 5px;
-      margin: 6px 0;
+      gap: 8px;
+      margin: 8px 0;
       flex-wrap: wrap;
       justify-content: center;
     }
     .deposit-modal .quick-amounts .quick-item {
-      display: flex;
-      align-items: center;
-      gap: 2px;
       background: #2a1a1a;
       border: 1px solid #4a2a2a;
       border-radius: 30px;
-      padding: 2px 5px 2px 8px;
-    }
-    .deposit-modal .quick-amounts .quick-item button {
-      border: none;
-      background: transparent;
+      padding: 4px 14px;
       color: #ccaaaa;
       font-weight: 600;
-      font-size: 12px;
+      font-size: 13px;
       cursor: pointer;
-      padding: 3px 4px;
-      transition: color 0.2s;
+      transition: 0.2s;
     }
-    .deposit-modal .quick-amounts .quick-item button:hover {
+    .deposit-modal .quick-amounts .quick-item:hover {
+      background: #3a2a2a;
+      border-color: #6a4a4a;
       color: white;
     }
-    .deposit-modal .quick-amounts .remove-btn {
-      background: transparent;
-      border: none;
-      color: #885555;
+    .deposit-modal .quick-amounts .quick-item.active {
+      border-color: #ffd700;
+      color: #ffd700;
+    }
+
+    .deposit-limit-info {
+      font-size: 11px;
+      color: #665555;
+      margin-top: 4px;
+      text-align: center;
+    }
+    .deposit-limit-info span {
+      color: #ffd700;
+    }
+    .deposit-limit-info .remaining {
+      color: #80ffaa;
+    }
+    .deposit-limit-info .reset-timer {
+      color: #88aabb;
       font-size: 10px;
-      padding: 0 2px;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    .deposit-modal .quick-amounts .remove-btn:hover {
-      color: #ff5555;
-    }
-    .deposit-modal .quick-amounts .add-quick {
-      background: #1a2a3a;
-      border: 1px dashed #4a5a6a;
-      border-radius: 30px;
-      padding: 3px 12px;
-      color: #8899aa;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .deposit-modal .quick-amounts .add-quick:hover {
-      background: #2a3a4a;
-      border-color: #6a8aaa;
-      color: white;
-    }
-    .deposit-modal .quick-amounts .add-quick-input {
-      background: #1a1a1a;
-      border: 1px solid #4a2a2a;
-      border-radius: 30px;
-      padding: 3px 8px;
-      color: white;
-      font-size: 12px;
-      width: 55px;
-      outline: none;
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-    .deposit-modal .quick-amounts .add-quick-input::-webkit-outer-spin-button,
-    .deposit-modal .quick-amounts .add-quick-input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
     }
 
     /* Лидеры */
@@ -1127,21 +1044,24 @@
       margin-bottom: 10px;
     }
 
-    .deposit-limit-info {
-      font-size: 11px;
-      color: #665555;
-      margin-top: 4px;
-      text-align: center;
+    /* Скрытые элементы */
+    .avatar-upload-area {
+      display: none !important;
     }
-    .deposit-limit-info span {
-      color: #ffd700;
+    #avatarFileInput {
+      display: none !important;
     }
-    .deposit-limit-info .remaining {
-      color: #80ffaa;
+    #uploadAvatarBtn {
+      display: none !important;
     }
-    .deposit-limit-info .reset-timer {
-      color: #88aabb;
-      font-size: 10px;
+    #clearAvatarBtn {
+      display: none !important;
+    }
+    #avatarPreview {
+      display: none !important;
+    }
+    #avatarPreviewEmoji {
+      display: none !important;
     }
   </style>
 </head>
@@ -1232,7 +1152,13 @@
         <button class="modal-close-icon" id="depositModalClose">✕</button>
       </div>
       <div style="margin: 4px 0 2px; color: #ccaaaa; font-size: 13px;">Выберите сумму</div>
-      <div class="quick-amounts" id="quickAmountsContainer"></div>
+      <div class="quick-amounts" id="quickAmountsContainer">
+        <div class="quick-item" data-amount="1000">$1,000</div>
+        <div class="quick-item" data-amount="2000">$2,000</div>
+        <div class="quick-item" data-amount="5000">$5,000</div>
+        <div class="quick-item" data-amount="7000">$7,000</div>
+        <div class="quick-item" data-amount="10000">$10,000</div>
+      </div>
       <div class="deposit-input-group">
         <input type="number" id="depositAmountInput" value="50" step="0.01" min="0.01" placeholder="Сумма">
         <select id="depositCurrencySelect">
@@ -1258,14 +1184,8 @@
         <span id="avatarEmoji">👤</span>
         <div class="avatar-edit-hint">Нажмите для смены</div>
       </div>
-      <div class="avatar-upload-area">
-        <div class="avatar-preview" id="avatarPreview">
-          <span id="avatarPreviewEmoji">👤</span>
-        </div>
-        <button class="upload-btn" id="uploadAvatarBtn">📁 Загрузить аватар</button>
-        <button class="clear-avatar" id="clearAvatarBtn">✕ Удалить аватар</button>
-        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
-      </div>
+      <!-- Скрытые элементы загрузки аватара -->
+      <input type="file" id="avatarFileInput" accept="image/*">
       <div class="profile-field">
         <label>Никнейм</label>
         <input type="text" id="profileNickname" placeholder="Введите ник" maxlength="20">
@@ -1626,10 +1546,10 @@
         if (savedQuick) {
           quickAmounts = JSON.parse(savedQuick);
         } else {
-          quickAmounts = [10, 25, 50, 100, 500];
+          quickAmounts = [1000, 2000, 5000, 7000, 10000];
         }
       } catch (e) {
-        quickAmounts = [10, 25, 50, 100, 500];
+        quickAmounts = [1000, 2000, 5000, 7000, 10000];
       }
       loadPlayers();
       registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals);
@@ -1777,7 +1697,6 @@
       }
 
       usdBalance += usdAmount;
-      // Сохраняем использованный лимит
       saveDailyLimit(used + usdAmount);
 
       if (recordHistory) {
@@ -2086,83 +2005,30 @@
     function renderQuickAmounts() {
       const container = document.getElementById('quickAmountsContainer');
       if (!container) return;
-      let html = '';
-      quickAmounts.forEach((amount, index) => {
-        html += `
-          <div class="quick-item">
-            <button class="quick-amount-btn" data-amount="${amount}">${amount}</button>
-            <button class="remove-btn" data-index="${index}" title="Удалить">✕</button>
-          </div>
-        `;
-      });
-      html += `
-        <div class="add-quick" id="addQuickBtn">+ Добавить</div>
-        <input type="number" class="add-quick-input hidden" id="addQuickInput" placeholder="сумма" step="0.01" min="0.01">
-      `;
-      container.innerHTML = html;
-
-      document.querySelectorAll('.quick-amount-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const amount = parseFloat(this.dataset.amount);
+      container.innerHTML = '';
+      const amounts = [1000, 2000, 5000, 7000, 10000];
+      amounts.forEach(amount => {
+        const div = document.createElement('div');
+        div.className = 'quick-item';
+        div.dataset.amount = amount;
+        div.textContent = '$' + amount.toLocaleString();
+        div.addEventListener('click', function() {
           const input = document.getElementById('depositAmountInput');
-          if (input) input.value = amount;
+          if (input) input.value = this.dataset.amount;
+          document.querySelectorAll('.quick-item').forEach(el => el.classList.remove('active'));
+          this.classList.add('active');
         });
+        container.appendChild(div);
       });
-
-      document.querySelectorAll('.remove-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const index = parseInt(this.dataset.index);
-          quickAmounts.splice(index, 1);
-          saveQuickAmounts();
-          renderQuickAmounts();
-        });
-      });
-
-      const addBtn = document.getElementById('addQuickBtn');
-      const addInput = document.getElementById('addQuickInput');
-      if (addBtn) {
-        addBtn.addEventListener('click', function() {
-          if (addInput.classList.contains('hidden')) {
-            addInput.classList.remove('hidden');
-            addInput.focus();
-          } else {
-            const val = parseFloat(addInput.value);
-            if (!isNaN(val) && val > 0) {
-              quickAmounts.push(val);
-              saveQuickAmounts();
-              renderQuickAmounts();
-            } else {
-              alert('Введите корректную сумму');
-            }
-          }
-        });
-      }
-      if (addInput) {
-        addInput.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter') {
-            const val = parseFloat(this.value);
-            if (!isNaN(val) && val > 0) {
-              quickAmounts.push(val);
-              saveQuickAmounts();
-              renderQuickAmounts();
-            } else {
-              alert('Введите корректную сумму');
-            }
-          }
-        });
-      }
     }
 
     function updateAvatarPreview() {
-      const preview = document.getElementById('avatarPreview');
-      const emoji = document.getElementById('avatarPreviewEmoji');
-      if (!preview) return;
+      const avatarEl = document.getElementById('avatarEmoji');
+      if (!avatarEl) return;
       if (profileAvatar) {
-        preview.innerHTML = `<img src="${profileAvatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-        if (emoji) emoji.style.display = 'none';
+        avatarEl.innerHTML = `<img src="${profileAvatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
       } else {
-        preview.innerHTML = `<span id="avatarPreviewEmoji">👤</span>`;
-        if (emoji) emoji.style.display = 'block';
+        avatarEl.textContent = '👤';
       }
     }
 
@@ -2202,6 +2068,7 @@
       if (select) select.value = 'USD';
       updateRemainingDisplay();
       updateTimerDisplay();
+      document.querySelectorAll('.quick-item').forEach(el => el.classList.remove('active'));
     }
 
     function closeDepositModal() {
@@ -2285,11 +2152,20 @@
       const nickInput = document.getElementById('profileNickname');
       if (nickInput) nickInput.value = profileNickname;
 
-      // Обновляем таймер сразу
       updateTimerDisplay();
       updateRemainingDisplay();
 
       // ===== ОБРАБОТЧИКИ =====
+
+      // Быстрые суммы в пополнении
+      document.querySelectorAll('.quick-item').forEach(item => {
+        item.addEventListener('click', function() {
+          const input = document.getElementById('depositAmountInput');
+          if (input) input.value = this.dataset.amount;
+          document.querySelectorAll('.quick-item').forEach(el => el.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
 
       document.getElementById('editRefBtn')?.addEventListener('click', function() {
         const input = document.getElementById('refInput');
@@ -2324,7 +2200,14 @@
           return;
         }
         const title = document.getElementById('adminTitleSelect').value;
+        // Обновляем титул в локальных данных
         profileTitle = title;
+        // Обновляем титул в списке игроков
+        const player = players.find(p => p.name === profileNickname);
+        if (player) {
+          player.title = title;
+          savePlayers();
+        }
         saveData();
         updateUI();
         alert(`✅ Титул изменен на "${title}"`);
@@ -2367,12 +2250,11 @@
 
       document.getElementById('profileSaveBtn')?.addEventListener('click', saveProfile);
 
+      // Смена аватара по клику
       document.getElementById('avatarContainer')?.addEventListener('click', function() {
         document.getElementById('avatarFileInput')?.click();
       });
-      document.getElementById('uploadAvatarBtn')?.addEventListener('click', function() {
-        document.getElementById('avatarFileInput')?.click();
-      });
+
       document.getElementById('avatarFileInput')?.addEventListener('change', function(e) {
         const file = this.files[0];
         if (file) {
@@ -2384,12 +2266,6 @@
           };
           reader.readAsDataURL(file);
         }
-      });
-      document.getElementById('clearAvatarBtn')?.addEventListener('click', function() {
-        profileAvatar = null;
-        updateAvatarPreview();
-        saveData();
-        document.getElementById('avatarFileInput').value = '';
       });
 
       document.getElementById('copyRefBtn')?.addEventListener('click', function() {
@@ -2550,6 +2426,9 @@
       if (hitBtn) hitBtn.disabled = true;
       if (standBtn) standBtn.disabled = true;
       if (dealBtn) dealBtn.disabled = false;
+
+      // Обновляем профиль при загрузке
+      updateProfileStats();
     });
   </script>
 </body>
