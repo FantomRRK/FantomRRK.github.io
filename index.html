@@ -1436,19 +1436,20 @@
       } catch (e) {}
     }
 
-    function registerOrUpdatePlayer(name, balance, wins, refs) {
+    function registerOrUpdatePlayer(name, balance, wins, refs, title) {
       const existing = players.find(p => p.name === name);
       if (existing) {
         existing.balance = balance;
         existing.wins = wins;
         existing.referrals = refs;
+        if (title) existing.title = title;
       } else {
         players.push({
           name: name,
           balance: balance,
           wins: wins,
           referrals: refs || 0,
-          title: 'Игрок',
+          title: title || 'Игрок',
           avatar: '👤',
           gender: Math.random() > 0.5 ? 'Мужской' : 'Женский',
           age: Math.floor(Math.random() * 12 + 18),
@@ -1552,7 +1553,7 @@
         quickAmounts = [1000, 2000, 5000, 7000, 10000];
       }
       loadPlayers();
-      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals);
+      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle);
     }
 
     function saveData() {
@@ -1571,7 +1572,7 @@
         };
         localStorage.setItem('wwCasinoData', JSON.stringify(data));
       } catch (e) {}
-      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals);
+      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle);
       savePlayers();
     }
 
@@ -1617,7 +1618,7 @@
       renderProfileHistory();
       const refLink = document.getElementById('refLink');
       if (refLink) refLink.textContent = 'ww-casino.com/ref/' + refCode;
-      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals);
+      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle);
     }
 
     function renderProfileHistory(limit = 5) {
@@ -2194,22 +2195,34 @@
         }
       });
 
+      // ===== ФИКС СМЕНЫ ТИТУЛА =====
       document.getElementById('adminSetTitleBtn')?.addEventListener('click', function() {
         if (!adminAccess) {
           alert('Нет доступа. Введите код 1973');
           return;
         }
         const title = document.getElementById('adminTitleSelect').value;
-        // Обновляем титул в локальных данных
+
+        // Обновляем титул в профиле
         profileTitle = title;
+
         // Обновляем титул в списке игроков
         const player = players.find(p => p.name === profileNickname);
         if (player) {
           player.title = title;
           savePlayers();
+        } else {
+          // Если игрока нет в списке — добавляем
+          registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, title);
         }
+
+        // Сохраняем все данные
         saveData();
-        updateUI();
+
+        // Обновляем отображение в профиле
+        const titleDisplay = document.getElementById('profileTitleDisplay');
+        if (titleDisplay) titleDisplay.textContent = title;
+
         alert(`✅ Титул изменен на "${title}"`);
       });
 
@@ -2266,6 +2279,8 @@
           };
           reader.readAsDataURL(file);
         }
+        // Сбрасываем input, чтобы можно было выбрать тот же файл снова
+        this.value = '';
       });
 
       document.getElementById('copyRefBtn')?.addEventListener('click', function() {
