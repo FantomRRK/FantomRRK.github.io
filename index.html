@@ -148,21 +148,19 @@
       overflow: hidden;
     }
     .game-menu {
-      display: block;
-      max-width: 100%;
-      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
     }
     .game-menu .game-card {
       background: #1a1a1a;
       border: 1px solid #2a2a2a;
       border-radius: 14px;
-      padding: 24px 20px;
+      padding: 16px 12px;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
       user-select: none;
-      max-width: 300px;
-      margin: 0 auto;
     }
     .game-menu .game-card:hover {
       border-color: #cc3333;
@@ -170,18 +168,18 @@
       box-shadow: 0 8px 30px rgba(204, 0, 0, 0.15);
     }
     .game-menu .game-card .game-icon {
-      font-size: 48px;
-      margin-bottom: 8px;
+      font-size: 28px;
+      margin-bottom: 4px;
     }
     .game-menu .game-card .game-name {
-      font-size: 18px;
+      font-size: 13px;
       font-weight: 600;
       color: #f0f0f0;
     }
     .game-menu .game-card .game-desc {
-      font-size: 13px;
+      font-size: 10px;
       color: #665555;
-      margin-top: 4px;
+      margin-top: 2px;
     }
     .game-content {
       display: none;
@@ -246,7 +244,7 @@
       padding: 4px 10px;
       color: white;
       font-size: 13px;
-      width: 70px;
+      width: 80px;
       outline: none;
       -moz-appearance: textfield;
       appearance: textfield;
@@ -255,6 +253,21 @@
     .game-content .game-header .game-bet input::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
+    }
+    .game-content .game-header .game-bet .btn-allin {
+      background: #d4aa33;
+      border: 1px solid #ffd700;
+      border-radius: 30px;
+      padding: 2px 10px;
+      color: #1a1a1a;
+      font-weight: 700;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .game-content .game-header .game-bet .btn-allin:hover {
+      background: #ffd700;
+      transform: scale(0.95);
     }
 
     /* Блэкджек */
@@ -343,6 +356,207 @@
       color: #88aa99;
     }
 
+    /* Монетка */
+    .coin-container {
+      text-align: center;
+      padding: 16px 0;
+    }
+    .coin {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 700;
+      background: radial-gradient(circle at 30% 30%, #f0e68c, #b8860b);
+      border: 4px solid #d4aa33;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+      transition: transform 0.3s;
+      user-select: none;
+    }
+    .coin.flipping {
+      animation: coinFlip 0.6s ease-in-out;
+    }
+    @keyframes coinFlip {
+      0% {
+        transform: rotateY(0deg);
+      }
+      50% {
+        transform: rotateY(180deg);
+      }
+      100% {
+        transform: rotateY(360deg);
+      }
+    }
+    .coin .coin-side {
+      font-size: 40px;
+    }
+    .coin-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    /* Краш */
+    .crash-container {
+      background: #0a0a0a;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+    }
+    .crash-graph {
+      width: 100%;
+      height: 200px;
+      background: #111;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #2a2a2a;
+    }
+    .crash-graph canvas {
+      width: 100%;
+      height: 100%;
+    }
+    .crash-multiplier {
+      font-size: 48px;
+      font-weight: 700;
+      color: #ffd700;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+      margin: 8px 0;
+    }
+    .crash-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .crash-history {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    .crash-history .crash-item {
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      color: #88aabb;
+    }
+    .crash-history .crash-item.high {
+      color: #ffd700;
+      border-color: #ffd700;
+    }
+
+    /* Минное поле */
+    .minefield-container {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .minefield-size-select {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .minefield-size-select button {
+      background: #1a1a1a;
+      border: 1px solid #3a2a2a;
+      border-radius: 30px;
+      padding: 4px 14px;
+      color: #aa8888;
+      font-size: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .minefield-size-select button:hover {
+      border-color: #cc3333;
+      color: white;
+    }
+    .minefield-size-select button.active {
+      border-color: #ffd700;
+      color: #ffd700;
+    }
+    .minefield-grid {
+      display: grid;
+      gap: 4px;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .minefield-grid .cell {
+      aspect-ratio: 1;
+      background: #1a2a1a;
+      border: 1px solid #2a4a2a;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+      user-select: none;
+    }
+    .minefield-grid .cell:hover {
+      border-color: #4a8a4a;
+      background: #1a3a1a;
+    }
+    .minefield-grid .cell.revealed {
+      background: #0a1a0a;
+      border-color: #1a3a1a;
+      cursor: default;
+    }
+    .minefield-grid .cell.mine {
+      background: #2a1a1a;
+      border-color: #aa3333;
+    }
+    .minefield-grid .cell.mine.revealed {
+      background: #3a1a1a;
+      border-color: #cc3333;
+    }
+    .minefield-grid .cell .cell-symbol {
+      font-size: 18px;
+    }
+    .minefield-result {
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      min-height: 24px;
+    }
+    .minefield-result.win {
+      color: #ffd700;
+    }
+    .minefield-result.lose {
+      color: #ff6b6b;
+    }
+    .minefield-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .minefield-stats {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      font-size: 12px;
+      color: #aa8888;
+      margin-top: 6px;
+    }
+    .minefield-stats span {
+      color: #f0f0f0;
+      font-weight: 600;
+    }
+
     .btn {
       background: #2a1a1a;
       border: none;
@@ -403,6 +617,15 @@
     }
     .btn-gray:hover {
       background: #3a3a4a;
+    }
+    .btn-gold {
+      background: #8a6a1a;
+      border-color: #d4aa33;
+      box-shadow: 0 2px 0 #4a3a0a;
+      color: #ffd700;
+    }
+    .btn-gold:hover {
+      background: #aa7a2a;
     }
     .btn:disabled {
       opacity: 0.4;
@@ -516,16 +739,16 @@
 
     /* Профиль */
     .profile-avatar {
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
       background: #2a1a1a;
       border: 2px solid #cc3333;
-      margin: 0 auto 10px;
+      margin: 0 auto 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
+      font-size: 28px;
       cursor: pointer;
       transition: border-color 0.2s;
       overflow: hidden;
@@ -545,7 +768,7 @@
       left: 0;
       right: 0;
       background: rgba(0, 0, 0, 0.7);
-      font-size: 10px;
+      font-size: 9px;
       color: #aaa;
       padding: 2px 0;
       opacity: 0;
@@ -555,12 +778,12 @@
       opacity: 1;
     }
     .profile-field {
-      margin: 6px 0;
+      margin: 5px 0;
       text-align: left;
     }
     .profile-field label {
       color: #aa8888;
-      font-size: 11px;
+      font-size: 10px;
       display: block;
       margin-bottom: 2px;
     }
@@ -568,9 +791,9 @@
       background: #0f0f0f;
       border: 1px solid #3a2a2a;
       border-radius: 30px;
-      padding: 8px 14px;
+      padding: 6px 12px;
       color: white;
-      font-size: 14px;
+      font-size: 13px;
       width: 100%;
       outline: none;
       transition: border-color 0.2s;
@@ -581,41 +804,41 @@
     .profile-title {
       text-align: center;
       margin: 3px 0 8px;
-      font-size: 14px;
+      font-size: 13px;
       color: #ffd700;
       font-weight: 600;
     }
     .profile-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      margin: 10px 0;
+      gap: 5px;
+      margin: 8px 0;
     }
     .profile-stats .stat-item {
       background: #0f0f0f;
       border-radius: 12px;
-      padding: 8px;
+      padding: 6px;
       border: 1px solid #2a1a1a;
     }
     .profile-stats .stat-item .label {
       color: #aa8888;
-      font-size: 10px;
+      font-size: 9px;
     }
     .profile-stats .stat-item .value {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: #ffb3b3;
     }
     .profile-actions {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-top: 10px;
+      gap: 5px;
+      margin-top: 8px;
     }
     .profile-actions .btn {
       flex: 1;
-      padding: 10px;
-      font-size: 14px;
+      padding: 8px;
+      font-size: 13px;
     }
     .profile-ref-link {
       background: #0f0f0f;
@@ -795,6 +1018,19 @@
     }
     .admin-panel-inline .admin-reset-btn:hover {
       background: #9a2a2a;
+    }
+    .admin-panel-inline .admin-ban-btn {
+      background: #6b1a1a;
+      border: 1px solid #aa3333;
+      border-radius: 30px;
+      padding: 4px 14px;
+      color: white;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .admin-panel-inline .admin-ban-btn:hover {
+      background: #8a2a2a;
     }
     .admin-panel-inline .admin-player-edit {
       display: flex;
@@ -1131,9 +1367,40 @@
     #avatarPreviewEmoji {
       display: none !important;
     }
+
+    .banned-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      color: #ff6b6b;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .banned-overlay .ban-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+    }
+    .banned-overlay .ban-sub {
+      font-size: 16px;
+      color: #aa8888;
+      font-weight: 400;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
+  <!-- Бан оверлей -->
+  <div class="banned-overlay hidden" id="bannedOverlay">
+    <div class="ban-icon">🚫</div>
+    <div>Ваш аккаунт заблокирован</div>
+    <div class="ban-sub">Обратитесь к администратору для разблокировки</div>
+  </div>
+
   <div class="global-header">
     <div class="header-left">
       <h1>♛ WW CASINO</h1>
@@ -1152,7 +1419,22 @@
         <div class="game-card" data-game="blackjack">
           <div class="game-icon">♠️</div>
           <div class="game-name">Блэкджек</div>
-          <div class="game-desc">Классическая карточная игра</div>
+          <div class="game-desc">Классика</div>
+        </div>
+        <div class="game-card" data-game="coin">
+          <div class="game-icon">🪙</div>
+          <div class="game-name">Монетка</div>
+          <div class="game-desc">50/50</div>
+        </div>
+        <div class="game-card" data-game="crash">
+          <div class="game-icon">🚀</div>
+          <div class="game-name">Краш</div>
+          <div class="game-desc">x100</div>
+        </div>
+        <div class="game-card" data-game="minefield">
+          <div class="game-icon">💣</div>
+          <div class="game-name">Минное поле</div>
+          <div class="game-desc">3x3-9x9</div>
         </div>
       </div>
 
@@ -1164,6 +1446,7 @@
           <div class="game-bet">
             <label>Ставка</label>
             <input type="number" id="bjBetAmount" value="10" step="1" min="1">
+            <button class="btn-allin" onclick="setBjAllIn()">ALL IN</button>
           </div>
         </div>
         <div class="bj-table">
@@ -1185,6 +1468,89 @@
           </div>
         </div>
       </div>
+
+      <!-- Монетка -->
+      <div class="game-content" id="gameCoin">
+        <button class="game-back" id="backToMenuCoin">← Назад к играм</button>
+        <div class="game-header">
+          <h2>🪙 Монетка</h2>
+          <div class="game-bet">
+            <label>Ставка</label>
+            <input type="number" id="coinBetAmount" value="10" step="1" min="1" max="10000">
+            <button class="btn-allin" onclick="setCoinAllIn()">ALL IN</button>
+          </div>
+        </div>
+        <div class="coin-container">
+          <div class="coin" id="coinDisplay">
+            <span class="coin-side" id="coinSide">❓</span>
+          </div>
+          <div style="font-size:14px;color:#aa8888;margin-bottom:8px;">Выберите сторону</div>
+          <div class="coin-actions">
+            <button class="btn btn-gold" id="coinHeadsBtn">🦅 Орел</button>
+            <button class="btn btn-gold" id="coinTailsBtn">🪙 Решка</button>
+          </div>
+          <div class="bj-result" id="coinResult"></div>
+        </div>
+      </div>
+
+      <!-- Краш -->
+      <div class="game-content" id="gameCrash">
+        <button class="game-back" id="backToMenuCrash">← Назад к играм</button>
+        <div class="game-header">
+          <h2>🚀 Краш</h2>
+          <div class="game-bet">
+            <label>Ставка</label>
+            <input type="number" id="crashBetAmount" value="10" step="1" min="1" max="50000">
+            <button class="btn-allin" onclick="setCrashAllIn()">ALL IN</button>
+          </div>
+        </div>
+        <div class="crash-container">
+          <div class="crash-graph">
+            <canvas id="crashCanvas"></canvas>
+          </div>
+          <div class="crash-multiplier" id="crashMultiplier">1.00x</div>
+          <div class="crash-actions">
+            <button class="btn btn-gold" id="crashBetBtn">📈 Ставка</button>
+            <button class="btn btn-success" id="crashCashoutBtn" disabled>💰 Забрать</button>
+          </div>
+          <div class="crash-history" id="crashHistory"></div>
+          <div class="bj-result" id="crashResult"></div>
+        </div>
+      </div>
+
+      <!-- Минное поле -->
+      <div class="game-content" id="gameMinefield">
+        <button class="game-back" id="backToMenuMine">← Назад к играм</button>
+        <div class="game-header">
+          <h2>💣 Минное поле</h2>
+          <div class="game-bet">
+            <label>Ставка</label>
+            <input type="number" id="mineBetAmount" value="10" step="1" min="1">
+            <button class="btn-allin" onclick="setMineAllIn()">ALL IN</button>
+          </div>
+        </div>
+        <div class="minefield-container">
+          <div class="minefield-size-select" id="mineSizeSelect">
+            <button data-size="3" data-max="5000">3x3</button>
+            <button data-size="5" data-max="10000">5x5</button>
+            <button data-size="9" data-max="20000">9x9</button>
+          </div>
+          <div style="font-size:12px;color:#665555;margin-bottom:6px;">
+            💣 Бомб: <span id="mineBombCount">1</span> | Макс ставка: $<span id="mineMaxBet">5000</span>
+            <span style="margin-left:12px;">| ⭐ Множитель: <span id="mineMultiplierDisplay">1.00</span>x</span>
+          </div>
+          <div class="minefield-grid" id="minefieldGrid"></div>
+          <div class="minefield-stats">
+            <span>Открыто: <span id="mineRevealed">0</span></span>
+            <span>Бомб: <span id="mineBombsLeft">0</span></span>
+          </div>
+          <div class="minefield-result" id="mineResult"></div>
+          <div class="minefield-actions">
+            <button class="btn btn-gold" id="mineDealBtn">💣 Раздать</button>
+            <button class="btn btn-success" id="mineCashoutBtn" disabled>💰 Забрать</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1192,20 +1558,14 @@
   <div class="modal-overlay" id="statusModalOverlay">
     <div class="modal-window">
       <div id="statusProcessing">
-        <div class="flex-between">
-          <h2>⏳ Платеж оформляется</h2>
-          <button class="modal-close-icon" id="statusCloseIcon">✕</button>
-        </div>
+        <div class="flex-between"><h2>⏳ Платеж оформляется</h2><button class="modal-close-icon" id="statusCloseIcon">✕</button></div>
         <div class="loader-circle"></div>
         <div class="modal-text">Обработка запроса...</div>
         <div class="modal-sub">Не закрывайте окно</div>
       </div>
       <div id="statusSuccess" class="hidden">
-        <div class="flex-between">
-          <h2>✅ Платеж оформлен</h2>
-          <button class="modal-close-icon" id="statusCloseIconSuccess">✕</button>
-        </div>
-        <div style="font-size: 36px; margin: 4px 0;">💵</div>
+        <div class="flex-between"><h2>✅ Платеж оформлен</h2><button class="modal-close-icon" id="statusCloseIconSuccess">✕</button></div>
+        <div style="font-size:36px;margin:4px 0;">💵</div>
         <div class="modal-text" id="statusAmountInfo">+ 0.00 USD</div>
         <div class="modal-sub" id="statusRubInfo">0.00 ₽</div>
         <button class="modal-btn" id="statusCloseBtn">Отлично</button>
@@ -1215,11 +1575,8 @@
 
   <div class="modal-overlay" id="depositModalOverlay">
     <div class="modal-window deposit-modal">
-      <div class="flex-between">
-        <h2>💳 Пополнение</h2>
-        <button class="modal-close-icon" id="depositModalClose">✕</button>
-      </div>
-      <div style="margin: 4px 0 2px; color: #ccaaaa; font-size: 13px;">Выберите сумму</div>
+      <div class="flex-between"><h2>💳 Пополнение</h2><button class="modal-close-icon" id="depositModalClose">✕</button></div>
+      <div style="margin:4px 0 2px;color:#ccaaaa;font-size:13px;">Выберите сумму</div>
       <div class="quick-amounts" id="quickAmountsContainer">
         <div class="quick-item" data-amount="1000">$1,000</div>
         <div class="quick-item" data-amount="2000">$2,000</div>
@@ -1229,10 +1586,7 @@
       </div>
       <div class="deposit-input-group">
         <input type="number" id="depositAmountInput" value="50" step="0.01" min="0.01" placeholder="Сумма">
-        <select id="depositCurrencySelect">
-          <option value="USD">USD</option>
-          <option value="RUB">RUB</option>
-        </select>
+        <select id="depositCurrencySelect"><option value="USD">USD</option><option value="RUB">RUB</option></select>
       </div>
       <button class="btn-deposit-confirm" id="depositConfirmBtn">Пополнить</button>
       <div class="deposit-limit-info">
@@ -1244,40 +1598,16 @@
 
   <div class="modal-overlay" id="profileModalOverlay">
     <div class="modal-window">
-      <div class="flex-between">
-        <h2>👤 Профиль</h2>
-        <button class="modal-close-icon" id="profileModalClose">✕</button>
-      </div>
-      <div class="profile-avatar" id="avatarContainer">
-        <span id="avatarEmoji">👤</span>
-        <div class="avatar-edit-hint">Нажмите для смены</div>
-      </div>
+      <div class="flex-between"><h2>👤 Профиль</h2><button class="modal-close-icon" id="profileModalClose">✕</button></div>
+      <div class="profile-avatar" id="avatarContainer"><span id="avatarEmoji">👤</span><div class="avatar-edit-hint">Нажмите для смены</div></div>
       <input type="file" id="avatarFileInput" accept="image/*">
-      <div class="profile-field">
-        <label>Никнейм</label>
-        <input type="text" id="profileNickname" placeholder="Введите ник" maxlength="20">
-      </div>
-      <div class="profile-title">
-        <span style="color: #aa8888; font-size: 11px;">Титул: </span>
-        <span id="profileTitleDisplay" style="color: #ffd700;">Игрок</span>
-      </div>
+      <div class="profile-field"><label>Никнейм</label><input type="text" id="profileNickname" placeholder="Введите ник" maxlength="20"></div>
+      <div class="profile-title"><span style="color:#aa8888;font-size:11px;">Титул: </span><span id="profileTitleDisplay" style="color:#ffd700;">Игрок</span></div>
       <div class="profile-stats">
-        <div class="stat-item">
-          <div class="label">Операций</div>
-          <div class="value" id="profileTotalTransactions">0</div>
-        </div>
-        <div class="stat-item">
-          <div class="label">Всего пополнено</div>
-          <div class="value" id="profileTotalDeposited">0.00 $</div>
-        </div>
-        <div class="stat-item">
-          <div class="label">Текущий баланс</div>
-          <div class="value" id="profileBalance">0.00 $</div>
-        </div>
-        <div class="stat-item">
-          <div class="label">Выигрышей</div>
-          <div class="value" id="profileWins">0</div>
-        </div>
+        <div class="stat-item"><div class="label">Операций</div><div class="value" id="profileTotalTransactions">0</div></div>
+        <div class="stat-item"><div class="label">Всего пополнено</div><div class="value" id="profileTotalDeposited">0.00 $</div></div>
+        <div class="stat-item"><div class="label">Текущий баланс</div><div class="value" id="profileBalance">0.00 $</div></div>
+        <div class="stat-item"><div class="label">Выигрышей</div><div class="value" id="profileWins">0</div></div>
       </div>
       <div class="profile-ref-link">
         <span class="ref-label">🔗 Реферальная ссылка:</span>
@@ -1285,19 +1615,17 @@
         <button class="ref-edit" id="editRefBtn">✏️</button>
         <input type="text" class="ref-input hidden" id="refInput" placeholder="Новый код" maxlength="20">
         <button class="ref-save-btn hidden" id="saveRefBtn">💾</button>
-        <button class="btn btn-gray" id="copyRefBtn" style="padding: 3px 10px; font-size: 10px;">📋 Копировать</button>
+        <button class="btn btn-gray" id="copyRefBtn" style="padding:3px 10px;font-size:10px;">📋 Копировать</button>
       </div>
-      <div style="margin: 6px 0; text-align: left;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
-          <span style="color: #aa8888; font-size: 10px;">📋 История операций</span>
-          <button class="btn btn-gray" id="showHistoryBtn" style="padding: 3px 10px; font-size: 10px; flex: 0 1 auto;">Показать все</button>
+      <div style="margin:6px 0;text-align:left;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+          <span style="color:#aa8888;font-size:10px;">📋 История операций</span>
+          <button class="btn btn-gray" id="showHistoryBtn" style="padding:3px 10px;font-size:10px;flex:0 1 auto;">Показать все</button>
         </div>
-        <div id="profileHistoryList" class="history-list-modal" style="max-height: 70px;">
-          <div style="color: #665555; text-align: center; padding: 6px 0;">Нет операций</div>
-        </div>
+        <div id="profileHistoryList" class="history-list-modal" style="max-height:70px;"><div style="color:#665555;text-align:center;padding:6px 0;">Нет операций</div></div>
       </div>
 
-      <!-- АДМИН-ПАНЕЛЬ (скрыта, доступ по коду 1973) -->
+      <!-- АДМИН-ПАНЕЛЬ -->
       <div class="admin-login">
         <div class="admin-row">
           <input type="password" id="adminCodeInput" placeholder="Код" maxlength="4">
@@ -1305,19 +1633,19 @@
         </div>
         <div id="adminPanelContainer" class="hidden">
           <div class="admin-panel-inline">
-            <div style="color: #ff6b6b; font-size: 11px; text-align: center; margin-bottom: 6px;">⚙️ Админ панель</div>
+            <div style="color:#ff6b6b;font-size:11px;text-align:center;margin-bottom:6px;">⚙️ Админ панель</div>
 
-            <!-- Управление игроком по ID -->
-            <div class="admin-player-edit" style="margin-bottom: 6px;">
+            <div class="admin-player-edit" style="margin-bottom:6px;">
               <span class="admin-label-sm">🔍 Поиск по ID:</span>
               <input type="number" id="adminPlayerId" value="1" min="1" step="1" placeholder="ID">
               <button class="btn btn-warning" id="adminFindPlayerBtn">Найти</button>
             </div>
-            <div id="adminFoundPlayerInfo" style="color: #88aabb; font-size: 11px; text-align: center; margin-bottom: 6px; display: none;">
+            <div id="adminFoundPlayerInfo" style="color:#88aabb;font-size:11px;text-align:center;margin-bottom:6px;display:none;">
               <span id="adminFoundPlayerName"></span> | Баланс: $<span id="adminFoundPlayerBalance">0.00</span> | Титул: <span id="adminFoundPlayerTitle">Игрок</span>
+              <span id="adminFoundPlayerStatus" style="color:#ff6b6b;margin-left:8px;"></span>
             </div>
 
-            <div class="admin-controls" style="margin-bottom: 6px;">
+            <div class="admin-controls" style="margin-bottom:6px;">
               <div class="admin-row-group">
                 <span class="admin-title-label">Титул игрока:</span>
                 <select class="admin-title-select" id="adminTitleSelect">
@@ -1349,6 +1677,14 @@
             <div class="admin-divider"></div>
             <div class="admin-controls">
               <div class="admin-row-group">
+                <button class="admin-ban-btn" id="adminBanBtn">🚫 Забанить</button>
+                <button class="admin-ban-btn" id="adminUnbanBtn" style="background:#1a4a2a;border-color:#2a7a4a;">✅ Разбанить</button>
+                <button class="admin-reset-btn" id="adminResetPlayerBtn">🔄 Обнулить аккаунт</button>
+              </div>
+            </div>
+            <div class="admin-divider"></div>
+            <div class="admin-controls">
+              <div class="admin-row-group">
                 <button class="admin-reset-btn" id="adminResetLimitBtn">🔄 Сбросить лимит</button>
               </div>
             </div>
@@ -1363,24 +1699,15 @@
   </div>
 
   <div class="modal-overlay" id="historyModalOverlay">
-    <div class="modal-window" style="max-width: 400px;">
-      <div class="flex-between">
-        <h2>📋 Полная история</h2>
-        <button class="modal-close-icon" id="historyModalClose">✕</button>
-      </div>
-      <div id="fullHistoryList" class="history-list-modal" style="max-height: 300px; margin-top: 6px;">
-        <div style="color: #665555; text-align: center; padding: 6px 0;">Нет операций</div>
-      </div>
+    <div class="modal-window" style="max-width:400px;">
+      <div class="flex-between"><h2>📋 Полная история</h2><button class="modal-close-icon" id="historyModalClose">✕</button></div>
+      <div id="fullHistoryList" class="history-list-modal" style="max-height:300px;margin-top:6px;"><div style="color:#665555;text-align:center;padding:6px 0;">Нет операций</div></div>
     </div>
   </div>
 
-  <!-- Модалка Топ -->
   <div class="modal-overlay" id="leaderboardModalOverlay">
-    <div class="modal-window" style="max-width: 500px;">
-      <div class="flex-between">
-        <h2>🏆 Топ игроков</h2>
-        <button class="modal-close-icon" id="leaderboardModalClose">✕</button>
-      </div>
+    <div class="modal-window" style="max-width:500px;">
+      <div class="flex-between"><h2>🏆 Топ игроков</h2><button class="modal-close-icon" id="leaderboardModalClose">✕</button></div>
       <div class="leaderboard-tabs" id="lbTabsModal">
         <button class="tab active" data-tab="balance">💰 По балансу</button>
         <button class="tab" data-tab="wins">🏆 По выигрышам</button>
@@ -1390,13 +1717,9 @@
     </div>
   </div>
 
-  <!-- Модалка карточки игрока -->
   <div class="modal-overlay" id="playerCardModalOverlay">
-    <div class="modal-window" style="max-width: 420px;">
-      <div class="flex-between">
-        <h2>👤 Карточка игрока</h2>
-        <button class="modal-close-icon" id="playerCardModalClose">✕</button>
-      </div>
+    <div class="modal-window" style="max-width:420px;">
+      <div class="flex-between"><h2>👤 Карточка игрока</h2><button class="modal-close-icon" id="playerCardModalClose">✕</button></div>
       <div id="playerCardContent"></div>
     </div>
   </div>
@@ -1415,9 +1738,7 @@
         const saved = localStorage.getItem('wwDepositLimit');
         if (saved) {
           const data = JSON.parse(saved);
-          if (data.date === today) {
-            return data.used;
-          }
+          if (data.date === today) return data.used;
         }
       } catch (e) {}
       return 0;
@@ -1426,20 +1747,14 @@
     function saveDailyLimit(used) {
       const today = new Date().toDateString();
       try {
-        localStorage.setItem('wwDepositLimit', JSON.stringify({
-          date: today,
-          used: used
-        }));
+        localStorage.setItem('wwDepositLimit', JSON.stringify({ date: today, used: used }));
       } catch (e) {}
     }
 
     function resetDailyLimit() {
       const today = new Date().toDateString();
       try {
-        localStorage.setItem('wwDepositLimit', JSON.stringify({
-          date: today,
-          used: 0
-        }));
+        localStorage.setItem('wwDepositLimit', JSON.stringify({ date: today, used: 0 }));
       } catch (e) {}
       updateRemainingDisplay();
       updateTimerDisplay();
@@ -1456,37 +1771,29 @@
       tomorrow.setDate(tomorrow.getDate() + 1);
       tomorrow.setHours(0, 0, 0, 0);
       const diff = tomorrow - now;
-      const hours = Math.floor(diff / 3600000);
-      const minutes = Math.floor((diff % 3600000) / 60000);
-      const seconds = Math.floor((diff % 60000) / 1000);
-      return { hours, minutes, seconds, total: diff };
+      return {
+        hours: Math.floor(diff / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
+        total: diff
+      };
     }
 
     function updateTimerDisplay() {
       const el = document.getElementById('resetTimer');
       if (!el) return;
       const time = getTimeToReset();
-      if (time.total <= 0) {
-        el.textContent = '⏳ Сброс через: 00:00:00';
-        return;
-      }
-      const h = String(time.hours).padStart(2, '0');
-      const m = String(time.minutes).padStart(2, '0');
-      const s = String(time.seconds).padStart(2, '0');
-      el.textContent = `⏳ Сброс через: ${h}:${m}:${s}`;
+      if (time.total <= 0) { el.textContent = '⏳ Сброс через: 00:00:00'; return; }
+      el.textContent = `⏳ Сброс через: ${String(time.hours).padStart(2,'0')}:${String(time.minutes).padStart(2,'0')}:${String(time.seconds).padStart(2,'0')}`;
     }
 
     function updateRemainingDisplay() {
       const el = document.getElementById('depositRemaining');
       if (!el) return;
-      const remaining = getRemainingLimit();
-      el.textContent = '$' + remaining.toFixed(2);
+      el.textContent = '$' + getRemainingLimit().toFixed(2);
     }
 
-    setInterval(() => {
-      updateTimerDisplay();
-      updateRemainingDisplay();
-    }, 1000);
+    setInterval(() => { updateTimerDisplay(); updateRemainingDisplay(); }, 1000);
 
     // ====================================================================
 
@@ -1504,6 +1811,7 @@
     let refCode = 'FaWW';
     let referrals = 0;
     let currentPlayerId = null;
+    let isBanned = false;
 
     // Блэкджек
     let deck = [];
@@ -1512,12 +1820,35 @@
     let gameActive = false;
     let gameFinished = false;
 
-    // Список игроков (топ)
-    let players = [];
+    // Монетка
+    let coinFlipping = false;
 
-    // ===== ТЕЛЕГРАМ =====
+    // Краш
+    let crashRunning = false;
+    let crashMultiplier = 1.00;
+    let crashBetPlaced = false;
+    let crashHistory = [];
+    let crashAnimId = null;
+    let crashStartTime = 0;
+    let crashCanvas = null;
+    let crashCtx = null;
+    let crashPoints = [];
+
+    // Минное поле
+    let mineSize = 3;
+    let mineBombs = 1;
+    let mineGrid = [];
+    let mineRevealed = 0;
+    let mineGameActive = false;
+    let mineBetPlaced = false;
+    let mineMultiplier = 1.00;
+    let mineMaxBet = 5000;
+
+    // Список игроков
+    let players = [];
     let telegramUser = null;
 
+    // ===== ТЕЛЕГРАМ =====
     function initTelegram() {
       if (window.Telegram && window.Telegram.WebApp) {
         Telegram.WebApp.expand();
@@ -1534,10 +1865,7 @@
               data.telegramId = user.id;
               localStorage.setItem('wwCasinoData', JSON.stringify(data));
             } else {
-              localStorage.setItem('wwCasinoData', JSON.stringify({
-                profileNickname: username,
-                telegramId: user.id
-              }));
+              localStorage.setItem('wwCasinoData', JSON.stringify({ profileNickname: username, telegramId: user.id }));
             }
           } catch (e) {}
           return user;
@@ -1550,18 +1878,13 @@
     function getNextPlayerId() {
       try {
         const saved = localStorage.getItem('wwNextPlayerId');
-        if (saved) {
-          const id = parseInt(saved);
-          if (!isNaN(id) && id > 0) return id;
-        }
+        if (saved) { const id = parseInt(saved); if (!isNaN(id) && id > 0) return id; }
       } catch (e) {}
       return 1;
     }
 
     function saveNextPlayerId(id) {
-      try {
-        localStorage.setItem('wwNextPlayerId', String(id));
-      } catch (e) {}
+      try { localStorage.setItem('wwNextPlayerId', String(id)); } catch (e) {}
     }
 
     function loadPlayers() {
@@ -1569,21 +1892,16 @@
         const saved = localStorage.getItem('wwCasinoPlayers');
         if (saved) {
           players = JSON.parse(saved);
-          // Обновляем nextPlayerId и проставляем ID старым игрокам
           let maxId = 0;
           let needSave = false;
           players.forEach((p, index) => {
-            if (!p.id) {
-              p.id = index + 1;
-              needSave = true;
-            }
+            if (!p.id) { p.id = index + 1; needSave = true; }
+            if (!p.banned) p.banned = false;
             if (p.id > maxId) maxId = p.id;
           });
           nextPlayerId = maxId + 1;
           saveNextPlayerId(nextPlayerId);
-          if (needSave) {
-            savePlayers();
-          }
+          if (needSave) savePlayers();
           return;
         }
       } catch (e) {}
@@ -1592,20 +1910,13 @@
     }
 
     function savePlayers() {
-      try {
-        localStorage.setItem('wwCasinoPlayers', JSON.stringify(players));
-      } catch (e) {}
+      try { localStorage.setItem('wwCasinoPlayers', JSON.stringify(players)); } catch (e) {}
     }
 
     function registerOrUpdatePlayer(name, balance, wins, refs, title, telegramId) {
-      // Проверяем существование по telegramId или имени
       let existing = null;
-      if (telegramId) {
-        existing = players.find(p => p.telegramId === telegramId);
-      }
-      if (!existing) {
-        existing = players.find(p => p.name === name);
-      }
+      if (telegramId) existing = players.find(p => p.telegramId === telegramId);
+      if (!existing) existing = players.find(p => p.name === name);
 
       if (existing) {
         existing.name = name;
@@ -1615,8 +1926,14 @@
         if (title) existing.title = title;
         if (telegramId) existing.telegramId = telegramId;
         existing.lastLogin = new Date().toLocaleDateString('ru-RU');
-        if (telegramId === (telegramUser ? telegramUser.id : null)) {
-          currentPlayerId = existing.id;
+        if (telegramId === (telegramUser ? telegramUser.id : null)) currentPlayerId = existing.id;
+        // Проверка бана
+        if (existing.banned) {
+          isBanned = true;
+          document.getElementById('bannedOverlay').classList.remove('hidden');
+        } else {
+          isBanned = false;
+          document.getElementById('bannedOverlay').classList.add('hidden');
         }
       } else {
         const newId = nextPlayerId++;
@@ -1629,6 +1946,7 @@
           referrals: refs || 0,
           title: title || 'Игрок',
           telegramId: telegramId || null,
+          banned: false,
           avatar: '👤',
           gender: Math.random() > 0.5 ? 'Мужской' : 'Женский',
           age: Math.floor(Math.random() * 12 + 18),
@@ -1637,20 +1955,38 @@
           lastLogin: new Date().toLocaleDateString('ru-RU')
         };
         players.push(player);
-        if (telegramId === (telegramUser ? telegramUser.id : null)) {
-          currentPlayerId = player.id;
-        }
+        if (telegramId === (telegramUser ? telegramUser.id : null)) currentPlayerId = player.id;
       }
       savePlayers();
     }
 
-    function findPlayerById(id) {
-      return players.find(p => p.id === id);
+    function findPlayerById(id) { return players.find(p => p.id === id); }
+
+    // ===== АДМИН ФУНКЦИИ =====
+    function updateFoundPlayerInfo() {
+      const idInput = document.getElementById('adminPlayerId');
+      const id = parseInt(idInput ? idInput.value : 1);
+      const player = findPlayerById(id);
+      const infoEl = document.getElementById('adminFoundPlayerInfo');
+      if (player && infoEl) {
+        infoEl.style.display = 'block';
+        document.getElementById('adminFoundPlayerName').textContent = player.name;
+        document.getElementById('adminFoundPlayerBalance').textContent = player.balance.toFixed(2);
+        document.getElementById('adminFoundPlayerTitle').textContent = player.title || 'Игрок';
+        const statusEl = document.getElementById('adminFoundPlayerStatus');
+        if (player.banned) {
+          statusEl.textContent = '🚫 ЗАБАНЕН';
+          statusEl.style.color = '#ff6b6b';
+        } else {
+          statusEl.textContent = '✅ Активен';
+          statusEl.style.color = '#80ffaa';
+        }
+      } else if (infoEl) {
+        infoEl.style.display = 'none';
+      }
     }
 
-    // ===== ГЕНЕРАЦИЯ ТОПА =====
     function renderLeaderboardModal(sortBy = 'balance') {
-      // Обновляем данные текущего игрока
       const player = players.find(p => p.telegramId === (telegramUser ? telegramUser.id : null) || p.name === profileNickname);
       if (player) {
         player.title = profileTitle;
@@ -1677,17 +2013,14 @@
       else if (sortBy === 'wins') sorted.sort((a, b) => b.wins - a.wins);
       else if (sortBy === 'refs') sorted.sort((a, b) => b.referrals - a.referrals);
 
-      let html = `
-        <table class="leaderboard-table">
-          <thead><tr><th>#</th><th>ID</th><th>Игрок</th><th>${sortBy === 'balance' ? '💰 Баланс' : sortBy === 'wins' ? '🏆 Выигрыши' : '👥 Рефералы'}</th><th>Титул</th></tr></thead>
-          <tbody>
-      `;
+      let html =
+        `<table class="leaderboard-table"><thead><tr><th>#</th><th>ID</th><th>Игрок</th><th>${sortBy === 'balance' ? '💰 Баланс' : sortBy === 'wins' ? '🏆 Выигрыши' : '👥 Рефералы'}</th><th>Титул</th><th>Статус</th></tr></thead><tbody>`;
       sorted.forEach((player, index) => {
         const isHighlight = player.id === currentPlayerId;
-        const value = sortBy === 'balance' ? '$' + player.balance.toFixed(2) :
-          sortBy === 'wins' ? player.wins : player.referrals;
-        // Показываем ID, даже если он undefined (но с фиксом выше этого не должно быть)
+        const value = sortBy === 'balance' ? '$' + player.balance.toFixed(2) : sortBy === 'wins' ? player.wins : player
+          .referrals;
         const playerId = player.id !== undefined ? player.id : '?';
+        const status = player.banned ? '🚫' : '✅';
         html += `
           <tr class="${isHighlight ? 'highlight' : ''}" data-player="${encodeURIComponent(player.name)}" data-id="${player.id}">
             <td class="rank">${index + 1}</td>
@@ -1695,6 +2028,7 @@
             <td class="name">${player.name}</td>
             <td class="value">${value}</td>
             <td style="color:#ffd700;font-size:10px;">${player.title || 'Игрок'}</td>
+            <td style="font-size:10px;">${status}</td>
           </tr>
         `;
       });
@@ -1728,11 +2062,15 @@
             <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'Администратор')">👑 Админ</button>
             <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'VIP')">⭐ VIP</button>
             <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'Игрок')">Игрок</button>
+            <button class="btn btn-danger" onclick="adminBanPlayerById(${player.id})">🚫 Забанить</button>
+            <button class="btn btn-success" onclick="adminUnbanPlayerById(${player.id})">✅ Разбанить</button>
+            <button class="btn btn-warning" onclick="adminResetPlayerById(${player.id})">🔄 Обнулить</button>
           </div>
         `;
       }
 
       const playerId = player.id !== undefined ? player.id : '?';
+      const statusText = player.banned ? '🚫 Забанен' : '✅ Активен';
 
       content.innerHTML = `
         <div class="player-card">
@@ -1747,6 +2085,7 @@
           <div class="player-row"><span class="label">🕐 Последний вход</span><span class="value">${player.lastLogin || '--'}</span></div>
           <div class="player-row"><span class="label">🎂 Возраст</span><span class="value">${player.age || 25} лет</span></div>
           <div class="player-row"><span class="label">📍 Город</span><span class="value">${player.city || 'Не указан'}</span></div>
+          <div class="player-row"><span class="label">📊 Статус</span><span class="value">${statusText}</span></div>
           ${player.telegramId ? `<div class="player-row"><span class="label">🆔 Telegram ID</span><span class="value">${player.telegramId}</span></div>` : ''}
           ${adminHtml}
         </div>
@@ -1754,22 +2093,7 @@
       document.getElementById('playerCardModalOverlay').classList.add('active');
     }
 
-    // ===== АДМИН ФУНКЦИИ ПО ID =====
-    function updateFoundPlayerInfo() {
-      const idInput = document.getElementById('adminPlayerId');
-      const id = parseInt(idInput ? idInput.value : 1);
-      const player = findPlayerById(id);
-      const infoEl = document.getElementById('adminFoundPlayerInfo');
-      if (player && infoEl) {
-        infoEl.style.display = 'block';
-        document.getElementById('adminFoundPlayerName').textContent = player.name;
-        document.getElementById('adminFoundPlayerBalance').textContent = player.balance.toFixed(2);
-        document.getElementById('adminFoundPlayerTitle').textContent = player.title || 'Игрок';
-      } else if (infoEl) {
-        infoEl.style.display = 'none';
-      }
-    }
-
+    // ===== АДМИН ДЕЙСТВИЯ =====
     window.adminGiveBalanceById = function(id, amount) {
       if (!adminAccess) { alert('❌ Нет доступа'); return; }
       const player = findPlayerById(id);
@@ -1783,6 +2107,12 @@
         if (currentPlayer) showPlayerCard(currentPlayer);
       }
       updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        usdBalance = player.balance;
+        const balanceEl = document.getElementById('profileBalance');
+        if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
+        saveData();
+      }
       alert(`✅ ${player.name} (ID: ${player.id}) получено +${amount} USD. Новый баланс: $${player.balance.toFixed(2)}`);
     };
 
@@ -1803,6 +2133,12 @@
         if (currentPlayer) showPlayerCard(currentPlayer);
       }
       updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        usdBalance = player.balance;
+        const balanceEl = document.getElementById('profileBalance');
+        if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
+        saveData();
+      }
       alert(`✅ ${player.name} (ID: ${player.id}) списано -${amount} USD. Новый баланс: $${player.balance.toFixed(2)}`);
     };
 
@@ -1819,8 +2155,108 @@
         if (currentPlayer) showPlayerCard(currentPlayer);
       }
       updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        profileTitle = title;
+        const titleDisplay = document.getElementById('profileTitleDisplay');
+        if (titleDisplay) titleDisplay.textContent = title;
+        saveData();
+      }
       alert(`✅ Титул игрока ${player.name} (ID: ${player.id}) изменен на "${title}"`);
     };
+
+    window.adminBanPlayerById = function(id) {
+      if (!adminAccess) { alert('❌ Нет доступа'); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ Игрок не найден'); return; }
+      if (player.banned) { alert('⚠️ Игрок уже забанен'); return; }
+      player.banned = true;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      const overlay = document.getElementById('playerCardModalOverlay');
+      if (overlay.classList.contains('active')) {
+        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
+        if (currentPlayer) showPlayerCard(currentPlayer);
+      }
+      updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        isBanned = true;
+        document.getElementById('bannedOverlay').classList.remove('hidden');
+      }
+      alert(`✅ Игрок ${player.name} (ID: ${player.id}) забанен`);
+    };
+
+    window.adminUnbanPlayerById = function(id) {
+      if (!adminAccess) { alert('❌ Нет доступа'); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ Игрок не найден'); return; }
+      if (!player.banned) { alert('⚠️ Игрок не забанен'); return; }
+      player.banned = false;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      const overlay = document.getElementById('playerCardModalOverlay');
+      if (overlay.classList.contains('active')) {
+        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
+        if (currentPlayer) showPlayerCard(currentPlayer);
+      }
+      updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        isBanned = false;
+        document.getElementById('bannedOverlay').classList.add('hidden');
+      }
+      alert(`✅ Игрок ${player.name} (ID: ${player.id}) разбанен`);
+    };
+
+    window.adminResetPlayerById = function(id) {
+      if (!adminAccess) { alert('❌ Нет доступа'); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ Игрок не найден'); return; }
+      if (!confirm(`⚠️ Вы уверены, что хотите обнулить аккаунт ${player.name} (ID: ${player.id})? Это действие необратимо!`)) return;
+      const oldBalance = player.balance;
+      player.balance = 0;
+      player.wins = 0;
+      player.referrals = 0;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      const overlay = document.getElementById('playerCardModalOverlay');
+      if (overlay.classList.contains('active')) {
+        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
+        if (currentPlayer) showPlayerCard(currentPlayer);
+      }
+      updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        usdBalance = 0;
+        wins = 0;
+        referrals = 0;
+        const balanceEl = document.getElementById('profileBalance');
+        if (balanceEl) balanceEl.textContent = '0.00 $';
+        const winsEl = document.getElementById('profileWins');
+        if (winsEl) winsEl.textContent = '0';
+        saveData();
+        updateUI();
+      }
+      alert(`✅ Аккаунт ${player.name} (ID: ${player.id}) обнулен. Было списано $${oldBalance.toFixed(2)}`);
+    };
+
+    // ===== ALL IN =====
+    function setBjAllIn() {
+      const input = document.getElementById('bjBetAmount');
+      if (input) input.value = Math.floor(usdBalance);
+    }
+
+    function setCoinAllIn() {
+      const input = document.getElementById('coinBetAmount');
+      if (input) input.value = Math.min(Math.floor(usdBalance), 10000);
+    }
+
+    function setCrashAllIn() {
+      const input = document.getElementById('crashBetAmount');
+      if (input) input.value = Math.min(Math.floor(usdBalance), 50000);
+    }
+
+    function setMineAllIn() {
+      const input = document.getElementById('mineBetAmount');
+      if (input) input.value = Math.min(Math.floor(usdBalance), mineMaxBet);
+    }
 
     // ===== ЗАГРУЗКА =====
     function loadData() {
@@ -1843,14 +2279,8 @@
       } catch (e) {}
       try {
         const savedQuick = localStorage.getItem('wwCasinoQuickAmounts');
-        if (savedQuick) {
-          quickAmounts = JSON.parse(savedQuick);
-        } else {
-          quickAmounts = [1000, 2000, 5000, 7000, 10000];
-        }
-      } catch (e) {
-        quickAmounts = [1000, 2000, 5000, 7000, 10000];
-      }
+        if (savedQuick) { quickAmounts = JSON.parse(savedQuick); } else { quickAmounts = [1000, 2000, 5000, 7000, 10000]; }
+      } catch (e) { quickAmounts = [1000, 2000, 5000, 7000, 10000]; }
       loadPlayers();
       const tgId = telegramUser ? telegramUser.id : null;
       registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
@@ -1879,9 +2309,7 @@
     }
 
     function saveQuickAmounts() {
-      try {
-        localStorage.setItem('wwCasinoQuickAmounts', JSON.stringify(quickAmounts));
-      } catch (e) {}
+      try { localStorage.setItem('wwCasinoQuickAmounts', JSON.stringify(quickAmounts)); } catch (e) {}
     }
 
     function updateUI() {
@@ -1936,7 +2364,19 @@
       displayHistory.forEach(item => {
         const sign = item.type === 'deposit' ? '+' : item.type === 'withdraw' ? '-' : '';
         const colorClass = item.type === 'deposit' ? 'positive' : 'negative';
-        const label = item.type === 'deposit' ? '💰 Пополнение' : item.type === 'withdraw' ? '💸 Вывод' : '♠️ Блэкджек';
+        const labels = {
+          'deposit': '💰 Пополнение',
+          'withdraw': '💸 Вывод',
+          'bj_win': '♠️ Блэкджек',
+          'bj_bet': '♠️ Блэкджек',
+          'coin_win': '🪙 Монетка',
+          'coin_bet': '🪙 Монетка',
+          'crash_win': '🚀 Краш',
+          'crash_bet': '🚀 Краш',
+          'mine_win': '💣 Минное поле',
+          'mine_bet': '💣 Минное поле'
+        };
+        const label = labels[item.type] || item.type;
         html += `
           <div class="history-item-modal">
             <span>${label}</span>
@@ -1960,7 +2400,19 @@
       displayHistory.forEach(item => {
         const sign = item.type === 'deposit' ? '+' : item.type === 'withdraw' ? '-' : '';
         const colorClass = item.type === 'deposit' ? 'positive' : 'negative';
-        const label = item.type === 'deposit' ? '💰 Пополнение' : item.type === 'withdraw' ? '💸 Вывод' : '♠️ Блэкджек';
+        const labels = {
+          'deposit': '💰 Пополнение',
+          'withdraw': '💸 Вывод',
+          'bj_win': '♠️ Блэкджек',
+          'bj_bet': '♠️ Блэкджек',
+          'coin_win': '🪙 Монетка',
+          'coin_bet': '🪙 Монетка',
+          'crash_win': '🚀 Краш',
+          'crash_bet': '🚀 Краш',
+          'mine_win': '💣 Минное поле',
+          'mine_bet': '💣 Минное поле'
+        };
+        const label = labels[item.type] || item.type;
         html += `
           <div class="history-item-modal">
             <span>${label}</span>
@@ -1984,13 +2436,8 @@
     function addBalance(amount, currency, recordHistory = true) {
       if (isNaN(amount) || amount <= 0) return false;
       let usdAmount;
-      if (currency === 'USD') {
-        usdAmount = amount;
-      } else if (currency === 'RUB') {
-        usdAmount = amount / EXCHANGE_RATE;
-      } else {
+      if (currency === 'USD') { usdAmount = amount; } else if (currency === 'RUB') { usdAmount = amount / EXCHANGE_RATE; } else
         return false;
-      }
 
       const used = getDailyLimit();
       const remaining = MAX_DEPOSIT - used;
@@ -2015,13 +2462,8 @@
     function takeBalance(amount, currency, recordHistory = true) {
       if (isNaN(amount) || amount <= 0) return false;
       let usdAmount;
-      if (currency === 'USD') {
-        usdAmount = amount;
-      } else if (currency === 'RUB') {
-        usdAmount = amount / EXCHANGE_RATE;
-      } else {
+      if (currency === 'USD') { usdAmount = amount; } else if (currency === 'RUB') { usdAmount = amount / EXCHANGE_RATE; } else
         return false;
-      }
       if (usdAmount > usdBalance) {
         alert(`Недостаточно средств! Доступно: ${usdBalance.toFixed(2)} USD`);
         return false;
@@ -2036,7 +2478,7 @@
       return true;
     }
 
-    // ===== ОБЩИЕ ФУНКЦИИ =====
+    // ===== БЛЭКДЖЕК =====
     function createDeck() {
       const suits = ['♠', '♥', '♦', '♣'];
       const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
@@ -2082,11 +2524,8 @@
       return `<div class="card ${color}">${card.rank}${card.suit}</div>`;
     }
 
-    function getCardDisplayHidden() {
-      return `<div class="card hidden">?</div>`;
-    }
+    function getCardDisplayHidden() { return `<div class="card hidden">?</div>`; }
 
-    // ===== БЛЭКДЖЕК =====
     function renderBjGame() {
       const dealerCardsEl = document.getElementById('dealerCards');
       const playerCardsEl = document.getElementById('playerCards');
@@ -2141,16 +2580,11 @@
     }
 
     function startBjGame() {
+      if (isBanned) { alert('❌ Ваш аккаунт заблокирован!'); return; }
       const betInput = document.getElementById('bjBetAmount');
       const bet = parseFloat(betInput ? betInput.value : 10);
-      if (isNaN(bet) || bet <= 0) {
-        alert('Введите корректную ставку');
-        return;
-      }
-      if (bet > usdBalance) {
-        alert(`Недостаточно средств! Доступно: ${usdBalance.toFixed(2)} USD`);
-        return;
-      }
+      if (isNaN(bet) || bet <= 0) { alert('Введите корректную ставку'); return; }
+      if (bet > usdBalance) { alert(`Недостаточно средств! Доступно: ${usdBalance.toFixed(2)} USD`); return; }
 
       usdBalance -= bet;
       totalTransactions++;
@@ -2163,24 +2597,17 @@
       gameActive = true;
       gameFinished = false;
       const resultEl = document.getElementById('bjResult');
-      if (resultEl) {
-        resultEl.textContent = '';
-        resultEl.className = 'bj-result';
-      }
+      if (resultEl) { resultEl.textContent = ''; resultEl.className = 'bj-result'; }
       renderBjGame();
 
-      if (getHandValue(playerHand) === 21) {
-        finishBjGame('blackjack');
-      }
+      if (getHandValue(playerHand) === 21) { finishBjGame('blackjack'); }
     }
 
     function playerHit() {
       if (!gameActive || gameFinished) return;
       playerHand.push(deck.pop());
       renderBjGame();
-      if (getHandValue(playerHand) > 21) {
-        finishBjGame('bust');
-      }
+      if (getHandValue(playerHand) > 21) { finishBjGame('bust'); }
     }
 
     function playerStand() {
@@ -2251,16 +2678,410 @@
       }
 
       const resultEl = document.getElementById('bjResult');
-      if (resultEl) {
-        resultEl.textContent = resultText;
-        resultEl.className = 'bj-result ' + resultClass;
-      }
+      if (resultEl) { resultEl.textContent = resultText; resultEl.className = 'bj-result ' + resultClass; }
       const hitBtn = document.getElementById('bjHitBtn');
       const standBtn = document.getElementById('bjStandBtn');
       const dealBtn = document.getElementById('bjDealBtn');
       if (hitBtn) hitBtn.disabled = true;
       if (standBtn) standBtn.disabled = true;
       if (dealBtn) dealBtn.disabled = false;
+    }
+
+    // ===== МОНЕТКА =====
+    function flipCoin(choice) {
+      if (coinFlipping) return;
+      if (isBanned) { alert('❌ Ваш аккаунт заблокирован!'); return; }
+      const betInput = document.getElementById('coinBetAmount');
+      const bet = parseFloat(betInput ? betInput.value : 10);
+      if (isNaN(bet) || bet <= 0) { alert('Введите корректную ставку'); return; }
+      if (bet > 10000) { alert('❌ Максимальная ставка для монетки: $10,000'); return; }
+      if (bet > usdBalance) { alert(`Недостаточно средств! Доступно: ${usdBalance.toFixed(2)} USD`); return; }
+
+      usdBalance -= bet;
+      totalTransactions++;
+      addHistory(bet, 'coin_bet');
+      updateUI();
+
+      coinFlipping = true;
+      const coinEl = document.getElementById('coinDisplay');
+      const coinSide = document.getElementById('coinSide');
+      const resultEl = document.getElementById('coinResult');
+
+      coinEl.classList.add('flipping');
+      resultEl.textContent = '⏳ ...';
+      resultEl.className = 'bj-result';
+
+      setTimeout(() => {
+        const result = Math.random() < 0.5 ? 'heads' : 'tails';
+        const sideText = result === 'heads' ? '🦅 Орел' : '🪙 Решка';
+        coinSide.textContent = result === 'heads' ? '🦅' : '🪙';
+        coinEl.classList.remove('flipping');
+
+        if (result === choice) {
+          const winAmount = bet * 2;
+          usdBalance += winAmount;
+          totalTransactions++;
+          wins++;
+          addHistory(winAmount, 'coin_win');
+          updateUI();
+          resultEl.textContent = `🎉 Вы выиграли! ${winAmount.toFixed(2)} USD (${sideText})`;
+          resultEl.className = 'bj-result win';
+        } else {
+          resultEl.textContent = `😔 Вы проиграли (${sideText})`;
+          resultEl.className = 'bj-result lose';
+        }
+
+        coinFlipping = false;
+      }, 600);
+    }
+
+    // ===== КРАШ =====
+    function initCrashCanvas() {
+      const canvas = document.getElementById('crashCanvas');
+      if (!canvas) return;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = canvas.parentElement.clientWidth || 400;
+      canvas.height = 200;
+      crashCanvas = canvas;
+      crashCtx = canvas.getContext('2d');
+      drawCrashGraph();
+    }
+
+    function drawCrashGraph() {
+      if (!crashCtx || !crashCanvas) return;
+      const ctx = crashCtx;
+      const w = crashCanvas.width;
+      const h = crashCanvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Сетка
+      ctx.strokeStyle = '#1a2a2a';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 10; i++) {
+        const x = (i / 10) * w;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+        const y = (i / 10) * h;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // График
+      if (crashPoints.length > 0) {
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let i = 0; i < crashPoints.length; i++) {
+          const x = (i / crashPoints.length) * w;
+          const y = h - (Math.min(crashPoints[i], 10) / 10) * h;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+
+      // Текущий множитель
+      if (crashRunning) {
+        const text = crashMultiplier.toFixed(2) + 'x';
+        ctx.fillStyle = '#ffd700';
+        ctx.font = 'bold 24px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(text, w / 2, 40);
+      }
+    }
+
+    function startCrash() {
+      if (isBanned) { alert('❌ Ваш аккаунт заблокирован!'); return; }
+      if (crashRunning) return;
+      const betInput = document.getElementById('crashBetAmount');
+      const bet = parseFloat(betInput ? betInput.value : 10);
+      if (isNaN(bet) || bet <= 0) { alert('Введите корректную ставку'); return; }
+      if (bet > 50000) { alert('❌ Максимальная ставка для Краша: $50,000'); return; }
+      if (bet > usdBalance) { alert(`Недостаточно средств! Доступно: ${usdBalance.toFixed(2)} USD`); return; }
+
+      usdBalance -= bet;
+      totalTransactions++;
+      addHistory(bet, 'crash_bet');
+      updateUI();
+
+      crashBetPlaced = true;
+      crashRunning = true;
+      crashMultiplier = 1.00;
+      crashPoints = [1.00];
+      crashStartTime = Date.now();
+
+      document.getElementById('crashBetBtn').disabled = true;
+      document.getElementById('crashCashoutBtn').disabled = false;
+      document.getElementById('crashResult').textContent = '⏳ Идет...';
+      document.getElementById('crashResult').className = 'bj-result';
+
+      // Рандомная точка краша (от 1.1 до 100)
+      const crashPoint = 1 + Math.random() * 99;
+
+      let lastMultiplier = 1.00;
+      const interval = setInterval(() => {
+        if (!crashRunning) { clearInterval(interval); return; }
+
+        // Рост с ускорением
+        const elapsed = (Date.now() - crashStartTime) / 1000;
+        const growth = 1 + elapsed * 0.3 + Math.random() * 0.1;
+        lastMultiplier = Math.min(lastMultiplier * (1 + 0.01 * growth), crashPoint);
+        crashMultiplier = lastMultiplier;
+
+        crashPoints.push(crashMultiplier);
+        if (crashPoints.length > 100) crashPoints.shift();
+        drawCrashGraph();
+        document.getElementById('crashMultiplier').textContent = crashMultiplier.toFixed(2) + 'x';
+
+        if (crashMultiplier >= crashPoint) {
+          clearInterval(interval);
+          crashRunning = false;
+          crashBetPlaced = false;
+          document.getElementById('crashBetBtn').disabled = false;
+          document.getElementById('crashCashoutBtn').disabled = true;
+          document.getElementById('crashResult').textContent = `💥 Краш! x${crashPoint.toFixed(2)}`;
+          document.getElementById('crashResult').className = 'bj-result lose';
+
+          // Добавляем в историю
+          crashHistory.unshift(crashPoint.toFixed(2));
+          if (crashHistory.length > 20) crashHistory.pop();
+          updateCrashHistory();
+        }
+      }, 50);
+    }
+
+    function crashCashout() {
+      if (!crashRunning || !crashBetPlaced) return;
+      crashRunning = false;
+      crashBetPlaced = false;
+
+      const betInput = document.getElementById('crashBetAmount');
+      const bet = parseFloat(betInput ? betInput.value : 10);
+      const winAmount = bet * crashMultiplier;
+
+      usdBalance += winAmount;
+      totalTransactions++;
+      wins++;
+      addHistory(winAmount, 'crash_win');
+      updateUI();
+
+      document.getElementById('crashBetBtn').disabled = false;
+      document.getElementById('crashCashoutBtn').disabled = true;
+      document.getElementById('crashResult').textContent = `🎉 Вы забрали! ${winAmount.toFixed(2)} USD (x${crashMultiplier.toFixed(2)})`;
+      document.getElementById('crashResult').className = 'bj-result win';
+
+      // Добавляем в историю
+      crashHistory.unshift(crashMultiplier.toFixed(2));
+      if (crashHistory.length > 20) crashHistory.pop();
+      updateCrashHistory();
+    }
+
+    function updateCrashHistory() {
+      const el = document.getElementById('crashHistory');
+      if (!el) return;
+      let html = '';
+      crashHistory.forEach(item => {
+        const isHigh = parseFloat(item) > 2;
+        html += `<span class="crash-item ${isHigh ? 'high' : ''}">${item}x</span>`;
+      });
+      el.innerHTML = html || '<span style="color:#665555;font-size:11px;">Нет истории</span>';
+    }
+
+    // ===== МИННОЕ ПОЛЕ =====
+    function initMinefield() {
+      const sizeEls = document.querySelectorAll('#mineSizeSelect button');
+      sizeEls.forEach(el => {
+        el.addEventListener('click', function() {
+          sizeEls.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          const size = parseInt(this.dataset.size);
+          mineSize = size;
+          mineMaxBet = parseInt(this.dataset.max);
+          mineBombs = Math.floor(size * size / 3);
+          document.getElementById('mineBombCount').textContent = mineBombs;
+          document.getElementById('mineMaxBet').textContent = mineMaxBet;
+          const betInput = document.getElementById('mineBetAmount');
+          if (betInput) betInput.max = mineMaxBet;
+          resetMinefield();
+        });
+      });
+      // Активируем 3x3 по умолчанию
+      sizeEls[0].classList.add('active');
+      mineSize = 3;
+      mineMaxBet = 5000;
+      mineBombs = Math.floor(9 / 3);
+      document.getElementById('mineBombCount').textContent = mineBombs;
+      document.getElementById('mineMaxBet').textContent = '5000';
+      resetMinefield();
+    }
+
+    function resetMinefield() {
+      const gridEl = document.getElementById('minefieldGrid');
+      const size = mineSize;
+      gridEl.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+      gridEl.innerHTML = '';
+      mineGrid = [];
+      mineRevealed = 0;
+      mineGameActive = false;
+      mineBetPlaced = false;
+      mineMultiplier = 1.00;
+      document.getElementById('mineRevealed').textContent = '0';
+      document.getElementById('mineBombsLeft').textContent = mineBombs;
+      document.getElementById('mineResult').textContent = '';
+      document.getElementById('mineResult').className = 'minefield-result';
+      document.getElementById('mineDealBtn').disabled = false;
+      document.getElementById('mineCashoutBtn').disabled = true;
+      document.getElementById('mineMultiplierDisplay').textContent = '1.00';
+
+      for (let i = 0; i < size * size; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.index = i;
+        cell.dataset.revealed = 'false';
+        cell.textContent = '';
+        cell.addEventListener('click', function() { minefieldClick(parseInt(this.dataset.index)); });
+        gridEl.appendChild(cell);
+        mineGrid.push({ revealed: false, hasBomb: false });
+      }
+    }
+
+    function minefieldDeal() {
+      if (isBanned) { alert('❌ Ваш аккаунт заблокирован!'); return; }
+      if (mineGameActive) return;
+      const betInput = document.getElementById('mineBetAmount');
+      const bet = parseFloat(betInput ? betInput.value : 10);
+      if (isNaN(bet) || bet <= 0) { alert('Введите корректную ставку'); return; }
+      if (bet > mineMaxBet) { alert(`❌ Максимальная ставка для ${mineSize}x${mineSize}: $${mineMaxBet}`); return; }
+      if (bet > usdBalance) { alert(`Недостаточно средств! Доступно: ${usdBalance.toFixed(2)} USD`); return; }
+
+      // Списываем ставку
+      usdBalance -= bet;
+      totalTransactions++;
+      addHistory(bet, 'mine_bet');
+      updateUI();
+
+      // Размещаем бомбы
+      const totalCells = mineSize * mineSize;
+      const bombCount = mineBombs;
+      // Сбрасываем все клетки
+      const cells = document.querySelectorAll('#minefieldGrid .cell');
+      cells.forEach(c => { c.className = 'cell'; c.textContent = ''; c.dataset.revealed = 'false'; });
+      mineGrid.forEach(c => { c.revealed = false; c.hasBomb = false; });
+
+      // Размещаем бомбы
+      let placed = 0;
+      while (placed < bombCount) {
+        const idx = Math.floor(Math.random() * totalCells);
+        if (!mineGrid[idx].hasBomb) {
+          mineGrid[idx].hasBomb = true;
+          placed++;
+        }
+      }
+
+      mineRevealed = 0;
+      mineGameActive = true;
+      mineBetPlaced = true;
+      mineMultiplier = 1.00;
+      document.getElementById('mineRevealed').textContent = '0';
+      document.getElementById('mineBombsLeft').textContent = bombCount;
+      document.getElementById('mineResult').textContent = '💣 Игра началась! Открывайте клетки';
+      document.getElementById('mineResult').className = 'minefield-result';
+      document.getElementById('mineDealBtn').disabled = true;
+      document.getElementById('mineCashoutBtn').disabled = false;
+      document.getElementById('mineMultiplierDisplay').textContent = '1.00';
+    }
+
+    function minefieldClick(index) {
+      if (!mineGameActive || !mineBetPlaced) return;
+      if (mineGrid[index].revealed) return;
+
+      const cell = document.querySelectorAll('#minefieldGrid .cell')[index];
+      if (!cell) return;
+
+      if (mineGrid[index].hasBomb) {
+        // Бомба!
+        cell.className = 'cell mine revealed';
+        cell.textContent = '💣';
+        cell.dataset.revealed = 'true';
+        mineGrid[index].revealed = true;
+
+        // Проигрыш
+        mineGameActive = false;
+        mineBetPlaced = false;
+        document.getElementById('mineDealBtn').disabled = false;
+        document.getElementById('mineCashoutBtn').disabled = true;
+        document.getElementById('mineResult').textContent = '💥 Бомба! Вы проиграли';
+        document.getElementById('mineResult').className = 'minefield-result lose';
+
+        // Показываем все бомбы
+        mineGrid.forEach((g, i) => {
+          if (g.hasBomb && !g.revealed) {
+            const c = document.querySelectorAll('#minefieldGrid .cell')[i];
+            if (c) { c.className = 'cell mine revealed'; c.textContent = '💣'; }
+          }
+        });
+        return;
+      }
+
+      // Безопасно!
+      cell.className = 'cell revealed';
+      cell.textContent = '✅';
+      cell.dataset.revealed = 'true';
+      mineGrid[index].revealed = true;
+      mineRevealed++;
+
+      // Множитель растет
+      const totalCells = mineSize * mineSize;
+      const safeCells = totalCells - mineBombs;
+      const revealedRatio = mineRevealed / safeCells;
+      mineMultiplier = 1 + revealedRatio * 3;
+
+      document.getElementById('mineRevealed').textContent = mineRevealed;
+      document.getElementById('mineMultiplierDisplay').textContent = mineMultiplier.toFixed(2);
+
+      // Проверка победы
+      if (mineRevealed >= safeCells) {
+        // Победа!
+        mineGameActive = false;
+        mineBetPlaced = false;
+        const betInput = document.getElementById('mineBetAmount');
+        const bet = parseFloat(betInput ? betInput.value : 10);
+        const winAmount = bet * mineMultiplier;
+        usdBalance += winAmount;
+        totalTransactions++;
+        wins++;
+        addHistory(winAmount, 'mine_win');
+        updateUI();
+
+        document.getElementById('mineDealBtn').disabled = false;
+        document.getElementById('mineCashoutBtn').disabled = true;
+        document.getElementById('mineResult').textContent = `🎉 ПОБЕДА! ${winAmount.toFixed(2)} USD (x${mineMultiplier.toFixed(2)})`;
+        document.getElementById('mineResult').className = 'minefield-result win';
+      }
+    }
+
+    function minefieldCashout() {
+      if (!mineGameActive || !mineBetPlaced) return;
+      const betInput = document.getElementById('mineBetAmount');
+      const bet = parseFloat(betInput ? betInput.value : 10);
+      const winAmount = bet * mineMultiplier;
+
+      usdBalance += winAmount;
+      totalTransactions++;
+      wins++;
+      addHistory(winAmount, 'mine_win');
+      updateUI();
+
+      mineGameActive = false;
+      mineBetPlaced = false;
+      document.getElementById('mineDealBtn').disabled = false;
+      document.getElementById('mineCashoutBtn').disabled = true;
+      document.getElementById('mineResult').textContent = `💰 Вы забрали ${winAmount.toFixed(2)} USD (x${mineMultiplier.toFixed(2)})`;
+      document.getElementById('mineResult').className = 'minefield-result win';
     }
 
     // ===== НАВИГАЦИЯ =====
@@ -2270,21 +3091,27 @@
       document.querySelectorAll('.game-content').forEach(el => el.classList.remove('active'));
       const target = document.getElementById('game' + gameId.charAt(0).toUpperCase() + gameId.slice(1));
       if (target) target.classList.add('active');
-      if (gameId === 'blackjack') {
-        renderBjGame();
+      if (gameId === 'blackjack') { renderBjGame();
         const hitBtn = document.getElementById('bjHitBtn');
         const standBtn = document.getElementById('bjStandBtn');
         const dealBtn = document.getElementById('bjDealBtn');
         if (hitBtn) hitBtn.disabled = true;
         if (standBtn) standBtn.disabled = true;
-        if (dealBtn) dealBtn.disabled = false;
-      }
+        if (dealBtn) dealBtn.disabled = false; }
+      if (gameId === 'crash') { setTimeout(initCrashCanvas, 100);
+        updateCrashHistory(); }
+      if (gameId === 'minefield') { initMinefield(); }
     }
 
     function showMenu() {
       const menu = document.getElementById('gameMenu');
-      if (menu) menu.style.display = 'block';
+      if (menu) menu.style.display = 'grid';
       document.querySelectorAll('.game-content').forEach(el => el.classList.remove('active'));
+      if (crashRunning) {
+        crashRunning = false;
+        document.getElementById('crashBetBtn').disabled = false;
+        document.getElementById('crashCashoutBtn').disabled = true;
+      }
     }
 
     function showLeaderboardModal() {
@@ -2296,13 +3123,9 @@
       document.getElementById('leaderboardModalOverlay').classList.add('active');
     }
 
-    function closeLeaderboardModal() {
-      document.getElementById('leaderboardModalOverlay').classList.remove('active');
-    }
+    function closeLeaderboardModal() { document.getElementById('leaderboardModalOverlay').classList.remove('active'); }
 
-    function closePlayerCard() {
-      document.getElementById('playerCardModalOverlay').classList.remove('active');
-    }
+    function closePlayerCard() { document.getElementById('playerCardModalOverlay').classList.remove('active'); }
 
     // ===== UI =====
     function renderQuickAmounts() {
@@ -2349,16 +3172,11 @@
       document.getElementById('saveRefBtn').classList.add('hidden');
     }
 
-    function closeProfile() {
-      document.getElementById('profileModalOverlay').classList.remove('active');
-    }
+    function closeProfile() { document.getElementById('profileModalOverlay').classList.remove('active'); }
 
     function saveProfile() {
       const nickInput = document.getElementById('profileNickname');
-      if (nickInput) {
-        const newNick = nickInput.value.trim();
-        if (newNick) profileNickname = newNick;
-      }
+      if (nickInput) { const newNick = nickInput.value.trim(); if (newNick) profileNickname = newNick; }
       saveData();
       alert('✅ Профиль сохранен!');
     }
@@ -2374,9 +3192,7 @@
       document.querySelectorAll('.quick-item').forEach(el => el.classList.remove('active'));
     }
 
-    function closeDepositModal() {
-      document.getElementById('depositModalOverlay').classList.remove('active');
-    }
+    function closeDepositModal() { document.getElementById('depositModalOverlay').classList.remove('active'); }
 
     function startDeposit(amount, currency) {
       closeDepositModal();
@@ -2428,7 +3244,6 @@
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
     document.addEventListener('DOMContentLoaded', function() {
-      // Инициализация Telegram
       const user = initTelegram();
 
       loadData();
@@ -2441,6 +3256,11 @@
 
       updateTimerDisplay();
       updateRemainingDisplay();
+
+      // Проверка бана
+      if (isBanned) {
+        document.getElementById('bannedOverlay').classList.remove('hidden');
+      }
 
       // ===== ОБРАБОТЧИКИ =====
 
@@ -2458,10 +3278,8 @@
         const saveBtn = document.getElementById('saveRefBtn');
         input.classList.toggle('hidden');
         saveBtn.classList.toggle('hidden');
-        if (!input.classList.contains('hidden')) {
-          input.value = refCode;
-          input.focus();
-        }
+        if (!input.classList.contains('hidden')) { input.value = refCode;
+          input.focus(); }
       });
 
       document.getElementById('saveRefBtn')?.addEventListener('click', function() {
@@ -2475,17 +3293,12 @@
           input.classList.add('hidden');
           document.getElementById('saveRefBtn').classList.add('hidden');
           alert('✅ Реферальный код обновлен!');
-        } else {
-          alert('⚠️ Код должен содержать минимум 3 символа');
-        }
+        } else { alert('⚠️ Код должен содержать минимум 3 символа'); }
       });
 
-      // ===== ПОИСК ИГРОКА ПО ID В АДМИН-ПАНЕЛИ =====
+      // ===== АДМИН =====
       document.getElementById('adminFindPlayerBtn')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
-        }
+        if (!adminAccess) { alert('❌ Нет доступа. Введите код 1973'); return; }
         const idInput = document.getElementById('adminPlayerId');
         const id = parseInt(idInput ? idInput.value : 1);
         const player = findPlayerById(id);
@@ -2495,26 +3308,21 @@
           document.getElementById('adminFoundPlayerName').textContent = player.name;
           document.getElementById('adminFoundPlayerBalance').textContent = player.balance.toFixed(2);
           document.getElementById('adminFoundPlayerTitle').textContent = player.title || 'Игрок';
+          const statusEl = document.getElementById('adminFoundPlayerStatus');
+          if (player.banned) { statusEl.textContent = '🚫 ЗАБАНЕН';
+            statusEl.style.color = '#ff6b6b'; } else { statusEl.textContent = '✅ Активен';
+            statusEl.style.color = '#80ffaa'; }
           alert(`✅ Найден игрок: ${player.name} (ID: ${player.id})`);
-        } else if (infoEl) {
-          infoEl.style.display = 'none';
-          alert(`❌ Игрок с ID ${id} не найден`);
-        }
+        } else if (infoEl) { infoEl.style.display = 'none';
+          alert(`❌ Игрок с ID ${id} не найден`); }
       });
 
-      // ===== АДМИН ДЕЙСТВИЯ ПО ID =====
       document.getElementById('adminSetTitleBtn')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
-        }
+        if (!adminAccess) { alert('❌ Нет доступа. Введите код 1973'); return; }
         const idInput = document.getElementById('adminPlayerId');
         const id = parseInt(idInput ? idInput.value : 1);
         const player = findPlayerById(id);
-        if (!player) {
-          alert(`❌ Игрок с ID ${id} не найден`);
-          return;
-        }
+        if (!player) { alert(`❌ Игрок с ID ${id} не найден`); return; }
         const title = document.getElementById('adminTitleSelect').value;
         player.title = title;
         savePlayers();
@@ -2530,17 +3338,11 @@
       });
 
       document.getElementById('adminAddUsdProfile')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
-        }
+        if (!adminAccess) { alert('❌ Нет доступа. Введите код 1973'); return; }
         const idInput = document.getElementById('adminPlayerId');
         const id = parseInt(idInput ? idInput.value : 1);
         const player = findPlayerById(id);
-        if (!player) {
-          alert(`❌ Игрок с ID ${id} не найден`);
-          return;
-        }
+        if (!player) { alert(`❌ Игрок с ID ${id} не найден`); return; }
         const val = parseFloat(document.getElementById('adminAmountGive')?.value || 0);
         if (!isNaN(val) && val > 0) {
           player.balance += val;
@@ -2560,17 +3362,11 @@
       });
 
       document.getElementById('adminAddRubProfile')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
-        }
+        if (!adminAccess) { alert('❌ Нет доступа. Введите код 1973'); return; }
         const idInput = document.getElementById('adminPlayerId');
         const id = parseInt(idInput ? idInput.value : 1);
         const player = findPlayerById(id);
-        if (!player) {
-          alert(`❌ Игрок с ID ${id} не найден`);
-          return;
-        }
+        if (!player) { alert(`❌ Игрок с ID ${id} не найден`); return; }
         const val = parseFloat(document.getElementById('adminAmountGive')?.value || 0);
         if (!isNaN(val) && val > 0) {
           const usdAmount = val / EXCHANGE_RATE;
@@ -2591,23 +3387,15 @@
       });
 
       document.getElementById('adminTakeUsdProfile')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
-        }
+        if (!adminAccess) { alert('❌ Нет доступа. Введите код 1973'); return; }
         const idInput = document.getElementById('adminPlayerId');
         const id = parseInt(idInput ? idInput.value : 1);
         const player = findPlayerById(id);
-        if (!player) {
-          alert(`❌ Игрок с ID ${id} не найден`);
-          return;
-        }
+        if (!player) { alert(`❌ Игрок с ID ${id} не найден`); return; }
         const val = parseFloat(document.getElementById('adminAmountTake')?.value || 0);
         if (!isNaN(val) && val > 0) {
-          if (player.balance < val) {
-            alert(`❌ У игрока недостаточно средств! Доступно: $${player.balance.toFixed(2)}`);
-            return;
-          }
+          if (player.balance < val) { alert(`❌ У игрока недостаточно средств! Доступно: $${player.balance.toFixed(2)}`);
+            return; }
           player.balance -= val;
           savePlayers();
           renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
@@ -2625,24 +3413,16 @@
       });
 
       document.getElementById('adminTakeRubProfile')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
-        }
+        if (!adminAccess) { alert('❌ Нет доступа. Введите код 1973'); return; }
         const idInput = document.getElementById('adminPlayerId');
         const id = parseInt(idInput ? idInput.value : 1);
         const player = findPlayerById(id);
-        if (!player) {
-          alert(`❌ Игрок с ID ${id} не найден`);
-          return;
-        }
+        if (!player) { alert(`❌ Игрок с ID ${id} не найден`); return; }
         const val = parseFloat(document.getElementById('adminAmountTake')?.value || 0);
         if (!isNaN(val) && val > 0) {
           const usdAmount = val / EXCHANGE_RATE;
-          if (player.balance < usdAmount) {
-            alert(`❌ У игрока недостаточно средств! Доступно: $${player.balance.toFixed(2)}`);
-            return;
-          }
+          if (player.balance < usdAmount) { alert(`❌ У игрока недостаточно средств! Доступно: $${player.balance.toFixed(2)}`);
+            return; }
           player.balance -= usdAmount;
           savePlayers();
           renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
@@ -2659,11 +3439,73 @@
         } else alert('❌ Введите число > 0');
       });
 
-      document.getElementById('adminResetLimitBtn')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
+      document.getElementById('adminBanBtn')?.addEventListener('click', function() {
+        if (!adminAccess) { alert('❌ Нет доступа. Введите код 1973'); return; }
+        const idInput = document.getElementById('adminPlayerId');
+        const id = parseInt(idInput ? idInput.value : 1);
+        const player = findPlayerById(id);
+        if (!player) { alert(`❌ Игрок с ID ${id} не найден`); return; }
+        if (player.banned) { alert('⚠️ Игрок уже забанен'); return; }
+        player.banned = true;
+        savePlayers();
+        renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+        updateFoundPlayerInfo();
+        if (player.id === currentPlayerId) {
+          isBanned = true;
+          document.getElementById('bannedOverlay').classList.remove('hidden');
         }
+        alert(`✅ Игрок ${player.name} (ID: ${player.id}) забанен`);
+      });
+
+      document.getElementById('adminUnbanBtn')?.addEventListener('click', function() {
+        if (!adminAccess) { alert('❌ Нет доступа. Введите код 1973'); return; }
+        const idInput = document.getElementById('adminPlayerId');
+        const id = parseInt(idInput ? idInput.value : 1);
+        const player = findPlayerById(id);
+        if (!player) { alert(`❌ Игрок с ID ${id} не найден`); return; }
+        if (!player.banned) { alert('⚠️ Игрок не забанен'); return; }
+        player.banned = false;
+        savePlayers();
+        renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+        updateFoundPlayerInfo();
+        if (player.id === currentPlayerId) {
+          isBanned = false;
+          document.getElementById('bannedOverlay').classList.add('hidden');
+        }
+        alert(`✅ Игрок ${player.name} (ID: ${player.id}) разбанен`);
+      });
+
+      document.getElementById('adminResetPlayerBtn')?.addEventListener('click', function() {
+        if (!adminAccess) { alert('❌ Нет доступа. Введите код 1973'); return; }
+        const idInput = document.getElementById('adminPlayerId');
+        const id = parseInt(idInput ? idInput.value : 1);
+        const player = findPlayerById(id);
+        if (!player) { alert(`❌ Игрок с ID ${id} не найден`); return; }
+        if (!confirm(`⚠️ Вы уверены, что хотите обнулить аккаунт ${player.name} (ID: ${player.id})? Это действие необратимо!`))
+          return;
+        const oldBalance = player.balance;
+        player.balance = 0;
+        player.wins = 0;
+        player.referrals = 0;
+        savePlayers();
+        renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+        updateFoundPlayerInfo();
+        if (player.id === currentPlayerId) {
+          usdBalance = 0;
+          wins = 0;
+          referrals = 0;
+          const balanceEl = document.getElementById('profileBalance');
+          if (balanceEl) balanceEl.textContent = '0.00 $';
+          const winsEl = document.getElementById('profileWins');
+          if (winsEl) winsEl.textContent = '0';
+          saveData();
+          updateUI();
+        }
+        alert(`✅ Аккаунт ${player.name} (ID: ${player.id}) обнулен. Было списано $${oldBalance.toFixed(2)}`);
+      });
+
+      document.getElementById('adminResetLimitBtn')?.addEventListener('click', function() {
+        if (!adminAccess) { alert('❌ Нет доступа. Введите код 1973'); return; }
         if (confirm('⚠️ Вы уверены, что хотите сбросить дневной лимит пополнения?')) {
           resetDailyLimit();
           alert('✅ Лимит успешно сброшен!');
@@ -2672,56 +3514,34 @@
         }
       });
 
-      document.getElementById('headerBalance')?.addEventListener('click', function() {
-        showRub = !showRub;
-        updateUI();
-      });
-
-      document.getElementById('depositBtnHeader')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        openDepositModal();
-      });
-
-      document.getElementById('profileBtn')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        openProfile();
-      });
-
-      document.getElementById('leaderboardHeaderBtn')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        showLeaderboardModal();
-      });
-
+      document.getElementById('headerBalance')?.addEventListener('click', function() { showRub = !showRub;
+        updateUI(); });
+      document.getElementById('depositBtnHeader')?.addEventListener('click', function(e) { e.preventDefault();
+        openDepositModal(); });
+      document.getElementById('profileBtn')?.addEventListener('click', function(e) { e.preventDefault();
+        openProfile(); });
+      document.getElementById('leaderboardHeaderBtn')?.addEventListener('click', function(e) { e.preventDefault();
+        showLeaderboardModal(); });
       document.getElementById('leaderboardModalClose')?.addEventListener('click', closeLeaderboardModal);
-      document.getElementById('leaderboardModalOverlay')?.addEventListener('click', function(e) {
-        if (e.target === this) closeLeaderboardModal();
-      });
-
+      document.getElementById('leaderboardModalOverlay')?.addEventListener('click', function(e) { if (e.target === this)
+          closeLeaderboardModal(); });
       document.getElementById('playerCardModalClose')?.addEventListener('click', closePlayerCard);
-      document.getElementById('playerCardModalOverlay')?.addEventListener('click', function(e) {
-        if (e.target === this) closePlayerCard();
-      });
-
+      document.getElementById('playerCardModalOverlay')?.addEventListener('click', function(e) { if (e.target === this)
+          closePlayerCard(); });
       document.getElementById('profileModalClose')?.addEventListener('click', closeProfile);
-      document.getElementById('profileModalOverlay')?.addEventListener('click', function(e) {
-        if (e.target === this) closeProfile();
-      });
-
+      document.getElementById('profileModalOverlay')?.addEventListener('click', function(e) { if (e.target === this)
+          closeProfile(); });
       document.getElementById('profileSaveBtn')?.addEventListener('click', saveProfile);
 
-      document.getElementById('avatarContainer')?.addEventListener('click', function() {
-        document.getElementById('avatarFileInput')?.click();
-      });
-
+      document.getElementById('avatarContainer')?.addEventListener('click', function() { document.getElementById(
+          'avatarFileInput')?.click(); });
       document.getElementById('avatarFileInput')?.addEventListener('change', function(e) {
         const file = this.files[0];
         if (file) {
           const reader = new FileReader();
-          reader.onload = function(ev) {
-            profileAvatar = ev.target.result;
+          reader.onload = function(ev) { profileAvatar = ev.target.result;
             updateAvatarPreview();
-            saveData();
-          };
+            saveData(); };
           reader.readAsDataURL(file);
         }
         this.value = '';
@@ -2730,12 +3550,9 @@
       document.getElementById('copyRefBtn')?.addEventListener('click', function() {
         const text = document.getElementById('refLink')?.textContent || '';
         if (navigator.clipboard) {
-          navigator.clipboard.writeText(text).then(() => {
-            alert('📋 Реферальная ссылка скопирована!');
-          }).catch(() => fallbackCopy(text));
-        } else {
-          fallbackCopy(text);
-        }
+          navigator.clipboard.writeText(text).then(() => { alert('📋 Реферальная ссылка скопирована!'); }).catch(() =>
+            fallbackCopy(text));
+        } else { fallbackCopy(text); }
       });
 
       function fallbackCopy(text) {
@@ -2748,52 +3565,73 @@
         alert('📋 Реферальная ссылка скопирована!');
       }
 
-      document.getElementById('showHistoryBtn')?.addEventListener('click', function() {
-        renderFullHistory();
-        document.getElementById('historyModalOverlay')?.classList.add('active');
-      });
-      document.getElementById('historyModalClose')?.addEventListener('click', function() {
-        document.getElementById('historyModalOverlay')?.classList.remove('active');
-      });
-      document.getElementById('historyModalOverlay')?.addEventListener('click', function(e) {
-        if (e.target === this) this.classList.remove('active');
-      });
+      document.getElementById('showHistoryBtn')?.addEventListener('click', function() { renderFullHistory();
+        document.getElementById('historyModalOverlay')?.classList.add('active'); });
+      document.getElementById('historyModalClose')?.addEventListener('click', function() { document.getElementById(
+          'historyModalOverlay')?.classList.remove('active'); });
+      document.getElementById('historyModalOverlay')?.addEventListener('click', function(e) { if (e.target === this) this
+          .classList.remove('active'); });
 
       document.getElementById('depositModalClose')?.addEventListener('click', closeDepositModal);
-      document.getElementById('depositModalOverlay')?.addEventListener('click', function(e) {
-        if (e.target === this) closeDepositModal();
-      });
+      document.getElementById('depositModalOverlay')?.addEventListener('click', function(e) { if (e.target === this)
+          closeDepositModal(); });
       document.getElementById('depositConfirmBtn')?.addEventListener('click', function() {
         const rawAmount = parseFloat(document.getElementById('depositAmountInput')?.value || 0);
         const currency = document.getElementById('depositCurrencySelect')?.value || 'USD';
-        if (isNaN(rawAmount) || rawAmount <= 0) {
-          alert('❌ Введите сумму больше 0');
-          return;
-        }
-        if (currency === 'RUB' && rawAmount < 1) {
-          alert('❌ Минимальная сумма: 1 RUB');
-          return;
-        }
-        if (currency === 'USD' && rawAmount < 0.01) {
-          alert('❌ Минимальная сумма: 0.01 USD');
-          return;
-        }
+        if (isNaN(rawAmount) || rawAmount <= 0) { alert('❌ Введите сумму больше 0'); return; }
+        if (currency === 'RUB' && rawAmount < 1) { alert('❌ Минимальная сумма: 1 RUB'); return; }
+        if (currency === 'USD' && rawAmount < 0.01) { alert('❌ Минимальная сумма: 0.01 USD'); return; }
         startDeposit(rawAmount, currency);
       });
 
       document.getElementById('statusCloseBtn')?.addEventListener('click', closeStatusModal);
       document.getElementById('statusCloseIcon')?.addEventListener('click', closeStatusModal);
       document.getElementById('statusCloseIconSuccess')?.addEventListener('click', closeStatusModal);
-      document.getElementById('statusModalOverlay')?.addEventListener('click', function(e) {
-        if (e.target === this) closeStatusModal();
+      document.getElementById('statusModalOverlay')?.addEventListener('click', function(e) { if (e.target === this)
+          closeStatusModal(); });
+
+      // Игры
+      document.querySelectorAll('.game-card').forEach(card => {
+        card.addEventListener('click', function() { const game = this.dataset.game;
+          showGame(game); });
       });
 
-      document.querySelector('.game-card')?.addEventListener('click', function() {
-        const game = this.dataset.game;
-        showGame(game);
-      });
       document.getElementById('backToMenuBj')?.addEventListener('click', showMenu);
+      document.getElementById('backToMenuCoin')?.addEventListener('click', showMenu);
+      document.getElementById('backToMenuCrash')?.addEventListener('click', function() {
+        if (crashRunning) { crashRunning = false;
+          document.getElementById('crashBetBtn').disabled = false;
+          document.getElementById('crashCashoutBtn').disabled = true; }
+        showMenu();
+      });
+      document.getElementById('backToMenuMine')?.addEventListener('click', showMenu);
 
+      // Блэкджек
+      document.getElementById('bjDealBtn')?.addEventListener('click', startBjGame);
+      document.getElementById('bjHitBtn')?.addEventListener('click', playerHit);
+      document.getElementById('bjStandBtn')?.addEventListener('click', playerStand);
+      document.getElementById('bjBetAmount')?.addEventListener('keydown', function(e) { if (e.key === 'Enter')
+          startBjGame(); });
+
+      // Монетка
+      document.getElementById('coinHeadsBtn')?.addEventListener('click', function() { flipCoin('heads'); });
+      document.getElementById('coinTailsBtn')?.addEventListener('click', function() { flipCoin('tails'); });
+      document.getElementById('coinBetAmount')?.addEventListener('keydown', function(e) { if (e.key === 'Enter') { flipCoin(
+            'heads'); } });
+
+      // Краш
+      document.getElementById('crashBetBtn')?.addEventListener('click', startCrash);
+      document.getElementById('crashCashoutBtn')?.addEventListener('click', crashCashout);
+      document.getElementById('crashBetAmount')?.addEventListener('keydown', function(e) { if (e.key === 'Enter')
+          startCrash(); });
+
+      // Минное поле
+      document.getElementById('mineDealBtn')?.addEventListener('click', minefieldDeal);
+      document.getElementById('mineCashoutBtn')?.addEventListener('click', minefieldCashout);
+      document.getElementById('mineBetAmount')?.addEventListener('keydown', function(e) { if (e.key === 'Enter')
+          minefieldDeal(); });
+
+      // Табы лидеров
       document.querySelectorAll('#lbTabsModal .tab').forEach(tab => {
         tab.addEventListener('click', function() {
           document.querySelectorAll('#lbTabsModal .tab').forEach(t => t.classList.remove('active'));
@@ -2802,13 +3640,7 @@
         });
       });
 
-      document.getElementById('bjDealBtn')?.addEventListener('click', startBjGame);
-      document.getElementById('bjHitBtn')?.addEventListener('click', playerHit);
-      document.getElementById('bjStandBtn')?.addEventListener('click', playerStand);
-      document.getElementById('bjBetAmount')?.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') startBjGame();
-      });
-
+      // Админ логин
       document.getElementById('adminLoginBtn')?.addEventListener('click', function() {
         const code = document.getElementById('adminCodeInput')?.value?.trim() || '';
         if (code === '1973') {
@@ -2825,6 +3657,7 @@
         }
       });
 
+      // Инициализация
       renderBjGame();
       const hitBtn = document.getElementById('bjHitBtn');
       const standBtn = document.getElementById('bjStandBtn');
@@ -2833,7 +3666,26 @@
       if (standBtn) standBtn.disabled = true;
       if (dealBtn) dealBtn.disabled = false;
 
+      initMinefield();
+      updateCrashHistory();
+      setTimeout(initCrashCanvas, 200);
+
       updateProfileStats();
+
+      // Сохраняем игрока при загрузке
+      const tgId = telegramUser ? telegramUser.id : null;
+      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
+
+      // Обновляем лимит
+      updateRemainingDisplay();
+      updateTimerDisplay();
+    });
+
+    // Ресайз для краша
+    window.addEventListener('resize', function() {
+      if (document.getElementById('gameCrash').classList.contains('active')) {
+        initCrashCanvas();
+      }
     });
   </script>
 </body>
