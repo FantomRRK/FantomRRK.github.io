@@ -796,6 +796,40 @@
     .admin-panel-inline .admin-reset-btn:hover {
       background: #9a2a2a;
     }
+    .admin-panel-inline .admin-player-edit {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+      padding: 6px 0;
+    }
+    .admin-panel-inline .admin-player-edit input {
+      background: #1a1a1a;
+      border: 1px solid #4a2a2a;
+      border-radius: 40px;
+      padding: 4px 10px;
+      color: white;
+      font-size: 12px;
+      width: 70px;
+      outline: none;
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    .admin-panel-inline .admin-player-edit input::-webkit-outer-spin-button,
+    .admin-panel-inline .admin-player-edit input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .admin-panel-inline .admin-player-edit .btn {
+      flex: 0 1 auto;
+      padding: 4px 12px;
+      font-size: 10px;
+    }
+    .admin-panel-inline .admin-player-edit .admin-label-sm {
+      color: #aa8888;
+      font-size: 10px;
+    }
 
     .history-list-modal {
       background: #0f0f0f;
@@ -1272,6 +1306,17 @@
         <div id="adminPanelContainer" class="hidden">
           <div class="admin-panel-inline">
             <div style="color: #ff6b6b; font-size: 11px; text-align: center; margin-bottom: 6px;">⚙️ Админ панель</div>
+
+            <!-- Управление игроком по ID -->
+            <div class="admin-player-edit" style="margin-bottom: 6px;">
+              <span class="admin-label-sm">🔍 Поиск по ID:</span>
+              <input type="number" id="adminPlayerId" value="1" min="1" step="1" placeholder="ID">
+              <button class="btn btn-warning" id="adminFindPlayerBtn">Найти</button>
+            </div>
+            <div id="adminFoundPlayerInfo" style="color: #88aabb; font-size: 11px; text-align: center; margin-bottom: 6px; display: none;">
+              <span id="adminFoundPlayerName"></span> | Баланс: $<span id="adminFoundPlayerBalance">0.00</span> | Титул: <span id="adminFoundPlayerTitle">Игрок</span>
+            </div>
+
             <div class="admin-controls" style="margin-bottom: 6px;">
               <div class="admin-row-group">
                 <span class="admin-title-label">Титул игрока:</span>
@@ -1361,6 +1406,7 @@
     // Глобальные переменные
     const EXCHANGE_RATE = 83.99;
     const MAX_DEPOSIT = 10000;
+    let nextPlayerId = 1;
 
     // ===== ЛИМИТ ПОПОЛНЕНИЯ =====
     function getDailyLimit() {
@@ -1457,6 +1503,7 @@
     let showRub = false;
     let refCode = 'FaWW';
     let referrals = 0;
+    let currentPlayerId = null;
 
     // Блэкджек
     let deck = [];
@@ -1478,9 +1525,7 @@
         if (user) {
           telegramUser = user;
           const username = user.username || user.first_name || user.id || 'Игрок';
-          // Обновляем профиль
           profileNickname = username;
-          // Сохраняем в localStorage
           try {
             const saved = localStorage.getItem('wwCasinoData');
             if (saved) {
@@ -1502,15 +1547,40 @@
     }
 
     // ===== РАБОТА С ИГРОКАМИ =====
+    function getNextPlayerId() {
+      try {
+        const saved = localStorage.getItem('wwNextPlayerId');
+        if (saved) {
+          const id = parseInt(saved);
+          if (!isNaN(id) && id > 0) return id;
+        }
+      } catch (e) {}
+      return 1;
+    }
+
+    function saveNextPlayerId(id) {
+      try {
+        localStorage.setItem('wwNextPlayerId', String(id));
+      } catch (e) {}
+    }
+
     function loadPlayers() {
       try {
         const saved = localStorage.getItem('wwCasinoPlayers');
         if (saved) {
           players = JSON.parse(saved);
+          // Обновляем nextPlayerId
+          let maxId = 0;
+          players.forEach(p => {
+            if (p.id && p.id > maxId) maxId = p.id;
+          });
+          nextPlayerId = maxId + 1;
+          saveNextPlayerId(nextPlayerId);
           return;
         }
       } catch (e) {}
       players = [];
+      nextPlayerId = getNextPlayerId();
     }
 
     function savePlayers() {
@@ -1520,8 +1590,15 @@
     }
 
     function registerOrUpdatePlayer(name, balance, wins, refs, title, telegramId) {
-      // Проверяем существование по имени или telegramId
-      const existing = players.find(p => p.name === name || (telegramId && p.telegramId === telegramId));
+      // Проверяем существование по telegramId или имени
+      let existing = null;
+      if (telegramId) {
+        existing = players.find(p => p.telegramId === telegramId);
+      }
+      if (!existing) {
+        existing = players.find(p => p.name === name);
+      }
+
       if (existing) {
         existing.name = name;
         existing.balance = balance;
@@ -1530,8 +1607,15 @@
         if (title) existing.title = title;
         if (telegramId) existing.telegramId = telegramId;
         existing.lastLogin = new Date().toLocaleDateString('ru-RU');
+        // Сохраняем ID текущего игрока
+        if (telegramId === (telegramUser ? telegramUser.id : null)) {
+          currentPlayerId = existing.id;
+        }
       } else {
-        players.push({
+        const newId = nextPlayerId++;
+        saveNextPlayerId(nextPlayerId);
+        const player = {
+          id: newId,
           name: name,
           balance: balance,
           wins: wins,
@@ -1544,25 +1628,36 @@
           city: ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань'][Math.floor(Math.random() * 5)],
           regDate: new Date().toLocaleDateString('ru-RU'),
           lastLogin: new Date().toLocaleDateString('ru-RU')
-        });
+        };
+        players.push(player);
+        if (telegramId === (telegramUser ? telegramUser.id : null)) {
+          currentPlayerId = player.id;
+        }
       }
       savePlayers();
+    }
+
+    function findPlayerById(id) {
+      return players.find(p => p.id === id);
     }
 
     // ===== ГЕНЕРАЦИЯ ТОПА =====
     function renderLeaderboardModal(sortBy = 'balance') {
       // Обновляем данные текущего игрока
-      const player = players.find(p => p.name === profileNickname || p.telegramId === (telegramUser ? telegramUser.id : null));
+      const player = players.find(p => p.telegramId === (telegramUser ? telegramUser.id : null) || p.name === profileNickname);
       if (player) {
         player.title = profileTitle;
         player.balance = usdBalance;
         player.wins = wins;
         player.referrals = referrals;
+        currentPlayerId = player.id;
         savePlayers();
       } else {
-        // Если игрока нет, регистрируем
         const tgId = telegramUser ? telegramUser.id : null;
         registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
+        // После регистрации обновляем currentPlayerId
+        const newPlayer = players.find(p => p.telegramId === tgId || p.name === profileNickname);
+        if (newPlayer) currentPlayerId = newPlayer.id;
       }
 
       if (players.length === 0) {
@@ -1578,16 +1673,17 @@
 
       let html = `
         <table class="leaderboard-table">
-          <thead><tr><th>#</th><th>Игрок</th><th>${sortBy === 'balance' ? '💰 Баланс' : sortBy === 'wins' ? '🏆 Выигрыши' : '👥 Рефералы'}</th><th>Титул</th></tr></thead>
+          <thead><tr><th>#</th><th>ID</th><th>Игрок</th><th>${sortBy === 'balance' ? '💰 Баланс' : sortBy === 'wins' ? '🏆 Выигрыши' : '👥 Рефералы'}</th><th>Титул</th></tr></thead>
           <tbody>
       `;
       sorted.forEach((player, index) => {
-        const isHighlight = player.name === profileNickname;
+        const isHighlight = player.id === currentPlayerId;
         const value = sortBy === 'balance' ? '$' + player.balance.toFixed(2) :
           sortBy === 'wins' ? player.wins : player.referrals;
         html += `
-          <tr class="${isHighlight ? 'highlight' : ''}" data-player="${encodeURIComponent(player.name)}" data-telegram="${player.telegramId || ''}">
+          <tr class="${isHighlight ? 'highlight' : ''}" data-player="${encodeURIComponent(player.name)}" data-id="${player.id}">
             <td class="rank">${index + 1}</td>
+            <td style="color:#665555;font-size:11px;">#${player.id}</td>
             <td class="name">${player.name}</td>
             <td class="value">${value}</td>
             <td style="color:#ffd700;font-size:10px;">${player.title || 'Игрок'}</td>
@@ -1611,19 +1707,19 @@
       if (!content) return;
 
       const isAdmin = adminAccess;
-      const isSelf = player.name === profileNickname;
+      const isSelf = player.id === currentPlayerId;
 
       let adminHtml = '';
       if (isAdmin && !isSelf) {
         adminHtml = `
           <div class="admin-actions">
             <div class="admin-label">⚙️ Управление аккаунтом (Админ)</div>
-            <button class="btn btn-warning" onclick="adminGiveBalance('${player.name}', 100)">+100 USD</button>
-            <button class="btn btn-warning" onclick="adminGiveBalance('${player.name}', 500)">+500 USD</button>
-            <button class="btn btn-danger" onclick="adminTakeBalance('${player.name}', 100)">-100 USD</button>
-            <button class="btn btn-gray" onclick="adminSetTitle('${player.name}', 'Администратор')">👑 Админ</button>
-            <button class="btn btn-gray" onclick="adminSetTitle('${player.name}', 'VIP')">⭐ VIP</button>
-            <button class="btn btn-gray" onclick="adminSetTitle('${player.name}', 'Игрок')">Игрок</button>
+            <button class="btn btn-warning" onclick="adminGiveBalanceById(${player.id}, 100)">+100 USD</button>
+            <button class="btn btn-warning" onclick="adminGiveBalanceById(${player.id}, 500)">+500 USD</button>
+            <button class="btn btn-danger" onclick="adminTakeBalanceById(${player.id}, 100)">-100 USD</button>
+            <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'Администратор')">👑 Админ</button>
+            <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'VIP')">⭐ VIP</button>
+            <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'Игрок')">Игрок</button>
           </div>
         `;
       }
@@ -1633,6 +1729,7 @@
           <div class="player-avatar-big">${player.avatar || '👤'}</div>
           <div class="player-name-big">${player.name}</div>
           <div class="player-title-big">${player.title || 'Игрок'}</div>
+          <div class="player-row"><span class="label">🆔 ID</span><span class="value gold">#${player.id}</span></div>
           <div class="player-row"><span class="label">💰 Баланс</span><span class="value gold">$${player.balance.toFixed(2)}</span></div>
           <div class="player-row"><span class="label">🏆 Выигрышей</span><span class="value green">${player.wins}</span></div>
           <div class="player-row"><span class="label">👥 Рефералов</span><span class="value">${player.referrals || 0}</span></div>
@@ -1647,25 +1744,42 @@
       document.getElementById('playerCardModalOverlay').classList.add('active');
     }
 
-    // ===== АДМИН ФУНКЦИИ ДЛЯ УПРАВЛЕНИЯ ИГРОКАМИ =====
-    window.adminGiveBalance = function(name, amount) {
+    // ===== АДМИН ФУНКЦИИ ПО ID =====
+    function updateFoundPlayerInfo() {
+      const idInput = document.getElementById('adminPlayerId');
+      const id = parseInt(idInput ? idInput.value : 1);
+      const player = findPlayerById(id);
+      const infoEl = document.getElementById('adminFoundPlayerInfo');
+      if (player && infoEl) {
+        infoEl.style.display = 'block';
+        document.getElementById('adminFoundPlayerName').textContent = player.name;
+        document.getElementById('adminFoundPlayerBalance').textContent = player.balance.toFixed(2);
+        document.getElementById('adminFoundPlayerTitle').textContent = player.title || 'Игрок';
+      } else if (infoEl) {
+        infoEl.style.display = 'none';
+      }
+    }
+
+    window.adminGiveBalanceById = function(id, amount) {
       if (!adminAccess) { alert('❌ Нет доступа'); return; }
-      const player = players.find(p => p.name === name);
-      if (!player) { alert('❌ Игрок не найден'); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ Игрок с ID ' + id + ' не найден'); return; }
       player.balance += amount;
       savePlayers();
       renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
       const overlay = document.getElementById('playerCardModalOverlay');
       if (overlay.classList.contains('active')) {
-        showPlayerCard(player);
+        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
+        if (currentPlayer) showPlayerCard(currentPlayer);
       }
-      alert(`✅ ${player.name} получено +${amount} USD. Новый баланс: $${player.balance.toFixed(2)}`);
+      updateFoundPlayerInfo();
+      alert(`✅ ${player.name} (ID: ${player.id}) получено +${amount} USD. Новый баланс: $${player.balance.toFixed(2)}`);
     };
 
-    window.adminTakeBalance = function(name, amount) {
+    window.adminTakeBalanceById = function(id, amount) {
       if (!adminAccess) { alert('❌ Нет доступа'); return; }
-      const player = players.find(p => p.name === name);
-      if (!player) { alert('❌ Игрок не найден'); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ Игрок с ID ' + id + ' не найден'); return; }
       if (player.balance < amount) {
         alert(`❌ У игрока недостаточно средств! Доступно: $${player.balance.toFixed(2)}`);
         return;
@@ -1675,23 +1789,27 @@
       renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
       const overlay = document.getElementById('playerCardModalOverlay');
       if (overlay.classList.contains('active')) {
-        showPlayerCard(player);
+        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
+        if (currentPlayer) showPlayerCard(currentPlayer);
       }
-      alert(`✅ ${player.name} списано -${amount} USD. Новый баланс: $${player.balance.toFixed(2)}`);
+      updateFoundPlayerInfo();
+      alert(`✅ ${player.name} (ID: ${player.id}) списано -${amount} USD. Новый баланс: $${player.balance.toFixed(2)}`);
     };
 
-    window.adminSetTitle = function(name, title) {
+    window.adminSetTitleById = function(id, title) {
       if (!adminAccess) { alert('❌ Нет доступа'); return; }
-      const player = players.find(p => p.name === name);
-      if (!player) { alert('❌ Игрок не найден'); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ Игрок с ID ' + id + ' не найден'); return; }
       player.title = title;
       savePlayers();
       renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
       const overlay = document.getElementById('playerCardModalOverlay');
       if (overlay.classList.contains('active')) {
-        showPlayerCard(player);
+        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
+        if (currentPlayer) showPlayerCard(currentPlayer);
       }
-      alert(`✅ Титул игрока ${player.name} изменен на "${title}"`);
+      updateFoundPlayerInfo();
+      alert(`✅ Титул игрока ${player.name} (ID: ${player.id}) изменен на "${title}"`);
     };
 
     // ===== ЗАГРУЗКА =====
@@ -1710,6 +1828,7 @@
           profileAvatar = data.profileAvatar || null;
           refCode = data.refCode || 'FaWW';
           referrals = data.referrals || 0;
+          if (data.currentPlayerId) currentPlayerId = data.currentPlayerId;
         }
       } catch (e) {}
       try {
@@ -1723,7 +1842,6 @@
         quickAmounts = [1000, 2000, 5000, 7000, 10000];
       }
       loadPlayers();
-      // Регистрируем текущего игрока с Telegram ID
       const tgId = telegramUser ? telegramUser.id : null;
       registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
     }
@@ -1740,7 +1858,8 @@
           profileTitle,
           profileAvatar,
           refCode,
-          referrals
+          referrals,
+          currentPlayerId
         };
         localStorage.setItem('wwCasinoData', JSON.stringify(data));
       } catch (e) {}
@@ -2351,28 +2470,185 @@
         }
       });
 
+      // ===== ПОИСК ИГРОКА ПО ID В АДМИН-ПАНЕЛИ =====
+      document.getElementById('adminFindPlayerBtn')?.addEventListener('click', function() {
+        if (!adminAccess) {
+          alert('❌ Нет доступа. Введите код 1973');
+          return;
+        }
+        const idInput = document.getElementById('adminPlayerId');
+        const id = parseInt(idInput ? idInput.value : 1);
+        const player = findPlayerById(id);
+        const infoEl = document.getElementById('adminFoundPlayerInfo');
+        if (player && infoEl) {
+          infoEl.style.display = 'block';
+          document.getElementById('adminFoundPlayerName').textContent = player.name;
+          document.getElementById('adminFoundPlayerBalance').textContent = player.balance.toFixed(2);
+          document.getElementById('adminFoundPlayerTitle').textContent = player.title || 'Игрок';
+          alert(`✅ Найден игрок: ${player.name} (ID: ${player.id})`);
+        } else if (infoEl) {
+          infoEl.style.display = 'none';
+          alert(`❌ Игрок с ID ${id} не найден`);
+        }
+      });
+
+      // ===== АДМИН ДЕЙСТВИЯ ПО ID =====
       document.getElementById('adminSetTitleBtn')?.addEventListener('click', function() {
         if (!adminAccess) {
           alert('❌ Нет доступа. Введите код 1973');
           return;
         }
+        const idInput = document.getElementById('adminPlayerId');
+        const id = parseInt(idInput ? idInput.value : 1);
+        const player = findPlayerById(id);
+        if (!player) {
+          alert(`❌ Игрок с ID ${id} не найден`);
+          return;
+        }
         const title = document.getElementById('adminTitleSelect').value;
-        profileTitle = title;
-        const player = players.find(p => p.name === profileNickname);
-        if (player) {
-          player.title = title;
+        player.title = title;
+        savePlayers();
+        renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+        updateFoundPlayerInfo();
+        // Обновляем профиль, если это текущий игрок
+        if (player.id === currentPlayerId) {
+          profileTitle = title;
+          const titleDisplay = document.getElementById('profileTitleDisplay');
+          if (titleDisplay) titleDisplay.textContent = title;
+          saveData();
+        }
+        alert(`✅ Титул игрока ${player.name} (ID: ${player.id}) изменен на "${title}"`);
+      });
+
+      document.getElementById('adminAddUsdProfile')?.addEventListener('click', function() {
+        if (!adminAccess) {
+          alert('❌ Нет доступа. Введите код 1973');
+          return;
+        }
+        const idInput = document.getElementById('adminPlayerId');
+        const id = parseInt(idInput ? idInput.value : 1);
+        const player = findPlayerById(id);
+        if (!player) {
+          alert(`❌ Игрок с ID ${id} не найден`);
+          return;
+        }
+        const val = parseFloat(document.getElementById('adminAmountGive')?.value || 0);
+        if (!isNaN(val) && val > 0) {
+          player.balance += val;
           savePlayers();
-        } else {
-          const tgId = telegramUser ? telegramUser.id : null;
-          registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, title, tgId);
-        }
-        saveData();
-        const titleDisplay = document.getElementById('profileTitleDisplay');
-        if (titleDisplay) titleDisplay.textContent = title;
-        if (document.getElementById('leaderboardModalOverlay').classList.contains('active')) {
           renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+          updateFoundPlayerInfo();
+          // Обновляем профиль, если это текущий игрок
+          if (player.id === currentPlayerId) {
+            usdBalance = player.balance;
+            const balanceEl = document.getElementById('profileBalance');
+            if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
+            saveData();
+          }
+          const input = document.getElementById('adminAmountGive');
+          if (input) input.value = '';
+          alert(`✅ ${player.name} (ID: ${player.id}) получено +${val} USD. Новый баланс: $${player.balance.toFixed(2)}`);
+        } else alert('❌ Введите число > 0');
+      });
+
+      document.getElementById('adminAddRubProfile')?.addEventListener('click', function() {
+        if (!adminAccess) {
+          alert('❌ Нет доступа. Введите код 1973');
+          return;
         }
-        alert(`✅ Титул изменен на "${title}"`);
+        const idInput = document.getElementById('adminPlayerId');
+        const id = parseInt(idInput ? idInput.value : 1);
+        const player = findPlayerById(id);
+        if (!player) {
+          alert(`❌ Игрок с ID ${id} не найден`);
+          return;
+        }
+        const val = parseFloat(document.getElementById('adminAmountGive')?.value || 0);
+        if (!isNaN(val) && val > 0) {
+          const usdAmount = val / EXCHANGE_RATE;
+          player.balance += usdAmount;
+          savePlayers();
+          renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+          updateFoundPlayerInfo();
+          if (player.id === currentPlayerId) {
+            usdBalance = player.balance;
+            const balanceEl = document.getElementById('profileBalance');
+            if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
+            saveData();
+          }
+          const input = document.getElementById('adminAmountGive');
+          if (input) input.value = '';
+          alert(`✅ ${player.name} (ID: ${player.id}) получено +${val} RUB. Новый баланс: $${player.balance.toFixed(2)}`);
+        } else alert('❌ Введите число > 0');
+      });
+
+      document.getElementById('adminTakeUsdProfile')?.addEventListener('click', function() {
+        if (!adminAccess) {
+          alert('❌ Нет доступа. Введите код 1973');
+          return;
+        }
+        const idInput = document.getElementById('adminPlayerId');
+        const id = parseInt(idInput ? idInput.value : 1);
+        const player = findPlayerById(id);
+        if (!player) {
+          alert(`❌ Игрок с ID ${id} не найден`);
+          return;
+        }
+        const val = parseFloat(document.getElementById('adminAmountTake')?.value || 0);
+        if (!isNaN(val) && val > 0) {
+          if (player.balance < val) {
+            alert(`❌ У игрока недостаточно средств! Доступно: $${player.balance.toFixed(2)}`);
+            return;
+          }
+          player.balance -= val;
+          savePlayers();
+          renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+          updateFoundPlayerInfo();
+          if (player.id === currentPlayerId) {
+            usdBalance = player.balance;
+            const balanceEl = document.getElementById('profileBalance');
+            if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
+            saveData();
+          }
+          const input = document.getElementById('adminAmountTake');
+          if (input) input.value = '';
+          alert(`✅ ${player.name} (ID: ${player.id}) списано -${val} USD. Новый баланс: $${player.balance.toFixed(2)}`);
+        } else alert('❌ Введите число > 0');
+      });
+
+      document.getElementById('adminTakeRubProfile')?.addEventListener('click', function() {
+        if (!adminAccess) {
+          alert('❌ Нет доступа. Введите код 1973');
+          return;
+        }
+        const idInput = document.getElementById('adminPlayerId');
+        const id = parseInt(idInput ? idInput.value : 1);
+        const player = findPlayerById(id);
+        if (!player) {
+          alert(`❌ Игрок с ID ${id} не найден`);
+          return;
+        }
+        const val = parseFloat(document.getElementById('adminAmountTake')?.value || 0);
+        if (!isNaN(val) && val > 0) {
+          const usdAmount = val / EXCHANGE_RATE;
+          if (player.balance < usdAmount) {
+            alert(`❌ У игрока недостаточно средств! Доступно: $${player.balance.toFixed(2)}`);
+            return;
+          }
+          player.balance -= usdAmount;
+          savePlayers();
+          renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+          updateFoundPlayerInfo();
+          if (player.id === currentPlayerId) {
+            usdBalance = player.balance;
+            const balanceEl = document.getElementById('profileBalance');
+            if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
+            saveData();
+          }
+          const input = document.getElementById('adminAmountTake');
+          if (input) input.value = '';
+          alert(`✅ ${player.name} (ID: ${player.id}) списано -${val} RUB. Новый баланс: $${player.balance.toFixed(2)}`);
+        } else alert('❌ Введите число > 0');
       });
 
       document.getElementById('adminResetLimitBtn')?.addEventListener('click', function() {
@@ -2533,63 +2809,13 @@
           const input = document.getElementById('adminCodeInput');
           if (input) input.value = '';
           alert('🔑 Доступ к админ-панели получен!');
+          // Обновляем информацию о найденном игроке
+          updateFoundPlayerInfo();
         } else {
           alert('❌ Неверный код доступа');
           const input = document.getElementById('adminCodeInput');
           if (input) input.value = '';
         }
-      });
-
-      document.getElementById('adminAddUsdProfile')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
-        }
-        const val = parseFloat(document.getElementById('adminAmountGive')?.value || 0);
-        if (!isNaN(val) && val > 0) {
-          addBalance(val, 'USD');
-          const input = document.getElementById('adminAmountGive');
-          if (input) input.value = '';
-        } else alert('❌ Введите число > 0');
-      });
-
-      document.getElementById('adminAddRubProfile')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
-        }
-        const val = parseFloat(document.getElementById('adminAmountGive')?.value || 0);
-        if (!isNaN(val) && val > 0) {
-          addBalance(val, 'RUB');
-          const input = document.getElementById('adminAmountGive');
-          if (input) input.value = '';
-        } else alert('❌ Введите число > 0');
-      });
-
-      document.getElementById('adminTakeUsdProfile')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
-        }
-        const val = parseFloat(document.getElementById('adminAmountTake')?.value || 0);
-        if (!isNaN(val) && val > 0) {
-          takeBalance(val, 'USD');
-          const input = document.getElementById('adminAmountTake');
-          if (input) input.value = '';
-        } else alert('❌ Введите число > 0');
-      });
-
-      document.getElementById('adminTakeRubProfile')?.addEventListener('click', function() {
-        if (!adminAccess) {
-          alert('❌ Нет доступа. Введите код 1973');
-          return;
-        }
-        const val = parseFloat(document.getElementById('adminAmountTake')?.value || 0);
-        if (!isNaN(val) && val > 0) {
-          takeBalance(val, 'RUB');
-          const input = document.getElementById('adminAmountTake');
-          if (input) input.value = '';
-        } else alert('❌ Введите число > 0');
       });
 
       renderBjGame();
