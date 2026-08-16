@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WW Casino</title>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -1778,6 +1783,25 @@
 
   <script>
     // ====================================================================
+    // FIREBASE КОНФИГУРАЦИЯ И ИНИЦИАЛИЗАЦИЯ
+    // ====================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyJFvaxHph1rXpZ91yH4KxL2BaM-gP8Jc",
+      authDomain: "ww-casino-3b23b.firebaseapp.com",
+      projectId: "ww-casino-3b23b",
+      storageBucket: "ww-casino-3b23b.firebasestorage.app",
+      messagingSenderId: "131433531874",
+      appId: "1:131433531874:web:2fee31c643a167a92051bb",
+      measurementId: "G-1EWEPTNPP2"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const analytics = firebase.analytics();
+
+    console.log('🔥 Firebase инициализирован');
+
+    // ====================================================================
     // ЛОКАЛИЗАЦИЯ
     const translations = {
       ru: {
@@ -1903,7 +1927,10 @@
         bj_win_hand: 'Вы выиграли!',
         bj_push: 'Ничья. Ставка возвращена',
         bj_lose: 'Дилер выиграл',
-        bj_bust: 'Перебор! Вы проиграли'
+        bj_bust: 'Перебор! Вы проиграли',
+        synced: '✅ Данные синхронизированы с облаком',
+        sync_error: '❌ Ошибка синхронизации',
+        connecting: '🔄 Подключение к облаку...'
       },
       en: {
         top: 'Top',
@@ -2028,7 +2055,10 @@
         bj_win_hand: 'You won!',
         bj_push: 'Push. Bet returned',
         bj_lose: 'Dealer won',
-        bj_bust: 'Bust! You lost'
+        bj_bust: 'Bust! You lost',
+        synced: '✅ Data synced with cloud',
+        sync_error: '❌ Sync error',
+        connecting: '🔄 Connecting to cloud...'
       }
     };
 
@@ -2043,7 +2073,6 @@
       localStorage.setItem('wwLang', lang);
       applyTranslations();
       document.getElementById('currentLangDisplay').textContent = lang === 'ru' ? 'Русский' : 'English';
-      // Обновляем кнопки языка
       document.getElementById('langRuBtn').className = lang === 'ru' ? 'btn btn-primary' : 'btn btn-gray';
       document.getElementById('langEnBtn').className = lang === 'en' ? 'btn btn-primary' : 'btn btn-gray';
     }
@@ -2053,7 +2082,6 @@
         const key = el.dataset.i18n;
         el.textContent = t(key);
       });
-      // Специальные элементы, которые не имеют data-i18n
       const specialElements = {
         'banMessage': 'banned_text',
         'banSub': 'banned_sub'
@@ -2062,7 +2090,6 @@
         const el = document.getElementById(id);
         if (el) el.textContent = t(key);
       }
-      // Обновляем заголовок
       document.querySelector('h1').textContent = '♛ WW CASINO';
     }
 
@@ -2189,34 +2216,173 @@
     // Список игроков
     let players = [];
     let telegramUser = null;
+    let currentUserId = null;
 
-    // ===== ТЕЛЕГРАМ =====
-    function initTelegram() {
-      if (window.Telegram && window.Telegram.WebApp) {
-        Telegram.WebApp.expand();
-        const user = Telegram.WebApp.initDataUnsafe.user;
-        if (user) {
-          telegramUser = user;
-          const username = user.username || user.first_name || user.id || 'Игрок';
-          profileNickname = username;
-          try {
-            const saved = localStorage.getItem('wwCasinoData');
-            if (saved) {
-              const data = JSON.parse(saved);
-              data.profileNickname = username;
-              data.telegramId = user.id;
-              localStorage.setItem('wwCasinoData', JSON.stringify(data));
-            } else {
-              localStorage.setItem('wwCasinoData', JSON.stringify({ profileNickname: username, telegramId: user.id }));
-            }
-          } catch (e) {}
-          return user;
+    // ====================================================================
+    // FIREBASE ФУНКЦИИ
+    // ====================================================================
+
+    // Получить или создать пользователя в Firestore
+    async function getOrCreateUser(userId, nickname) {
+      try {
+        const userRef = db.collection('users').doc(userId);
+        const doc = await userRef.get();
+        
+        if (doc.exists) {
+          const data = doc.data();
+          return data;
+        } else {
+          // Создаем нового пользователя
+          const newUser = {
+            nickname: nickname || 'Игрок',
+            balance: 0,
+            wins: 0,
+            referrals: 0,
+            title: 'Игрок',
+            banned: false,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+          };
+          await userRef.set(newUser);
+          return newUser;
         }
+      } catch (error) {
+        console.error('Ошибка получения пользователя:', error);
+        return null;
       }
-      return null;
     }
 
-    // ===== РАБОТА С ИГРОКАМИ =====
+    // Сохранить данные пользователя в Firestore
+    async function syncUserData(userId) {
+      if (!userId) return;
+      try {
+        const userRef = db.collection('users').doc(userId);
+        await userRef.update({
+          nickname: profileNickname,
+          balance: usdBalance,
+          wins: wins,
+          referrals: referrals,
+          title: profileTitle,
+          banned: isBanned,
+          lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log('✅ Данные синхронизированы с Firestore');
+        showToast(t('synced'));
+      } catch (error) {
+        console.error('Ошибка синхронизации:', error);
+        showToast(t('sync_error'), 'error');
+      }
+    }
+
+    // Загрузить данные из Firestore
+    async function loadUserData(userId) {
+      if (!userId) return;
+      try {
+        const userRef = db.collection('users').doc(userId);
+        const doc = await userRef.get();
+        
+        if (doc.exists) {
+          const data = doc.data();
+          usdBalance = data.balance || 0;
+          wins = data.wins || 0;
+          referrals = data.referrals || 0;
+          profileNickname = data.nickname || 'Игрок';
+          profileTitle = data.title || 'Игрок';
+          isBanned = data.banned || false;
+          
+          if (isBanned) {
+            document.getElementById('bannedOverlay').classList.remove('hidden');
+          } else {
+            document.getElementById('bannedOverlay').classList.add('hidden');
+          }
+          
+          updateUI();
+          showToast(t('synced'));
+          return data;
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+        showToast(t('sync_error'), 'error');
+        return null;
+      }
+    }
+
+    // Создать или обновить игрока в рейтинге
+    async function syncLeaderboard(userId, playerData) {
+      if (!userId) return;
+      try {
+        const leaderboardRef = db.collection('leaderboard').doc(userId);
+        await leaderboardRef.set({
+          ...playerData,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } catch (error) {
+        console.error('Ошибка синхронизации рейтинга:', error);
+      }
+    }
+
+    // Получить топ игроков
+    async function getTopPlayers(sortBy = 'balance', limit = 50) {
+      try {
+        let query = db.collection('leaderboard');
+        
+        if (sortBy === 'balance') {
+          query = query.orderBy('balance', 'desc');
+        } else if (sortBy === 'wins') {
+          query = query.orderBy('wins', 'desc');
+        } else if (sortBy === 'referrals') {
+          query = query.orderBy('referrals', 'desc');
+        }
+        
+        const snapshot = await query.limit(limit).get();
+        const players = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          data.id = doc.id;
+          players.push(data);
+        });
+        return players;
+      } catch (error) {
+        console.error('Ошибка получения топа:', error);
+        return [];
+      }
+    }
+
+    // Утилита: показать уведомление
+    function showToast(message, type = 'success') {
+      const colors = {
+        success: '#80ffaa',
+        error: '#ff6b6b',
+        info: '#88aabb'
+      };
+      const toast = document.createElement('div');
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1a1a1a;
+        color: ${colors[type] || '#f0f0f0'};
+        padding: 12px 24px;
+        border-radius: 30px;
+        border: 1px solid ${colors[type] || '#4a4a5a'};
+        font-size: 14px;
+        z-index: 9999;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        animation: fadeSlideIn 0.3s ease;
+        max-width: 90%;
+      `;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // ====================================================================
+    // РАБОТА С ИГРОКАМИ
     function getNextPlayerId() {
       try {
         const saved = localStorage.getItem('wwNextPlayerId');
@@ -2460,6 +2626,7 @@
         const balanceEl = document.getElementById('profileBalance');
         if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
         saveData();
+        syncUserData(currentUserId);
       }
       alert(`✅ ${player.name} (ID: ${player.id}) получено +${amount} USD. ${t('new_balance') || 'Новый баланс'}: $${player.balance.toFixed(2)}`);
     };
@@ -2469,7 +2636,7 @@
       const player = findPlayerById(id);
       if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
       if (player.balance < amount) {
-        alert(`❌ ${t('not_enough') || 'Недостаточно средств'}! ${t('available_short') || 'Доступно'}: $${player.balance.toFixed(2)}`);
+        alert(`❌ ${t('not_enough')}! ${t('available_short') || 'Доступно'}: $${player.balance.toFixed(2)}`);
         return;
       }
       player.balance -= amount;
@@ -2486,6 +2653,7 @@
         const balanceEl = document.getElementById('profileBalance');
         if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
         saveData();
+        syncUserData(currentUserId);
       }
       alert(`✅ ${player.name} (ID: ${player.id}) списано -${amount} USD. ${t('new_balance') || 'Новый баланс'}: $${player.balance.toFixed(2)}`);
     };
@@ -2508,6 +2676,7 @@
         const titleDisplay = document.getElementById('profileTitleDisplay');
         if (titleDisplay) titleDisplay.textContent = title;
         saveData();
+        syncUserData(currentUserId);
       }
       alert(`✅ ${t('title_changed') || 'Титул изменен'}: ${player.name} (ID: ${player.id}) -> "${title}"`);
     };
@@ -2529,6 +2698,7 @@
       if (player.id === currentPlayerId) {
         isBanned = true;
         document.getElementById('bannedOverlay').classList.remove('hidden');
+        syncUserData(currentUserId);
       }
       alert(`✅ ${t('banned_user') || 'Игрок забанен'}: ${player.name} (ID: ${player.id})`);
     };
@@ -2550,6 +2720,7 @@
       if (player.id === currentPlayerId) {
         isBanned = false;
         document.getElementById('bannedOverlay').classList.add('hidden');
+        syncUserData(currentUserId);
       }
       alert(`✅ ${t('unbanned_user') || 'Игрок разбанен'}: ${player.name} (ID: ${player.id})`);
     };
@@ -2581,6 +2752,7 @@
         const winsEl = document.getElementById('profileWins');
         if (winsEl) winsEl.textContent = '0';
         saveData();
+        syncUserData(currentUserId);
         updateUI();
       }
       alert(`✅ ${t('reset_done') || 'Аккаунт обнулен'} ${player.name} (ID: ${player.id}). ${t('removed') || 'Было списано'} $${oldBalance.toFixed(2)}`);
@@ -2805,6 +2977,7 @@
       }
       saveData();
       updateUI();
+      syncUserData(currentUserId);
       return true;
     }
 
@@ -2824,6 +2997,7 @@
       }
       saveData();
       updateUI();
+      syncUserData(currentUserId);
       return true;
     }
 
@@ -3036,6 +3210,8 @@
       if (hitBtn) hitBtn.disabled = true;
       if (standBtn) standBtn.disabled = true;
       if (dealBtn) dealBtn.disabled = false;
+      
+      syncUserData(currentUserId);
     }
 
     // ===== МОНЕТКА =====
@@ -3083,6 +3259,7 @@
         }
 
         coinFlipping = false;
+        syncUserData(currentUserId);
       }, 600);
     }
 
@@ -3195,6 +3372,7 @@
           crashHistory.unshift(crashPoint.toFixed(2));
           if (crashHistory.length > 20) crashHistory.pop();
           updateCrashHistory();
+          syncUserData(currentUserId);
         }
       }, 50);
     }
@@ -3222,6 +3400,7 @@
       crashHistory.unshift(crashMultiplier.toFixed(2));
       if (crashHistory.length > 20) crashHistory.pop();
       updateCrashHistory();
+      syncUserData(currentUserId);
     }
 
     function updateCrashHistory() {
@@ -3364,6 +3543,7 @@
               c.textContent = '💣'; }
           }
         });
+        syncUserData(currentUserId);
         return;
       }
 
@@ -3397,6 +3577,7 @@
         document.getElementById('mineCashoutBtn').disabled = true;
         document.getElementById('mineResult').textContent = `🎉 ${t('win_text')} ${winAmount.toFixed(2)} USD (x${mineMultiplier.toFixed(2)})`;
         document.getElementById('mineResult').className = 'minefield-result win';
+        syncUserData(currentUserId);
       }
     }
 
@@ -3418,6 +3599,7 @@
       document.getElementById('mineCashoutBtn').disabled = true;
       document.getElementById('mineResult').textContent = `💰 ${t('cashout_text')} ${winAmount.toFixed(2)} USD (x${mineMultiplier.toFixed(2)})`;
       document.getElementById('mineResult').className = 'minefield-result win';
+      syncUserData(currentUserId);
     }
 
     // ===== НАВИГАЦИЯ =====
@@ -3513,6 +3695,7 @@
       const nickInput = document.getElementById('profileNickname');
       if (nickInput) { const newNick = nickInput.value.trim(); if (newNick) profileNickname = newNick; }
       saveData();
+      syncUserData(currentUserId);
       alert('✅ ' + t('profile_saved'));
     }
 
@@ -3566,6 +3749,7 @@
       addHistory(usdAmount, 'deposit');
       saveData();
       updateUI();
+      syncUserData(currentUserId);
 
       setTimeout(() => {
         if (processing) processing.classList.add('hidden');
@@ -3586,7 +3770,7 @@
     }
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
       // Загрузка языка
       const savedLang = localStorage.getItem('wwLang');
       if (savedLang === 'en' || savedLang === 'ru') {
@@ -3596,6 +3780,17 @@
       }
 
       const user = initTelegram();
+
+      // Генерируем уникальный ID пользователя
+      let userId = localStorage.getItem('wwUserId');
+      if (!userId) {
+        userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('wwUserId', userId);
+      }
+      currentUserId = userId;
+
+      // Показываем уведомление о подключении
+      showToast(t('connecting'), 'info');
 
       loadData();
       renderQuickAmounts();
@@ -3611,6 +3806,9 @@
       if (isBanned) {
         document.getElementById('bannedOverlay').classList.remove('hidden');
       }
+
+      // Загружаем данные из Firestore
+      await loadUserData(userId);
 
       // ===== ОБРАБОТЧИКИ =====
 
@@ -3695,6 +3893,7 @@
           const titleDisplay = document.getElementById('profileTitleDisplay');
           if (titleDisplay) titleDisplay.textContent = title;
           saveData();
+          syncUserData(currentUserId);
         }
         alert(`✅ ${t('title_changed') || 'Титул изменен'}: ${player.name} (ID: ${player.id}) -> "${title}"`);
       });
@@ -3716,6 +3915,7 @@
             const balanceEl = document.getElementById('profileBalance');
             if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
             saveData();
+            syncUserData(currentUserId);
           }
           const input = document.getElementById('adminAmountGive');
           if (input) input.value = '';
@@ -3741,6 +3941,7 @@
             const balanceEl = document.getElementById('profileBalance');
             if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
             saveData();
+            syncUserData(currentUserId);
           }
           const input = document.getElementById('adminAmountGive');
           if (input) input.value = '';
@@ -3767,6 +3968,7 @@
             const balanceEl = document.getElementById('profileBalance');
             if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
             saveData();
+            syncUserData(currentUserId);
           }
           const input = document.getElementById('adminAmountTake');
           if (input) input.value = '';
@@ -3794,6 +3996,7 @@
             const balanceEl = document.getElementById('profileBalance');
             if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
             saveData();
+            syncUserData(currentUserId);
           }
           const input = document.getElementById('adminAmountTake');
           if (input) input.value = '';
@@ -3815,6 +4018,7 @@
         if (player.id === currentPlayerId) {
           isBanned = true;
           document.getElementById('bannedOverlay').classList.remove('hidden');
+          syncUserData(currentUserId);
         }
         alert(`✅ ${t('banned_user') || 'Игрок забанен'}: ${player.name} (ID: ${player.id})`);
       });
@@ -3833,6 +4037,7 @@
         if (player.id === currentPlayerId) {
           isBanned = false;
           document.getElementById('bannedOverlay').classList.add('hidden');
+          syncUserData(currentUserId);
         }
         alert(`✅ ${t('unbanned_user') || 'Игрок разбанен'}: ${player.name} (ID: ${player.id})`);
       });
@@ -3861,6 +4066,7 @@
           const winsEl = document.getElementById('profileWins');
           if (winsEl) winsEl.textContent = '0';
           saveData();
+          syncUserData(currentUserId);
           updateUI();
         }
         alert(`✅ ${t('reset_done') || 'Аккаунт обнулен'} ${player.name} (ID: ${player.id}). ${t('removed') || 'Было списано'} $${oldBalance.toFixed(2)}`);
@@ -4039,6 +4245,13 @@
 
       updateRemainingDisplay();
       updateTimerDisplay();
+
+      // Периодическая синхронизация (каждые 30 секунд)
+      setInterval(() => {
+        if (currentUserId) {
+          syncUserData(currentUserId);
+        }
+      }, 30000);
     });
 
     window.addEventListener('resize', function() {
@@ -4046,6 +4259,32 @@
         initCrashCanvas();
       }
     });
+
+    // Функция для Telegram
+    function initTelegram() {
+      if (window.Telegram && window.Telegram.WebApp) {
+        Telegram.WebApp.expand();
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        if (user) {
+          telegramUser = user;
+          const username = user.username || user.first_name || user.id || 'Игрок';
+          profileNickname = username;
+          try {
+            const saved = localStorage.getItem('wwCasinoData');
+            if (saved) {
+              const data = JSON.parse(saved);
+              data.profileNickname = username;
+              data.telegramId = user.id;
+              localStorage.setItem('wwCasinoData', JSON.stringify(data));
+            } else {
+              localStorage.setItem('wwCasinoData', JSON.stringify({ profileNickname: username, telegramId: user.id }));
+            }
+          } catch (e) {}
+          return user;
+        }
+      }
+      return null;
+    }
   </script>
 </body>
 </html>
