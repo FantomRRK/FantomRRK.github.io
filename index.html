@@ -1569,13 +1569,21 @@
         const saved = localStorage.getItem('wwCasinoPlayers');
         if (saved) {
           players = JSON.parse(saved);
-          // Обновляем nextPlayerId
+          // Обновляем nextPlayerId и проставляем ID старым игрокам
           let maxId = 0;
-          players.forEach(p => {
-            if (p.id && p.id > maxId) maxId = p.id;
+          let needSave = false;
+          players.forEach((p, index) => {
+            if (!p.id) {
+              p.id = index + 1;
+              needSave = true;
+            }
+            if (p.id > maxId) maxId = p.id;
           });
           nextPlayerId = maxId + 1;
           saveNextPlayerId(nextPlayerId);
+          if (needSave) {
+            savePlayers();
+          }
           return;
         }
       } catch (e) {}
@@ -1607,7 +1615,6 @@
         if (title) existing.title = title;
         if (telegramId) existing.telegramId = telegramId;
         existing.lastLogin = new Date().toLocaleDateString('ru-RU');
-        // Сохраняем ID текущего игрока
         if (telegramId === (telegramUser ? telegramUser.id : null)) {
           currentPlayerId = existing.id;
         }
@@ -1655,7 +1662,6 @@
       } else {
         const tgId = telegramUser ? telegramUser.id : null;
         registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
-        // После регистрации обновляем currentPlayerId
         const newPlayer = players.find(p => p.telegramId === tgId || p.name === profileNickname);
         if (newPlayer) currentPlayerId = newPlayer.id;
       }
@@ -1680,10 +1686,12 @@
         const isHighlight = player.id === currentPlayerId;
         const value = sortBy === 'balance' ? '$' + player.balance.toFixed(2) :
           sortBy === 'wins' ? player.wins : player.referrals;
+        // Показываем ID, даже если он undefined (но с фиксом выше этого не должно быть)
+        const playerId = player.id !== undefined ? player.id : '?';
         html += `
           <tr class="${isHighlight ? 'highlight' : ''}" data-player="${encodeURIComponent(player.name)}" data-id="${player.id}">
             <td class="rank">${index + 1}</td>
-            <td style="color:#665555;font-size:11px;">#${player.id}</td>
+            <td style="color:#665555;font-size:11px;">#${playerId}</td>
             <td class="name">${player.name}</td>
             <td class="value">${value}</td>
             <td style="color:#ffd700;font-size:10px;">${player.title || 'Игрок'}</td>
@@ -1724,12 +1732,14 @@
         `;
       }
 
+      const playerId = player.id !== undefined ? player.id : '?';
+
       content.innerHTML = `
         <div class="player-card">
           <div class="player-avatar-big">${player.avatar || '👤'}</div>
           <div class="player-name-big">${player.name}</div>
           <div class="player-title-big">${player.title || 'Игрок'}</div>
-          <div class="player-row"><span class="label">🆔 ID</span><span class="value gold">#${player.id}</span></div>
+          <div class="player-row"><span class="label">🆔 ID</span><span class="value gold">#${playerId}</span></div>
           <div class="player-row"><span class="label">💰 Баланс</span><span class="value gold">$${player.balance.toFixed(2)}</span></div>
           <div class="player-row"><span class="label">🏆 Выигрышей</span><span class="value green">${player.wins}</span></div>
           <div class="player-row"><span class="label">👥 Рефералов</span><span class="value">${player.referrals || 0}</span></div>
@@ -2510,7 +2520,6 @@
         savePlayers();
         renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
         updateFoundPlayerInfo();
-        // Обновляем профиль, если это текущий игрок
         if (player.id === currentPlayerId) {
           profileTitle = title;
           const titleDisplay = document.getElementById('profileTitleDisplay');
@@ -2538,7 +2547,6 @@
           savePlayers();
           renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
           updateFoundPlayerInfo();
-          // Обновляем профиль, если это текущий игрок
           if (player.id === currentPlayerId) {
             usdBalance = player.balance;
             const balanceEl = document.getElementById('profileBalance');
@@ -2809,7 +2817,6 @@
           const input = document.getElementById('adminCodeInput');
           if (input) input.value = '';
           alert('🔑 Доступ к админ-панели получен!');
-          // Обновляем информацию о найденном игроке
           updateFoundPlayerInfo();
         } else {
           alert('❌ Неверный код доступа');
