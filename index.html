@@ -1056,6 +1056,27 @@
       color: #aa8888;
       margin-bottom: 10px;
     }
+    .player-card .admin-actions {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #2a1a1a;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+    .player-card .admin-actions .btn {
+      padding: 4px 12px;
+      font-size: 11px;
+      flex: 0 1 auto;
+    }
+    .player-card .admin-actions .admin-label {
+      color: #ff6b6b;
+      font-size: 11px;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 4px;
+    }
 
     /* Скрытые элементы */
     .avatar-upload-area {
@@ -1310,7 +1331,7 @@
 
   <!-- Модалка Топ -->
   <div class="modal-overlay" id="leaderboardModalOverlay">
-    <div class="modal-window" style="max-width: 450px;">
+    <div class="modal-window" style="max-width: 500px;">
       <div class="flex-between">
         <h2>🏆 Топ игроков</h2>
         <button class="modal-close-icon" id="leaderboardModalClose">✕</button>
@@ -1326,7 +1347,7 @@
 
   <!-- Модалка карточки игрока -->
   <div class="modal-overlay" id="playerCardModalOverlay">
-    <div class="modal-window" style="max-width: 400px;">
+    <div class="modal-window" style="max-width: 420px;">
       <div class="flex-between">
         <h2>👤 Карточка игрока</h2>
         <button class="modal-close-icon" id="playerCardModalClose">✕</button>
@@ -1341,7 +1362,7 @@
     const EXCHANGE_RATE = 83.99;
     const MAX_DEPOSIT = 10000;
 
-    // ===== ЛИМИТ ПОПОЛНЕНИЯ С ТАЙМЕРОМ =====
+    // ===== ЛИМИТ ПОПОЛНЕНИЯ =====
     function getDailyLimit() {
       const today = new Date().toDateString();
       try {
@@ -1416,7 +1437,6 @@
       el.textContent = '$' + remaining.toFixed(2);
     }
 
-    // Запускаем таймер обновления каждую секунду
     setInterval(() => {
       updateTimerDisplay();
       updateRemainingDisplay();
@@ -1448,6 +1468,34 @@
     // Список игроков (топ)
     let players = [];
 
+    // ===== ТЕЛЕГРАМ =====
+    let telegramUser = null;
+
+    function initTelegram() {
+      if (window.Telegram && window.Telegram.WebApp) {
+        Telegram.WebApp.expand();
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        if (user) {
+          telegramUser = user;
+          const username = user.username || user.first_name || user.id || 'Игрок';
+          // Обновляем профиль
+          profileNickname = username;
+          // Сохраняем в localStorage
+          try {
+            const saved = localStorage.getItem('wwCasinoData');
+            if (saved) {
+              const data = JSON.parse(saved);
+              data.profileNickname = username;
+              data.telegramId = user.id;
+              localStorage.setItem('wwCasinoData', JSON.stringify(data));
+            }
+          } catch (e) {}
+          return user;
+        }
+      }
+      return null;
+    }
+
     // ===== РАБОТА С ИГРОКАМИ =====
     function loadPlayers() {
       try {
@@ -1466,14 +1514,16 @@
       } catch (e) {}
     }
 
-    function registerOrUpdatePlayer(name, balance, wins, refs, title) {
-      const existing = players.find(p => p.name === name);
+    function registerOrUpdatePlayer(name, balance, wins, refs, title, telegramId) {
+      const existing = players.find(p => p.name === name || p.telegramId === telegramId);
       if (existing) {
+        existing.name = name;
         existing.balance = balance;
         existing.wins = wins;
         existing.referrals = refs;
         if (title) existing.title = title;
-        else if (!existing.title) existing.title = 'Игрок';
+        if (telegramId) existing.telegramId = telegramId;
+        existing.lastLogin = new Date().toLocaleDateString('ru-RU');
       } else {
         players.push({
           name: name,
@@ -1481,6 +1531,7 @@
           wins: wins,
           referrals: refs || 0,
           title: title || 'Игрок',
+          telegramId: telegramId || null,
           avatar: '👤',
           gender: Math.random() > 0.5 ? 'Мужской' : 'Женский',
           age: Math.floor(Math.random() * 12 + 18),
@@ -1494,7 +1545,7 @@
 
     // ===== ГЕНЕРАЦИЯ ТОПА =====
     function renderLeaderboardModal(sortBy = 'balance') {
-      // Обновляем данные игрока перед рендером
+      // Обновляем данные текущего игрока
       const player = players.find(p => p.name === profileNickname);
       if (player) {
         player.title = profileTitle;
@@ -1525,7 +1576,7 @@
         const value = sortBy === 'balance' ? '$' + player.balance.toFixed(2) :
           sortBy === 'wins' ? player.wins : player.referrals;
         html += `
-          <tr class="${isHighlight ? 'highlight' : ''}" data-player="${encodeURIComponent(player.name)}">
+          <tr class="${isHighlight ? 'highlight' : ''}" data-player="${encodeURIComponent(player.name)}" data-telegram="${player.telegramId || ''}">
             <td class="rank">${index + 1}</td>
             <td class="name">${player.name}</td>
             <td class="value">${value}</td>
@@ -1548,6 +1599,25 @@
     function showPlayerCard(player) {
       const content = document.getElementById('playerCardContent');
       if (!content) return;
+
+      const isAdmin = adminAccess;
+      const isSelf = player.name === profileNickname;
+
+      let adminHtml = '';
+      if (isAdmin && !isSelf) {
+        adminHtml = `
+          <div class="admin-actions">
+            <div class="admin-label">⚙️ Управление аккаунтом (Админ)</div>
+            <button class="btn btn-warning" onclick="adminGiveBalance('${player.name}', 100)">+100 USD</button>
+            <button class="btn btn-warning" onclick="adminGiveBalance('${player.name}', 500)">+500 USD</button>
+            <button class="btn btn-danger" onclick="adminTakeBalance('${player.name}', 100)">-100 USD</button>
+            <button class="btn btn-gray" onclick="adminSetTitle('${player.name}', 'Администратор')">👑 Админ</button>
+            <button class="btn btn-gray" onclick="adminSetTitle('${player.name}', 'VIP')">⭐ VIP</button>
+            <button class="btn btn-gray" onclick="adminSetTitle('${player.name}', 'Игрок')">Игрок</button>
+          </div>
+        `;
+      }
+
       content.innerHTML = `
         <div class="player-card">
           <div class="player-avatar-big">${player.avatar || '👤'}</div>
@@ -1560,10 +1630,60 @@
           <div class="player-row"><span class="label">🕐 Последний вход</span><span class="value">${player.lastLogin || '--'}</span></div>
           <div class="player-row"><span class="label">🎂 Возраст</span><span class="value">${player.age || 25} лет</span></div>
           <div class="player-row"><span class="label">📍 Город</span><span class="value">${player.city || 'Не указан'}</span></div>
+          ${player.telegramId ? `<div class="player-row"><span class="label">🆔 Telegram ID</span><span class="value">${player.telegramId}</span></div>` : ''}
+          ${adminHtml}
         </div>
       `;
       document.getElementById('playerCardModalOverlay').classList.add('active');
     }
+
+    // ===== АДМИН ФУНКЦИИ ДЛЯ УПРАВЛЕНИЯ ИГРОКАМИ =====
+    window.adminGiveBalance = function(name, amount) {
+      if (!adminAccess) { alert('❌ Нет доступа'); return; }
+      const player = players.find(p => p.name === name);
+      if (!player) { alert('❌ Игрок не найден'); return; }
+      player.balance += amount;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      // Обновляем карточку если открыта
+      const overlay = document.getElementById('playerCardModalOverlay');
+      if (overlay.classList.contains('active')) {
+        showPlayerCard(player);
+      }
+      alert(`✅ ${player.name} получено +${amount} USD. Новый баланс: $${player.balance.toFixed(2)}`);
+    };
+
+    window.adminTakeBalance = function(name, amount) {
+      if (!adminAccess) { alert('❌ Нет доступа'); return; }
+      const player = players.find(p => p.name === name);
+      if (!player) { alert('❌ Игрок не найден'); return; }
+      if (player.balance < amount) {
+        alert(`❌ У игрока недостаточно средств! Доступно: $${player.balance.toFixed(2)}`);
+        return;
+      }
+      player.balance -= amount;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      const overlay = document.getElementById('playerCardModalOverlay');
+      if (overlay.classList.contains('active')) {
+        showPlayerCard(player);
+      }
+      alert(`✅ ${player.name} списано -${amount} USD. Новый баланс: $${player.balance.toFixed(2)}`);
+    };
+
+    window.adminSetTitle = function(name, title) {
+      if (!adminAccess) { alert('❌ Нет доступа'); return; }
+      const player = players.find(p => p.name === name);
+      if (!player) { alert('❌ Игрок не найден'); return; }
+      player.title = title;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      const overlay = document.getElementById('playerCardModalOverlay');
+      if (overlay.classList.contains('active')) {
+        showPlayerCard(player);
+      }
+      alert(`✅ Титул игрока ${player.name} изменен на "${title}"`);
+    };
 
     // ===== ЗАГРУЗКА =====
     function loadData() {
@@ -1594,7 +1714,9 @@
         quickAmounts = [1000, 2000, 5000, 7000, 10000];
       }
       loadPlayers();
-      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle);
+      // Регистрируем текущего игрока с Telegram ID
+      const tgId = telegramUser ? telegramUser.id : null;
+      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
     }
 
     function saveData() {
@@ -1613,7 +1735,8 @@
         };
         localStorage.setItem('wwCasinoData', JSON.stringify(data));
       } catch (e) {}
-      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle);
+      const tgId = telegramUser ? telegramUser.id : null;
+      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
       savePlayers();
     }
 
@@ -1659,7 +1782,8 @@
       renderProfileHistory();
       const refLink = document.getElementById('refLink');
       if (refLink) refLink.textContent = 'ww-casino.com/ref/' + refCode;
-      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle);
+      const tgId = telegramUser ? telegramUser.id : null;
+      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
     }
 
     function renderProfileHistory(limit = 5) {
@@ -2166,23 +2290,8 @@
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
     document.addEventListener('DOMContentLoaded', function() {
-      const isTelegram = window.Telegram && window.Telegram.WebApp;
-      if (isTelegram) {
-        Telegram.WebApp.expand();
-        const user = Telegram.WebApp.initDataUnsafe.user;
-        if (user) {
-          const username = user.username || user.first_name || 'Игрок';
-          profileNickname = username;
-          try {
-            const saved = localStorage.getItem('wwCasinoData');
-            if (saved) {
-              const data = JSON.parse(saved);
-              data.profileNickname = username;
-              localStorage.setItem('wwCasinoData', JSON.stringify(data));
-            }
-          } catch (e) {}
-        }
-      }
+      // Инициализация Telegram
+      const user = initTelegram();
 
       loadData();
       renderQuickAmounts();
@@ -2233,42 +2342,30 @@
         }
       });
 
-      // ===== ФИКС СМЕНЫ ТИТУЛА =====
       document.getElementById('adminSetTitleBtn')?.addEventListener('click', function() {
         if (!adminAccess) {
           alert('❌ Нет доступа. Введите код 1973');
           return;
         }
         const title = document.getElementById('adminTitleSelect').value;
-
-        // 1. Обновляем profileTitle
         profileTitle = title;
-
-        // 2. Обновляем в списке игроков
         const player = players.find(p => p.name === profileNickname);
         if (player) {
           player.title = title;
           savePlayers();
         } else {
-          registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, title);
+          const tgId = telegramUser ? telegramUser.id : null;
+          registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, title, tgId);
         }
-
-        // 3. Сохраняем данные
         saveData();
-
-        // 4. Обновляем отображение в профиле
         const titleDisplay = document.getElementById('profileTitleDisplay');
         if (titleDisplay) titleDisplay.textContent = title;
-
-        // 5. Обновляем топ если он открыт
         if (document.getElementById('leaderboardModalOverlay').classList.contains('active')) {
           renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
         }
-
         alert(`✅ Титул изменен на "${title}"`);
       });
 
-      // ===== СБРОС ЛИМИТА =====
       document.getElementById('adminResetLimitBtn')?.addEventListener('click', function() {
         if (!adminAccess) {
           alert('❌ Нет доступа. Введите код 1973');
