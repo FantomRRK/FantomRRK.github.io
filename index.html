@@ -1136,6 +1136,13 @@
     .deposit-limit-info span {
       color: #ffd700;
     }
+    .deposit-limit-info .remaining {
+      color: #80ffaa;
+    }
+    .deposit-limit-info .reset-timer {
+      color: #88aabb;
+      font-size: 10px;
+    }
   </style>
 </head>
 <body>
@@ -1234,7 +1241,10 @@
         </select>
       </div>
       <button class="btn-deposit-confirm" id="depositConfirmBtn">Пополнить</button>
-      <div class="deposit-limit-info">💰 Лимит пополнения: <span>$10,000</span> (1 USD = 83.99 ₽)</div>
+      <div class="deposit-limit-info">
+        💰 Лимит пополнения: <span>$10,000</span> | Доступно: <span class="remaining" id="depositRemaining">$10,000.00</span>
+        <br><span class="reset-timer" id="resetTimer">⏳ Сброс через: --:--:--</span>
+      </div>
     </div>
   </div>
 
@@ -1392,6 +1402,78 @@
     // Глобальные переменные
     const EXCHANGE_RATE = 83.99;
     const MAX_DEPOSIT = 10000;
+
+    // ===== ЛИМИТ ПОПОЛНЕНИЯ С ТАЙМЕРОМ =====
+    function getDailyLimit() {
+      const today = new Date().toDateString();
+      try {
+        const saved = localStorage.getItem('wwDepositLimit');
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (data.date === today) {
+            return data.used;
+          }
+        }
+      } catch (e) {}
+      return 0;
+    }
+
+    function saveDailyLimit(used) {
+      const today = new Date().toDateString();
+      try {
+        localStorage.setItem('wwDepositLimit', JSON.stringify({
+          date: today,
+          used: used
+        }));
+      } catch (e) {}
+    }
+
+    function getRemainingLimit() {
+      const used = getDailyLimit();
+      return Math.max(0, MAX_DEPOSIT - used);
+    }
+
+    function getTimeToReset() {
+      const now = new Date();
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+      const diff = tomorrow - now;
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+      return { hours, minutes, seconds, total: diff };
+    }
+
+    function updateTimerDisplay() {
+      const el = document.getElementById('resetTimer');
+      if (!el) return;
+      const time = getTimeToReset();
+      if (time.total <= 0) {
+        el.textContent = '⏳ Сброс через: 00:00:00';
+        return;
+      }
+      const h = String(time.hours).padStart(2, '0');
+      const m = String(time.minutes).padStart(2, '0');
+      const s = String(time.seconds).padStart(2, '0');
+      el.textContent = `⏳ Сброс через: ${h}:${m}:${s}`;
+    }
+
+    function updateRemainingDisplay() {
+      const el = document.getElementById('depositRemaining');
+      if (!el) return;
+      const remaining = getRemainingLimit();
+      el.textContent = '$' + remaining.toFixed(2);
+    }
+
+    // Запускаем таймер обновления каждую секунду
+    setInterval(() => {
+      updateTimerDisplay();
+      updateRemainingDisplay();
+    }, 1000);
+
+    // ====================================================================
+
     let usdBalance = 0.00;
     let totalTransactions = 0;
     let totalDepositedUSD = 0;
@@ -1591,6 +1673,7 @@
         el.classList.remove('rub-mode');
       }
       updateProfileStats();
+      updateRemainingDisplay();
     }
 
     function updateProfileStats() {
@@ -1684,12 +1767,19 @@
       } else {
         return false;
       }
-      // Проверка лимита пополнения
-      if (totalDepositedUSD + usdAmount > MAX_DEPOSIT) {
-        alert(`⚠️ Превышен лимит пополнения! Максимум: $${MAX_DEPOSIT.toFixed(2)}\nДоступно: $${(MAX_DEPOSIT - totalDepositedUSD).toFixed(2)}`);
+
+      // Проверка дневного лимита
+      const used = getDailyLimit();
+      const remaining = MAX_DEPOSIT - used;
+      if (usdAmount > remaining) {
+        alert(`⚠️ Превышен дневной лимит пополнения!\nМаксимум: $${MAX_DEPOSIT.toFixed(2)}\nДоступно сегодня: $${remaining.toFixed(2)}`);
         return false;
       }
+
       usdBalance += usdAmount;
+      // Сохраняем использованный лимит
+      saveDailyLimit(used + usdAmount);
+
       if (recordHistory) {
         totalTransactions++;
         totalDepositedUSD += usdAmount;
@@ -2086,7 +2176,6 @@
       adminAccess = false;
       const codeInput = document.getElementById('adminCodeInput');
       if (codeInput) codeInput.value = '';
-      // Скрываем поле редактирования рефералки
       document.getElementById('refInput').classList.add('hidden');
       document.getElementById('saveRefBtn').classList.add('hidden');
     }
@@ -2111,6 +2200,8 @@
       const select = document.getElementById('depositCurrencySelect');
       if (input) input.value = 50;
       if (select) select.value = 'USD';
+      updateRemainingDisplay();
+      updateTimerDisplay();
     }
 
     function closeDepositModal() {
@@ -2122,9 +2213,11 @@
       let usdAmount = currency === 'USD' ? amount : amount / EXCHANGE_RATE;
       if (isNaN(usdAmount) || usdAmount <= 0) usdAmount = 10;
 
-      // Проверка лимита
-      if (totalDepositedUSD + usdAmount > MAX_DEPOSIT) {
-        alert(`⚠️ Превышен лимит пополнения! Максимум: $${MAX_DEPOSIT.toFixed(2)}\nДоступно: $${(MAX_DEPOSIT - totalDepositedUSD).toFixed(2)}`);
+      // Проверка дневного лимита
+      const used = getDailyLimit();
+      const remaining = MAX_DEPOSIT - used;
+      if (usdAmount > remaining) {
+        alert(`⚠️ Превышен дневной лимит пополнения!\nМаксимум: $${MAX_DEPOSIT.toFixed(2)}\nДоступно сегодня: $${remaining.toFixed(2)}`);
         return;
       }
 
@@ -2139,6 +2232,7 @@
       if (statusOverlay) statusOverlay.classList.add('active');
 
       usdBalance += usdAmount;
+      saveDailyLimit(used + usdAmount);
       totalTransactions++;
       totalDepositedUSD += usdAmount;
       addHistory(usdAmount, 'deposit');
@@ -2150,6 +2244,7 @@
         if (success) success.classList.remove('hidden');
         if (amountInfo) amountInfo.textContent = `+ ${usdAmount.toFixed(2)} USD`;
         if (rubInfo) rubInfo.textContent = `${(usdAmount * EXCHANGE_RATE).toFixed(2)} ₽`;
+        updateRemainingDisplay();
       }, 1500);
     }
 
@@ -2164,7 +2259,6 @@
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
     document.addEventListener('DOMContentLoaded', function() {
-      // Определяем, открыто ли в Telegram Mini App
       const isTelegram = window.Telegram && window.Telegram.WebApp;
       if (isTelegram) {
         Telegram.WebApp.expand();
@@ -2191,9 +2285,12 @@
       const nickInput = document.getElementById('profileNickname');
       if (nickInput) nickInput.value = profileNickname;
 
+      // Обновляем таймер сразу
+      updateTimerDisplay();
+      updateRemainingDisplay();
+
       // ===== ОБРАБОТЧИКИ =====
 
-      // === РЕФЕРАЛКА (изменение) ===
       document.getElementById('editRefBtn')?.addEventListener('click', function() {
         const input = document.getElementById('refInput');
         const saveBtn = document.getElementById('saveRefBtn');
@@ -2221,7 +2318,6 @@
         }
       });
 
-      // === АДМИН (смена титула) ===
       document.getElementById('adminSetTitleBtn')?.addEventListener('click', function() {
         if (!adminAccess) {
           alert('Нет доступа. Введите код 1973');
@@ -2234,7 +2330,6 @@
         alert(`✅ Титул изменен на "${title}"`);
       });
 
-      // === ОСТАЛЬНЫЕ ОБРАБОТЧИКИ ===
       document.getElementById('headerBalance')?.addEventListener('click', function() {
         showRub = !showRub;
         updateUI();
@@ -2381,7 +2476,6 @@
         if (e.key === 'Enter') startBjGame();
       });
 
-      // АДМИН-ПАНЕЛЬ (только по коду 1973)
       document.getElementById('adminLoginBtn')?.addEventListener('click', function() {
         const code = document.getElementById('adminCodeInput')?.value?.trim() || '';
         if (code === '1973') {
