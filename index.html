@@ -1473,6 +1473,7 @@
         existing.wins = wins;
         existing.referrals = refs;
         if (title) existing.title = title;
+        else if (!existing.title) existing.title = 'Игрок';
       } else {
         players.push({
           name: name,
@@ -1493,6 +1494,16 @@
 
     // ===== ГЕНЕРАЦИЯ ТОПА =====
     function renderLeaderboardModal(sortBy = 'balance') {
+      // Обновляем данные игрока перед рендером
+      const player = players.find(p => p.name === profileNickname);
+      if (player) {
+        player.title = profileTitle;
+        player.balance = usdBalance;
+        player.wins = wins;
+        player.referrals = referrals;
+        savePlayers();
+      }
+
       if (players.length === 0) {
         document.getElementById('leaderboardModalContent').innerHTML =
           '<div style="color:#665555;text-align:center;padding:20px 0;">Нет игроков. Пригласите друзей!</div>';
@@ -2229,7 +2240,11 @@
           return;
         }
         const title = document.getElementById('adminTitleSelect').value;
+
+        // 1. Обновляем profileTitle
         profileTitle = title;
+
+        // 2. Обновляем в списке игроков
         const player = players.find(p => p.name === profileNickname);
         if (player) {
           player.title = title;
@@ -2237,13 +2252,19 @@
         } else {
           registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, title);
         }
+
+        // 3. Сохраняем данные
         saveData();
+
+        // 4. Обновляем отображение в профиле
         const titleDisplay = document.getElementById('profileTitleDisplay');
         if (titleDisplay) titleDisplay.textContent = title;
-        // Обновляем топ если он открыт
+
+        // 5. Обновляем топ если он открыт
         if (document.getElementById('leaderboardModalOverlay').classList.contains('active')) {
           renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
         }
+
         alert(`✅ Титул изменен на "${title}"`);
       });
 
