@@ -181,15 +181,6 @@
       color: #665555;
       margin-top: 2px;
     }
-    .game-card.coming {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .game-card.coming:hover {
-      transform: none;
-      border-color: #2a2a2a;
-      box-shadow: none;
-    }
     .game-content {
       display: none;
       animation: fadeSlideIn 0.4s ease;
@@ -592,21 +583,6 @@
       color: #ffd700;
       font-weight: 600;
     }
-    .profile-title select {
-      background: #1a1a1a;
-      border: 1px solid #3a2a2a;
-      border-radius: 30px;
-      padding: 3px 12px;
-      color: #ffd700;
-      font-weight: 600;
-      font-size: 13px;
-      outline: none;
-      cursor: pointer;
-    }
-    .profile-title select option {
-      background: #1a1a1a;
-      color: #f0f0f0;
-    }
     .profile-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -660,6 +636,46 @@
     .profile-ref-link .ref-label {
       color: #aa8888;
       font-size: 11px;
+    }
+    .profile-ref-link .ref-edit {
+      background: transparent;
+      border: 1px solid #3a2a2a;
+      border-radius: 30px;
+      padding: 3px 10px;
+      color: #aa8888;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .profile-ref-link .ref-edit:hover {
+      border-color: #ffd700;
+      color: #ffd700;
+    }
+    .profile-ref-link .ref-input {
+      background: #0f0f0f;
+      border: 1px solid #3a2a2a;
+      border-radius: 30px;
+      padding: 3px 10px;
+      color: white;
+      font-size: 12px;
+      width: 100px;
+      outline: none;
+    }
+    .profile-ref-link .ref-input:focus {
+      border-color: #ffd700;
+    }
+    .profile-ref-link .ref-save-btn {
+      background: #1a4a2a;
+      border: 1px solid #2a7a4a;
+      border-radius: 30px;
+      padding: 3px 12px;
+      color: white;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .profile-ref-link .ref-save-btn:hover {
+      background: #2a5a3a;
     }
 
     .admin-login {
@@ -747,6 +763,25 @@
       background: #2a1a1a;
       margin: 3px 0;
     }
+    .admin-panel-inline .admin-title-select {
+      background: #1a1a1a;
+      border: 1px solid #4a2a2a;
+      border-radius: 30px;
+      padding: 4px 12px;
+      color: #ffd700;
+      font-size: 12px;
+      outline: none;
+      cursor: pointer;
+    }
+    .admin-panel-inline .admin-title-select option {
+      background: #1a1a1a;
+      color: #f0f0f0;
+    }
+    .admin-panel-inline .admin-title-label {
+      color: #aa8888;
+      font-size: 11px;
+    }
+
     .avatar-upload-area {
       display: flex;
       flex-direction: column;
@@ -1091,6 +1126,16 @@
       color: #aa8888;
       margin-bottom: 10px;
     }
+
+    .deposit-limit-info {
+      font-size: 11px;
+      color: #665555;
+      margin-top: 4px;
+      text-align: center;
+    }
+    .deposit-limit-info span {
+      color: #ffd700;
+    }
   </style>
 </head>
 <body>
@@ -1113,11 +1158,6 @@
           <div class="game-icon">♠️</div>
           <div class="game-name">Блэкджек</div>
           <div class="game-desc">Классическая карточная игра</div>
-        </div>
-        <div class="game-card coming">
-          <div class="game-icon">🃏</div>
-          <div class="game-name">Скоро</div>
-          <div class="game-desc">Новые игры</div>
         </div>
       </div>
 
@@ -1194,6 +1234,7 @@
         </select>
       </div>
       <button class="btn-deposit-confirm" id="depositConfirmBtn">Пополнить</button>
+      <div class="deposit-limit-info">💰 Лимит пополнения: <span>$10,000</span> (1 USD = 83.99 ₽)</div>
     </div>
   </div>
 
@@ -1221,10 +1262,7 @@
       </div>
       <div class="profile-title">
         <span style="color: #aa8888; font-size: 11px;">Титул: </span>
-        <select id="profileTitleSelect">
-          <option value="Игрок">Игрок</option>
-          <option value="VIP">VIP</option>
-        </select>
+        <span id="profileTitleDisplay" style="color: #ffd700;">Игрок</span>
       </div>
       <div class="profile-stats">
         <div class="stat-item">
@@ -1247,6 +1285,9 @@
       <div class="profile-ref-link">
         <span class="ref-label">🔗 Реферальная ссылка:</span>
         <span class="ref-code" id="refLink">ww-casino.com/ref/FaWW</span>
+        <button class="ref-edit" id="editRefBtn">✏️</button>
+        <input type="text" class="ref-input hidden" id="refInput" placeholder="Новый код" maxlength="20">
+        <button class="ref-save-btn hidden" id="saveRefBtn">💾</button>
         <button class="btn btn-gray" id="copyRefBtn" style="padding: 3px 10px; font-size: 10px;">📋 Копировать</button>
       </div>
       <div style="margin: 6px 0; text-align: left;">
@@ -1268,6 +1309,20 @@
         <div id="adminPanelContainer" class="hidden">
           <div class="admin-panel-inline">
             <div style="color: #ff6b6b; font-size: 11px; text-align: center; margin-bottom: 6px;">⚙️ Админ панель</div>
+            <div class="admin-controls" style="margin-bottom: 6px;">
+              <div class="admin-row-group">
+                <span class="admin-title-label">Титул игрока:</span>
+                <select class="admin-title-select" id="adminTitleSelect">
+                  <option value="Игрок">Игрок</option>
+                  <option value="VIP">VIP</option>
+                  <option value="Администратор">Администратор</option>
+                  <option value="Легенда">Легенда</option>
+                  <option value="Мастер">Мастер</option>
+                </select>
+                <button class="btn btn-warning" id="adminSetTitleBtn" style="font-size:10px;padding:4px 10px;">Применить</button>
+              </div>
+            </div>
+            <div class="admin-divider"></div>
             <div class="admin-controls">
               <div class="admin-row-group">
                 <input type="number" id="adminAmountGive" value="100" step="0.01" min="0" placeholder="Сумма">
@@ -1335,7 +1390,8 @@
   <script>
     // ====================================================================
     // Глобальные переменные
-    const EXCHANGE_RATE = 82.43;
+    const EXCHANGE_RATE = 83.99;
+    const MAX_DEPOSIT = 10000;
     let usdBalance = 0.00;
     let totalTransactions = 0;
     let totalDepositedUSD = 0;
@@ -1494,7 +1550,6 @@
         quickAmounts = [10, 25, 50, 100, 500];
       }
       loadPlayers();
-      // Регистрируем текущего игрока
       registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals);
     }
 
@@ -1544,12 +1599,14 @@
         totalDeposited: document.getElementById('profileTotalDeposited'),
         balance: document.getElementById('profileBalance'),
         wins: document.getElementById('profileWins'),
-        since: document.getElementById('profileSince')
+        since: document.getElementById('profileSince'),
+        titleDisplay: document.getElementById('profileTitleDisplay')
       };
       if (els.totalTransactions) els.totalTransactions.textContent = totalTransactions;
       if (els.totalDeposited) els.totalDeposited.textContent = totalDepositedUSD.toFixed(2) + ' $';
       if (els.balance) els.balance.textContent = usdBalance.toFixed(2) + ' $';
       if (els.wins) els.wins.textContent = wins;
+      if (els.titleDisplay) els.titleDisplay.textContent = profileTitle;
       if (els.since && (els.since.textContent === '--' || !els.since.textContent)) {
         const now = new Date();
         els.since.textContent = now.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
@@ -1557,7 +1614,6 @@
       renderProfileHistory();
       const refLink = document.getElementById('refLink');
       if (refLink) refLink.textContent = 'ww-casino.com/ref/' + refCode;
-      // Обновляем игрока в топе
       registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals);
     }
 
@@ -1622,14 +1678,18 @@
       if (isNaN(amount) || amount <= 0) return false;
       let usdAmount;
       if (currency === 'USD') {
-        usdBalance += amount;
         usdAmount = amount;
       } else if (currency === 'RUB') {
         usdAmount = amount / EXCHANGE_RATE;
-        usdBalance += usdAmount;
       } else {
         return false;
       }
+      // Проверка лимита пополнения
+      if (totalDepositedUSD + usdAmount > MAX_DEPOSIT) {
+        alert(`⚠️ Превышен лимит пополнения! Максимум: $${MAX_DEPOSIT.toFixed(2)}\nДоступно: $${(MAX_DEPOSIT - totalDepositedUSD).toFixed(2)}`);
+        return false;
+      }
+      usdBalance += usdAmount;
       if (recordHistory) {
         totalTransactions++;
         totalDepositedUSD += usdAmount;
@@ -2018,9 +2078,7 @@
 
     function openProfile() {
       const nickInput = document.getElementById('profileNickname');
-      const titleSelect = document.getElementById('profileTitleSelect');
       if (nickInput) nickInput.value = profileNickname;
-      if (titleSelect) titleSelect.value = profileTitle;
       updateAvatarPreview();
       updateProfileStats();
       document.getElementById('profileModalOverlay').classList.add('active');
@@ -2028,6 +2086,9 @@
       adminAccess = false;
       const codeInput = document.getElementById('adminCodeInput');
       if (codeInput) codeInput.value = '';
+      // Скрываем поле редактирования рефералки
+      document.getElementById('refInput').classList.add('hidden');
+      document.getElementById('saveRefBtn').classList.add('hidden');
     }
 
     function closeProfile() {
@@ -2036,12 +2097,10 @@
 
     function saveProfile() {
       const nickInput = document.getElementById('profileNickname');
-      const titleSelect = document.getElementById('profileTitleSelect');
       if (nickInput) {
         const newNick = nickInput.value.trim();
         if (newNick) profileNickname = newNick;
       }
-      if (titleSelect) profileTitle = titleSelect.value;
       saveData();
       alert('Профиль сохранен!');
     }
@@ -2062,6 +2121,12 @@
       closeDepositModal();
       let usdAmount = currency === 'USD' ? amount : amount / EXCHANGE_RATE;
       if (isNaN(usdAmount) || usdAmount <= 0) usdAmount = 10;
+
+      // Проверка лимита
+      if (totalDepositedUSD + usdAmount > MAX_DEPOSIT) {
+        alert(`⚠️ Превышен лимит пополнения! Максимум: $${MAX_DEPOSIT.toFixed(2)}\nДоступно: $${(MAX_DEPOSIT - totalDepositedUSD).toFixed(2)}`);
+        return;
+      }
 
       const statusOverlay = document.getElementById('statusModalOverlay');
       const processing = document.getElementById('statusProcessing');
@@ -2107,7 +2172,6 @@
         if (user) {
           const username = user.username || user.first_name || 'Игрок';
           profileNickname = username;
-          // Обновляем данные в localStorage
           try {
             const saved = localStorage.getItem('wwCasinoData');
             if (saved) {
@@ -2126,10 +2190,51 @@
 
       const nickInput = document.getElementById('profileNickname');
       if (nickInput) nickInput.value = profileNickname;
-      const titleSelect = document.getElementById('profileTitleSelect');
-      if (titleSelect) titleSelect.value = profileTitle;
 
       // ===== ОБРАБОТЧИКИ =====
+
+      // === РЕФЕРАЛКА (изменение) ===
+      document.getElementById('editRefBtn')?.addEventListener('click', function() {
+        const input = document.getElementById('refInput');
+        const saveBtn = document.getElementById('saveRefBtn');
+        input.classList.toggle('hidden');
+        saveBtn.classList.toggle('hidden');
+        if (!input.classList.contains('hidden')) {
+          input.value = refCode;
+          input.focus();
+        }
+      });
+
+      document.getElementById('saveRefBtn')?.addEventListener('click', function() {
+        const input = document.getElementById('refInput');
+        const newCode = input.value.trim();
+        if (newCode && newCode.length >= 3) {
+          refCode = newCode;
+          saveData();
+          updateUI();
+          document.getElementById('refLink').textContent = 'ww-casino.com/ref/' + refCode;
+          input.classList.add('hidden');
+          document.getElementById('saveRefBtn').classList.add('hidden');
+          alert('✅ Реферальный код обновлен!');
+        } else {
+          alert('⚠️ Код должен содержать минимум 3 символа');
+        }
+      });
+
+      // === АДМИН (смена титула) ===
+      document.getElementById('adminSetTitleBtn')?.addEventListener('click', function() {
+        if (!adminAccess) {
+          alert('Нет доступа. Введите код 1973');
+          return;
+        }
+        const title = document.getElementById('adminTitleSelect').value;
+        profileTitle = title;
+        saveData();
+        updateUI();
+        alert(`✅ Титул изменен на "${title}"`);
+      });
+
+      // === ОСТАЛЬНЫЕ ОБРАБОТЧИКИ ===
       document.getElementById('headerBalance')?.addEventListener('click', function() {
         showRub = !showRub;
         updateUI();
@@ -2253,7 +2358,7 @@
         if (e.target === this) closeStatusModal();
       });
 
-      document.querySelectorAll('.game-card:not(.coming)').forEach(card => {
+      document.querySelectorAll('.game-card').forEach(card => {
         card.addEventListener('click', function() {
           const game = this.dataset.game;
           showGame(game);
