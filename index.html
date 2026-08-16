@@ -1488,6 +1488,11 @@
               data.profileNickname = username;
               data.telegramId = user.id;
               localStorage.setItem('wwCasinoData', JSON.stringify(data));
+            } else {
+              localStorage.setItem('wwCasinoData', JSON.stringify({
+                profileNickname: username,
+                telegramId: user.id
+              }));
             }
           } catch (e) {}
           return user;
@@ -1515,7 +1520,8 @@
     }
 
     function registerOrUpdatePlayer(name, balance, wins, refs, title, telegramId) {
-      const existing = players.find(p => p.name === name || p.telegramId === telegramId);
+      // Проверяем существование по имени или telegramId
+      const existing = players.find(p => p.name === name || (telegramId && p.telegramId === telegramId));
       if (existing) {
         existing.name = name;
         existing.balance = balance;
@@ -1546,13 +1552,17 @@
     // ===== ГЕНЕРАЦИЯ ТОПА =====
     function renderLeaderboardModal(sortBy = 'balance') {
       // Обновляем данные текущего игрока
-      const player = players.find(p => p.name === profileNickname);
+      const player = players.find(p => p.name === profileNickname || p.telegramId === (telegramUser ? telegramUser.id : null));
       if (player) {
         player.title = profileTitle;
         player.balance = usdBalance;
         player.wins = wins;
         player.referrals = referrals;
         savePlayers();
+      } else {
+        // Если игрока нет, регистрируем
+        const tgId = telegramUser ? telegramUser.id : null;
+        registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
       }
 
       if (players.length === 0) {
@@ -1645,7 +1655,6 @@
       player.balance += amount;
       savePlayers();
       renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
-      // Обновляем карточку если открыта
       const overlay = document.getElementById('playerCardModalOverlay');
       if (overlay.classList.contains('active')) {
         showPlayerCard(player);
