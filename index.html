@@ -4,11 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WW Casino</title>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -39,28 +36,18 @@
       z-index: 100;
       pointer-events: none;
     }
-    .global-header * {
-      pointer-events: auto;
-    }
-    .global-header .header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .global-header * { pointer-events: auto; }
+    .global-header .header-left { display: flex; align-items: center; gap: 12px; }
     .global-header h1 {
       font-weight: 700;
       letter-spacing: 2px;
       font-size: 18px;
       color: #ffffff;
-      text-shadow: 0 0 20px #cc000066, 0 2px 10px rgba(0, 0, 0, 0.8);
+      text-shadow: 0 0 20px #cc000066, 0 2px 10px rgba(0,0,0,0.8);
     }
-    .global-header .header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .global-header .header-right { display: flex; align-items: center; gap: 8px; }
     .global-header .btn-deposit-header {
-      background: rgba(179, 0, 0, 0.85);
+      background: rgba(179,0,0,0.85);
       border: 1px solid #ff3333;
       backdrop-filter: blur(8px);
       border-radius: 40px;
@@ -70,14 +57,11 @@
       font-size: 12px;
       cursor: pointer;
       transition: 0.15s;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
-    .global-header .btn-deposit-header:hover {
-      background: rgba(212, 0, 0, 0.95);
-      transform: scale(0.97);
-    }
+    .global-header .btn-deposit-header:hover { background: rgba(212,0,0,0.95); transform: scale(0.97); }
     .global-header .header-balance {
-      background: rgba(17, 17, 17, 0.85);
+      background: rgba(17,17,17,0.85);
       border: 1px solid #3a1a1a;
       backdrop-filter: blur(8px);
       border-radius: 40px;
@@ -88,17 +72,12 @@
       cursor: pointer;
       transition: 0.15s;
       user-select: none;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
-    .global-header .header-balance:hover {
-      border-color: #cc3333;
-      background: rgba(26, 26, 26, 0.9);
-    }
-    .global-header .header-balance.rub-mode {
-      color: #ffb3b3;
-    }
+    .global-header .header-balance:hover { border-color: #cc3333; background: rgba(26,26,26,0.9); }
+    .global-header .header-balance.rub-mode { color: #ffb3b3; }
     .global-header .btn-profile {
-      background: rgba(42, 42, 58, 0.85);
+      background: rgba(42,42,58,0.85);
       border: 1px solid #4a4a5a;
       backdrop-filter: blur(8px);
       border-radius: 40px;
@@ -111,14 +90,11 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
-    .global-header .btn-profile:hover {
-      background: rgba(58, 58, 74, 0.9);
-      border-color: #6a6a8a;
-    }
+    .global-header .btn-profile:hover { background: rgba(58,58,74,0.9); border-color: #6a6a8a; }
     .global-header .header-leaderboard-btn {
-      background: rgba(17, 17, 17, 0.85);
+      background: rgba(17,17,17,0.85);
       border: 1px solid #3a1a1a;
       backdrop-filter: blur(8px);
       border-radius: 40px;
@@ -128,17 +104,14 @@
       font-size: 12px;
       cursor: pointer;
       transition: 0.15s;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
       display: flex;
       align-items: center;
       gap: 4px;
     }
-    .global-header .header-leaderboard-btn:hover {
-      border-color: #ffd700;
-      background: rgba(26, 26, 26, 0.9);
-    }
+    .global-header .header-leaderboard-btn:hover { border-color: #ffd700; background: rgba(26,26,26,0.9); }
     .global-header .btn-settings {
-      background: rgba(42, 42, 58, 0.85);
+      background: rgba(42,42,58,0.85);
       border: 1px solid #4a4a5a;
       backdrop-filter: blur(8px);
       border-radius: 40px;
@@ -151,12 +124,9 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
-    .global-header .btn-settings:hover {
-      background: rgba(58, 58, 74, 0.9);
-      border-color: #6a6a8a;
-    }
+    .global-header .btn-settings:hover { background: rgba(58,58,74,0.9); border-color: #6a6a8a; }
 
     .casino-card {
       max-width: 100%;
@@ -165,7 +135,7 @@
       border-radius: 24px;
       padding: 16px 16px 20px;
       margin-top: 60px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px #b30000 inset, 0 0 0 2px #2a2a2a inset;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px #b30000 inset, 0 0 0 2px #2a2a2a inset;
       border: 2px solid #cc0000;
       color: #f0f0f0;
     }
@@ -183,11 +153,7 @@
       grid-template-columns: 1fr 1fr 1fr 1fr;
       gap: 10px;
     }
-    @media (max-width: 600px) {
-      .game-menu {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
+    @media (max-width: 600px) { .game-menu { grid-template-columns: 1fr 1fr; } }
     .game-menu .game-card {
       background: #1a1a1a;
       border: 1px solid #2a2a2a;
@@ -198,41 +164,15 @@
       transition: all 0.3s ease;
       user-select: none;
     }
-    .game-menu .game-card:hover {
-      border-color: #cc3333;
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(204, 0, 0, 0.15);
-    }
-    .game-menu .game-card .game-icon {
-      font-size: 28px;
-      margin-bottom: 4px;
-    }
-    .game-menu .game-card .game-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: #f0f0f0;
-    }
-    .game-menu .game-card .game-desc {
-      font-size: 10px;
-      color: #665555;
-      margin-top: 2px;
-    }
-    .game-content {
-      display: none;
-      animation: fadeSlideIn 0.4s ease;
-    }
-    .game-content.active {
-      display: block;
-    }
+    .game-menu .game-card:hover { border-color: #cc3333; transform: translateY(-3px); box-shadow: 0 8px 30px rgba(204,0,0,0.15); }
+    .game-menu .game-card .game-icon { font-size: 28px; margin-bottom: 4px; }
+    .game-menu .game-card .game-name { font-size: 13px; font-weight: 600; color: #f0f0f0; }
+    .game-menu .game-card .game-desc { font-size: 10px; color: #665555; margin-top: 2px; }
+    .game-content { display: none; animation: fadeSlideIn 0.4s ease; }
+    .game-content.active { display: block; }
     @keyframes fadeSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .game-content .game-back {
       background: none;
@@ -247,9 +187,7 @@
       gap: 6px;
       transition: color 0.2s;
     }
-    .game-content .game-back:hover {
-      color: #ffcccc;
-    }
+    .game-content .game-back:hover { color: #ffcccc; }
     .game-content .game-header {
       display: flex;
       justify-content: space-between;
@@ -258,21 +196,14 @@
       flex-wrap: wrap;
       gap: 6px;
     }
-    .game-content .game-header h2 {
-      color: #ffcccc;
-      font-size: 16px;
-      font-weight: 600;
-    }
+    .game-content .game-header h2 { color: #ffcccc; font-size: 16px; font-weight: 600; }
     .game-content .game-header .game-bet {
       display: flex;
       align-items: center;
       gap: 6px;
       flex-wrap: wrap;
     }
-    .game-content .game-header .game-bet label {
-      color: #aa8888;
-      font-size: 12px;
-    }
+    .game-content .game-header .game-bet label { color: #aa8888; font-size: 12px; }
     .game-content .game-header .game-bet input {
       background: #1a1a1a;
       border: 1px solid #3a2a2a;
@@ -301,12 +232,8 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .game-content .game-header .game-bet .btn-allin:hover {
-      background: #ffd700;
-      transform: scale(0.95);
-    }
+    .game-content .game-header .game-bet .btn-allin:hover { background: #ffd700; transform: scale(0.95); }
 
-    /* Блэкджек */
     .bj-table {
       background: #0a2a1a;
       border-radius: 16px;
@@ -314,24 +241,9 @@
       border: 2px solid #1a4a2a;
       min-height: 180px;
     }
-    .bj-hand {
-      margin: 6px 0;
-      padding: 6px 10px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 10px;
-    }
-    .bj-hand .hand-label {
-      font-size: 11px;
-      color: #88aa99;
-      margin-bottom: 3px;
-    }
-    .bj-hand .hand-cards {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      min-height: 34px;
-      align-items: center;
-    }
+    .bj-hand { margin: 6px 0; padding: 6px 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+    .bj-hand .hand-label { font-size: 11px; color: #88aa99; margin-bottom: 3px; }
+    .bj-hand .hand-cards { display: flex; gap: 6px; flex-wrap: wrap; min-height: 34px; align-items: center; }
     .bj-hand .hand-cards .card {
       background: white;
       color: #1a1a1a;
@@ -341,62 +253,21 @@
       font-size: 16px;
       min-width: 36px;
       text-align: center;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
-    .bj-hand .hand-cards .card.red {
-      color: #cc0000;
-    }
-    .bj-hand .hand-cards .card.black {
-      color: #1a1a1a;
-    }
-    .bj-hand .hand-cards .card.hidden {
-      background: #2a1a1a;
-      color: #2a1a1a;
-      border: 2px solid #4a2a2a;
-    }
-    .bj-hand .hand-total {
-      font-size: 14px;
-      font-weight: 700;
-      margin-top: 3px;
-      color: #88aa99;
-    }
-    .bj-hand .hand-total .total-value {
-      color: #ffd700;
-    }
-    .bj-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-    .bj-actions .btn {
-      padding: 8px 18px;
-      font-size: 13px;
-      min-width: 70px;
-    }
-    .bj-result {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 18px;
-      font-weight: 700;
-      min-height: 28px;
-    }
-    .bj-result.win {
-      color: #ffd700;
-    }
-    .bj-result.lose {
-      color: #ff6b6b;
-    }
-    .bj-result.push {
-      color: #88aa99;
-    }
+    .bj-hand .hand-cards .card.red { color: #cc0000; }
+    .bj-hand .hand-cards .card.black { color: #1a1a1a; }
+    .bj-hand .hand-cards .card.hidden { background: #2a1a1a; color: #2a1a1a; border: 2px solid #4a2a2a; }
+    .bj-hand .hand-total { font-size: 14px; font-weight: 700; margin-top: 3px; color: #88aa99; }
+    .bj-hand .hand-total .total-value { color: #ffd700; }
+    .bj-actions { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+    .bj-actions .btn { padding: 8px 18px; font-size: 13px; min-width: 70px; }
+    .bj-result { text-align: center; margin-top: 10px; font-size: 18px; font-weight: 700; min-height: 28px; }
+    .bj-result.win { color: #ffd700; }
+    .bj-result.lose { color: #ff6b6b; }
+    .bj-result.push { color: #88aa99; }
 
-    /* Монетка */
-    .coin-container {
-      text-align: center;
-      padding: 16px 0;
-    }
+    .coin-container { text-align: center; padding: 16px 0; }
     .coin {
       width: 120px;
       height: 120px;
@@ -409,101 +280,30 @@
       font-weight: 700;
       background: radial-gradient(circle at 30% 30%, #f0e68c, #b8860b);
       border: 4px solid #d4aa33;
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+      box-shadow: 0 0 30px rgba(255,215,0,0.2);
       transition: transform 0.3s;
       user-select: none;
     }
-    .coin.flipping {
-      animation: coinFlip 0.6s ease-in-out;
-    }
+    .coin.flipping { animation: coinFlip 0.6s ease-in-out; }
     @keyframes coinFlip {
-      0% {
-        transform: rotateY(0deg);
-      }
-      50% {
-        transform: rotateY(180deg);
-      }
-      100% {
-        transform: rotateY(360deg);
-      }
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(180deg); }
+      100% { transform: rotateY(360deg); }
     }
-    .coin .coin-side {
-      font-size: 40px;
-    }
-    .coin-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
+    .coin .coin-side { font-size: 40px; }
+    .coin-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
 
-    /* Краш */
-    .crash-container {
-      background: #0a0a0a;
-      border-radius: 16px;
-      padding: 16px;
-      text-align: center;
-    }
-    .crash-graph {
-      width: 100%;
-      height: 200px;
-      background: #111;
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid #2a2a2a;
-    }
-    .crash-graph canvas {
-      width: 100%;
-      height: 100%;
-    }
-    .crash-multiplier {
-      font-size: 48px;
-      font-weight: 700;
-      color: #ffd700;
-      text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
-      margin: 8px 0;
-    }
-    .crash-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    .crash-history {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 8px;
-      font-size: 12px;
-    }
-    .crash-history .crash-item {
-      padding: 2px 8px;
-      border-radius: 12px;
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      color: #88aabb;
-    }
-    .crash-history .crash-item.high {
-      color: #ffd700;
-      border-color: #ffd700;
-    }
+    .crash-container { background: #0a0a0a; border-radius: 16px; padding: 16px; text-align: center; }
+    .crash-graph { width: 100%; height: 200px; background: #111; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid #2a2a2a; }
+    .crash-graph canvas { width: 100%; height: 100%; }
+    .crash-multiplier { font-size: 48px; font-weight: 700; color: #ffd700; text-shadow: 0 0 30px rgba(255,215,0,0.2); margin: 8px 0; }
+    .crash-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+    .crash-history { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 8px; font-size: 12px; }
+    .crash-history .crash-item { padding: 2px 8px; border-radius: 12px; background: #1a1a1a; border: 1px solid #2a2a2a; color: #88aabb; }
+    .crash-history .crash-item.high { color: #ffd700; border-color: #ffd700; }
 
-    /* Минное поле */
-    .minefield-container {
-      text-align: center;
-      padding: 10px 0;
-    }
-    .minefield-size-select {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
+    .minefield-container { text-align: center; padding: 10px 0; }
+    .minefield-size-select { display: flex; gap: 8px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap; }
     .minefield-size-select button {
       background: #1a1a1a;
       border: 1px solid #3a2a2a;
@@ -514,14 +314,8 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .minefield-size-select button:hover {
-      border-color: #cc3333;
-      color: white;
-    }
-    .minefield-size-select button.active {
-      border-color: #ffd700;
-      color: #ffd700;
-    }
+    .minefield-size-select button:hover { border-color: #cc3333; color: white; }
+    .minefield-size-select button.active { border-color: #ffd700; color: #ffd700; }
     .minefield-grid {
       display: grid;
       gap: 4px;
@@ -541,57 +335,17 @@
       transition: 0.2s;
       user-select: none;
     }
-    .minefield-grid .cell:hover {
-      border-color: #4a8a4a;
-      background: #1a3a1a;
-    }
-    .minefield-grid .cell.revealed {
-      background: #0a1a0a;
-      border-color: #1a3a1a;
-      cursor: default;
-    }
-    .minefield-grid .cell.mine {
-      background: #2a1a1a;
-      border-color: #aa3333;
-    }
-    .minefield-grid .cell.mine.revealed {
-      background: #3a1a1a;
-      border-color: #cc3333;
-    }
-    .minefield-grid .cell .cell-symbol {
-      font-size: 18px;
-    }
-    .minefield-result {
-      margin-top: 10px;
-      font-size: 16px;
-      font-weight: 700;
-      min-height: 24px;
-    }
-    .minefield-result.win {
-      color: #ffd700;
-    }
-    .minefield-result.lose {
-      color: #ff6b6b;
-    }
-    .minefield-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    .minefield-stats {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      font-size: 12px;
-      color: #aa8888;
-      margin-top: 6px;
-    }
-    .minefield-stats span {
-      color: #f0f0f0;
-      font-weight: 600;
-    }
+    .minefield-grid .cell:hover { border-color: #4a8a4a; background: #1a3a1a; }
+    .minefield-grid .cell.revealed { background: #0a1a0a; border-color: #1a3a1a; cursor: default; }
+    .minefield-grid .cell.mine { background: #2a1a1a; border-color: #aa3333; }
+    .minefield-grid .cell.mine.revealed { background: #3a1a1a; border-color: #cc3333; }
+    .minefield-grid .cell .cell-symbol { font-size: 18px; }
+    .minefield-result { margin-top: 10px; font-size: 16px; font-weight: 700; min-height: 24px; }
+    .minefield-result.win { color: #ffd700; }
+    .minefield-result.lose { color: #ff6b6b; }
+    .minefield-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+    .minefield-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: #aa8888; margin-top: 6px; }
+    .minefield-stats span { color: #f0f0f0; font-weight: 600; }
 
     .btn {
       background: #2a1a1a;
@@ -610,70 +364,25 @@
       justify-content: center;
       gap: 4px;
     }
-    .btn:hover {
-      transform: scale(0.97);
-    }
-    .btn-primary {
-      background: #b30000;
-      border-color: #ff3333;
-      box-shadow: 0 2px 0 #660000;
-      color: white;
-    }
-    .btn-primary:hover {
-      background: #d40000;
-    }
-    .btn-success {
-      background: #1a4a2a;
-      border-color: #2a7a4a;
-      box-shadow: 0 2px 0 #0a2a1a;
-    }
-    .btn-success:hover {
-      background: #2a5a3a;
-    }
-    .btn-danger {
-      background: #6b1a1a;
-      border-color: #aa3333;
-      box-shadow: 0 2px 0 #3a0a0a;
-    }
-    .btn-danger:hover {
-      background: #8a2a2a;
-    }
-    .btn-warning {
-      background: #7a4a1a;
-      border-color: #b37a2a;
-      box-shadow: 0 2px 0 #4a2a0a;
-    }
-    .btn-warning:hover {
-      background: #9a5a2a;
-    }
-    .btn-gray {
-      background: #2a2a3a;
-      border-color: #4a4a5a;
-      box-shadow: 0 2px 0 #1a1a2a;
-    }
-    .btn-gray:hover {
-      background: #3a3a4a;
-    }
-    .btn-gold {
-      background: #8a6a1a;
-      border-color: #d4aa33;
-      box-shadow: 0 2px 0 #4a3a0a;
-      color: #ffd700;
-    }
-    .btn-gold:hover {
-      background: #aa7a2a;
-    }
-    .btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .btn:hover { transform: scale(0.97); }
+    .btn-primary { background: #b30000; border-color: #ff3333; box-shadow: 0 2px 0 #660000; color: white; }
+    .btn-primary:hover { background: #d40000; }
+    .btn-success { background: #1a4a2a; border-color: #2a7a4a; box-shadow: 0 2px 0 #0a2a1a; }
+    .btn-success:hover { background: #2a5a3a; }
+    .btn-danger { background: #6b1a1a; border-color: #aa3333; box-shadow: 0 2px 0 #3a0a0a; }
+    .btn-danger:hover { background: #8a2a2a; }
+    .btn-warning { background: #7a4a1a; border-color: #b37a2a; box-shadow: 0 2px 0 #4a2a0a; }
+    .btn-warning:hover { background: #9a5a2a; }
+    .btn-gray { background: #2a2a3a; border-color: #4a4a5a; box-shadow: 0 2px 0 #1a1a2a; }
+    .btn-gray:hover { background: #3a3a4a; }
+    .btn-gold { background: #8a6a1a; border-color: #d4aa33; box-shadow: 0 2px 0 #4a3a0a; color: #ffd700; }
+    .btn-gold:hover { background: #aa7a2a; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-    /* Модалки */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0,0,0,0.8);
       backdrop-filter: blur(6px);
       display: flex;
       justify-content: center;
@@ -683,10 +392,7 @@
       opacity: 0;
       transition: opacity 0.3s ease, visibility 0.3s ease;
     }
-    .modal-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
+    .modal-overlay.active { visibility: visible; opacity: 1; }
     .modal-window {
       background: #1a1a1a;
       max-width: 380px;
@@ -695,21 +401,14 @@
       border-radius: 32px;
       text-align: center;
       border: 1px solid #cc3333;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.9);
       max-height: 90vh;
       overflow-y: auto;
       transform: scale(0.95);
       transition: transform 0.3s ease;
     }
-    .modal-overlay.active .modal-window {
-      transform: scale(1);
-    }
-    .modal-window h2 {
-      font-weight: 600;
-      font-size: 18px;
-      margin-bottom: 8px;
-      color: #ffcccc;
-    }
+    .modal-overlay.active .modal-window { transform: scale(1); }
+    .modal-window h2 { font-weight: 600; font-size: 18px; margin-bottom: 8px; color: #ffcccc; }
     .loader-circle {
       width: 50px;
       height: 50px;
@@ -720,22 +419,11 @@
       margin: 10px auto 8px;
     }
     @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
-    .modal-text {
-      font-size: 15px;
-      color: #ddc0c0;
-      margin: 4px 0;
-    }
-    .modal-sub {
-      color: #aa7a7a;
-      font-size: 12px;
-    }
+    .modal-text { font-size: 15px; color: #ddc0c0; margin: 4px 0; }
+    .modal-sub { color: #aa7a7a; font-size: 12px; }
     .modal-btn {
       background: #b30000;
       border: none;
@@ -749,17 +437,9 @@
       transition: background 0.2s;
       border: 1px solid #ff4d4d;
     }
-    .modal-btn:hover {
-      background: #d40000;
-    }
-    .hidden {
-      display: none !important;
-    }
-    .flex-between {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .modal-btn:hover { background: #d40000; }
+    .hidden { display: none !important; }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
     .modal-close-icon {
       background: none;
       border: none;
@@ -769,11 +449,8 @@
       padding: 0 4px;
       transition: color 0.2s;
     }
-    .modal-close-icon:hover {
-      color: #ff8888;
-    }
+    .modal-close-icon:hover { color: #ff8888; }
 
-    /* Профиль */
     .profile-avatar {
       width: 70px;
       height: 70px;
@@ -790,39 +467,23 @@
       overflow: hidden;
       position: relative;
     }
-    .profile-avatar:hover {
-      border-color: #ff5555;
-    }
-    .profile-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .profile-avatar:hover { border-color: #ff5555; }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .profile-avatar .avatar-edit-hint {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0,0,0,0.7);
       font-size: 9px;
       color: #aaa;
       padding: 2px 0;
       opacity: 0;
       transition: opacity 0.2s;
     }
-    .profile-avatar:hover .avatar-edit-hint {
-      opacity: 1;
-    }
-    .profile-field {
-      margin: 5px 0;
-      text-align: left;
-    }
-    .profile-field label {
-      color: #aa8888;
-      font-size: 10px;
-      display: block;
-      margin-bottom: 2px;
-    }
+    .profile-avatar:hover .avatar-edit-hint { opacity: 1; }
+    .profile-field { margin: 5px 0; text-align: left; }
+    .profile-field label { color: #aa8888; font-size: 10px; display: block; margin-bottom: 2px; }
     .profile-field input {
       background: #0f0f0f;
       border: 1px solid #3a2a2a;
@@ -834,48 +495,19 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    .profile-field input:focus {
-      border-color: #cc3333;
-    }
-    .profile-title {
-      text-align: center;
-      margin: 3px 0 8px;
-      font-size: 13px;
-      color: #ffd700;
-      font-weight: 600;
-    }
+    .profile-field input:focus { border-color: #cc3333; }
+    .profile-title { text-align: center; margin: 3px 0 8px; font-size: 13px; color: #ffd700; font-weight: 600; }
     .profile-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 5px;
       margin: 8px 0;
     }
-    .profile-stats .stat-item {
-      background: #0f0f0f;
-      border-radius: 12px;
-      padding: 6px;
-      border: 1px solid #2a1a1a;
-    }
-    .profile-stats .stat-item .label {
-      color: #aa8888;
-      font-size: 9px;
-    }
-    .profile-stats .stat-item .value {
-      font-size: 14px;
-      font-weight: 700;
-      color: #ffb3b3;
-    }
-    .profile-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-top: 8px;
-    }
-    .profile-actions .btn {
-      flex: 1;
-      padding: 8px;
-      font-size: 13px;
-    }
+    .profile-stats .stat-item { background: #0f0f0f; border-radius: 12px; padding: 6px; border: 1px solid #2a1a1a; }
+    .profile-stats .stat-item .label { color: #aa8888; font-size: 9px; }
+    .profile-stats .stat-item .value { font-size: 14px; font-weight: 700; color: #ffb3b3; }
+    .profile-actions { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+    .profile-actions .btn { flex: 1; padding: 8px; font-size: 13px; }
     .profile-ref-link {
       background: #0f0f0f;
       border-radius: 12px;
@@ -888,16 +520,8 @@
       justify-content: center;
       flex-wrap: wrap;
     }
-    .profile-ref-link .ref-code {
-      color: #ffd700;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .profile-ref-link .ref-label {
-      color: #aa8888;
-      font-size: 11px;
-    }
+    .profile-ref-link .ref-code { color: #ffd700; font-weight: 700; font-size: 14px; cursor: pointer; }
+    .profile-ref-link .ref-label { color: #aa8888; font-size: 11px; }
     .profile-ref-link .ref-edit {
       background: transparent;
       border: 1px solid #3a2a2a;
@@ -908,10 +532,7 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .profile-ref-link .ref-edit:hover {
-      border-color: #ffd700;
-      color: #ffd700;
-    }
+    .profile-ref-link .ref-edit:hover { border-color: #ffd700; color: #ffd700; }
     .profile-ref-link .ref-input {
       background: #0f0f0f;
       border: 1px solid #3a2a2a;
@@ -922,9 +543,7 @@
       width: 100px;
       outline: none;
     }
-    .profile-ref-link .ref-input:focus {
-      border-color: #ffd700;
-    }
+    .profile-ref-link .ref-input:focus { border-color: #ffd700; }
     .profile-ref-link .ref-save-btn {
       background: #1a4a2a;
       border: 1px solid #2a7a4a;
@@ -935,22 +554,10 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .profile-ref-link .ref-save-btn:hover {
-      background: #2a5a3a;
-    }
+    .profile-ref-link .ref-save-btn:hover { background: #2a5a3a; }
 
-    .admin-login {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid #2a1a1a;
-    }
-    .admin-login .admin-row {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+    .admin-login { margin-top: 10px; padding-top: 10px; border-top: 1px solid #2a1a1a; }
+    .admin-login .admin-row { display: flex; gap: 6px; align-items: center; justify-content: center; flex-wrap: wrap; }
     .admin-login input {
       background: #0f0f0f;
       border: 1px solid #3a2a2a;
@@ -969,11 +576,7 @@
       -webkit-appearance: none;
       margin: 0;
     }
-    .admin-login .btn {
-      flex: 0 1 auto;
-      padding: 6px 14px;
-      font-size: 12px;
-    }
+    .admin-login .btn { flex: 0 1 auto; padding: 6px 14px; font-size: 12px; }
     .admin-panel-inline {
       margin-top: 10px;
       padding: 10px;
@@ -981,21 +584,8 @@
       border-radius: 14px;
       border: 1px solid #3a1a1a;
     }
-    .admin-panel-inline .admin-controls {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      justify-content: center;
-    }
-    .admin-panel-inline .admin-row-group {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      justify-content: center;
-      width: 100%;
-    }
+    .admin-panel-inline .admin-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; justify-content: center; }
+    .admin-panel-inline .admin-row-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; justify-content: center; width: 100%; }
     .admin-panel-inline .admin-controls input {
       background: #1a1a1a;
       border: 1px solid #4a2a2a;
@@ -1013,17 +603,8 @@
       -webkit-appearance: none;
       margin: 0;
     }
-    .admin-panel-inline .admin-controls .btn {
-      flex: 0 1 auto;
-      padding: 6px 14px;
-      font-size: 11px;
-    }
-    .admin-panel-inline .admin-divider {
-      width: 100%;
-      height: 1px;
-      background: #2a1a1a;
-      margin: 4px 0;
-    }
+    .admin-panel-inline .admin-controls .btn { flex: 0 1 auto; padding: 6px 14px; font-size: 11px; }
+    .admin-panel-inline .admin-divider { width: 100%; height: 1px; background: #2a1a1a; margin: 4px 0; }
     .admin-panel-inline .admin-title-select {
       background: #1a1a1a;
       border: 1px solid #4a2a2a;
@@ -1034,14 +615,8 @@
       outline: none;
       cursor: pointer;
     }
-    .admin-panel-inline .admin-title-select option {
-      background: #1a1a1a;
-      color: #f0f0f0;
-    }
-    .admin-panel-inline .admin-title-label {
-      color: #aa8888;
-      font-size: 11px;
-    }
+    .admin-panel-inline .admin-title-select option { background: #1a1a1a; color: #f0f0f0; }
+    .admin-panel-inline .admin-title-label { color: #aa8888; font-size: 11px; }
     .admin-panel-inline .admin-reset-btn {
       background: #7a1a1a;
       border: 1px solid #aa3333;
@@ -1052,9 +627,7 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .admin-panel-inline .admin-reset-btn:hover {
-      background: #9a2a2a;
-    }
+    .admin-panel-inline .admin-reset-btn:hover { background: #9a2a2a; }
     .admin-panel-inline .admin-ban-btn {
       background: #6b1a1a;
       border: 1px solid #aa3333;
@@ -1065,9 +638,7 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .admin-panel-inline .admin-ban-btn:hover {
-      background: #8a2a2a;
-    }
+    .admin-panel-inline .admin-ban-btn:hover { background: #8a2a2a; }
     .admin-panel-inline .admin-player-edit {
       display: flex;
       flex-wrap: wrap;
@@ -1093,15 +664,8 @@
       -webkit-appearance: none;
       margin: 0;
     }
-    .admin-panel-inline .admin-player-edit .btn {
-      flex: 0 1 auto;
-      padding: 4px 12px;
-      font-size: 10px;
-    }
-    .admin-panel-inline .admin-player-edit .admin-label-sm {
-      color: #aa8888;
-      font-size: 10px;
-    }
+    .admin-panel-inline .admin-player-edit .btn { flex: 0 1 auto; padding: 4px 12px; font-size: 10px; }
+    .admin-panel-inline .admin-player-edit .admin-label-sm { color: #aa8888; font-size: 10px; }
 
     .history-list-modal {
       background: #0f0f0f;
@@ -1114,36 +678,19 @@
       color: #aa8888;
       margin-top: 5px;
     }
-    .history-list-modal::-webkit-scrollbar {
-      width: 3px;
-    }
-    .history-list-modal::-webkit-scrollbar-track {
-      background: #1a1a1a;
-      border-radius: 10px;
-    }
-    .history-list-modal::-webkit-scrollbar-thumb {
-      background: #4a2a2a;
-      border-radius: 10px;
-    }
+    .history-list-modal::-webkit-scrollbar { width: 3px; }
+    .history-list-modal::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
+    .history-list-modal::-webkit-scrollbar-thumb { background: #4a2a2a; border-radius: 10px; }
     .history-item-modal {
       display: flex;
       justify-content: space-between;
       padding: 3px 0;
       border-bottom: 1px solid #1a1a1a;
     }
-    .history-item-modal .amount {
-      font-weight: 600;
-    }
-    .history-item-modal .amount.positive {
-      color: #80ffaa;
-    }
-    .history-item-modal .amount.negative {
-      color: #ff6b6b;
-    }
-    .history-item-modal .date {
-      color: #665555;
-      font-size: 9px;
-    }
+    .history-item-modal .amount { font-weight: 600; }
+    .history-item-modal .amount.positive { color: #80ffaa; }
+    .history-item-modal .amount.negative { color: #ff6b6b; }
+    .history-item-modal .date { color: #665555; font-size: 9px; }
     .deposit-modal .deposit-input-group {
       background: #1a1a1a;
       border-radius: 60px;
@@ -1196,9 +743,7 @@
       border: 1px solid #ff4d4d;
       transition: background 0.2s;
     }
-    .deposit-modal .btn-deposit-confirm:hover {
-      background: #e60000;
-    }
+    .deposit-modal .btn-deposit-confirm:hover { background: #e60000; }
     .deposit-modal .quick-amounts {
       display: flex;
       gap: 8px;
@@ -1217,78 +762,23 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .deposit-modal .quick-amounts .quick-item:hover {
-      background: #3a2a2a;
-      border-color: #6a4a4a;
-      color: white;
-    }
-    .deposit-modal .quick-amounts .quick-item.active {
-      border-color: #ffd700;
-      color: #ffd700;
-    }
+    .deposit-modal .quick-amounts .quick-item:hover { background: #3a2a2a; border-color: #6a4a4a; color: white; }
+    .deposit-modal .quick-amounts .quick-item.active { border-color: #ffd700; color: #ffd700; }
 
-    .deposit-limit-info {
-      font-size: 11px;
-      color: #665555;
-      margin-top: 4px;
-      text-align: center;
-    }
-    .deposit-limit-info span {
-      color: #ffd700;
-    }
-    .deposit-limit-info .remaining {
-      color: #80ffaa;
-    }
-    .deposit-limit-info .reset-timer {
-      color: #88aabb;
-      font-size: 10px;
-    }
+    .deposit-limit-info { font-size: 11px; color: #665555; margin-top: 4px; text-align: center; }
+    .deposit-limit-info span { color: #ffd700; }
+    .deposit-limit-info .remaining { color: #80ffaa; }
+    .deposit-limit-info .reset-timer { color: #88aabb; font-size: 10px; }
 
-    /* Лидеры */
-    .leaderboard-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-top: 6px;
-    }
-    .leaderboard-table th {
-      color: #aa8888;
-      font-weight: 600;
-      padding: 5px 3px;
-      border-bottom: 1px solid #2a1a1a;
-      text-align: center;
-    }
-    .leaderboard-table td {
-      padding: 4px 3px;
-      border-bottom: 1px solid #1a1a1a;
-      text-align: center;
-      color: #ccaaaa;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .leaderboard-table td:hover {
-      background: rgba(204, 51, 51, 0.1);
-    }
-    .leaderboard-table tr.highlight td {
-      color: #ffd700;
-    }
-    .leaderboard-table .rank {
-      color: #665555;
-      font-weight: 600;
-    }
-    .leaderboard-table .name {
-      color: #f0f0f0;
-    }
-    .leaderboard-table .value {
-      color: #80ffaa;
-    }
-    .leaderboard-tabs {
-      display: flex;
-      gap: 5px;
-      justify-content: center;
-      margin-bottom: 6px;
-      flex-wrap: wrap;
-    }
+    .leaderboard-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
+    .leaderboard-table th { color: #aa8888; font-weight: 600; padding: 5px 3px; border-bottom: 1px solid #2a1a1a; text-align: center; }
+    .leaderboard-table td { padding: 4px 3px; border-bottom: 1px solid #1a1a1a; text-align: center; color: #ccaaaa; cursor: pointer; transition: background 0.2s; }
+    .leaderboard-table td:hover { background: rgba(204,51,51,0.1); }
+    .leaderboard-table tr.highlight td { color: #ffd700; }
+    .leaderboard-table .rank { color: #665555; font-weight: 600; }
+    .leaderboard-table .name { color: #f0f0f0; }
+    .leaderboard-table .value { color: #80ffaa; }
+    .leaderboard-tabs { display: flex; gap: 5px; justify-content: center; margin-bottom: 6px; flex-wrap: wrap; }
     .leaderboard-tabs .tab {
       background: #1a1a1a;
       border: 1px solid #2a2a2a;
@@ -1299,38 +789,15 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .leaderboard-tabs .tab:hover {
-      border-color: #cc3333;
-    }
-    .leaderboard-tabs .tab.active {
-      border-color: #ffd700;
-      color: #ffd700;
-    }
+    .leaderboard-tabs .tab:hover { border-color: #cc3333; }
+    .leaderboard-tabs .tab.active { border-color: #ffd700; color: #ffd700; }
 
-    .player-card {
-      text-align: left;
-      padding: 4px 0;
-    }
-    .player-card .player-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 5px 0;
-      border-bottom: 1px solid #1a1a1a;
-      font-size: 13px;
-    }
-    .player-card .player-row .label {
-      color: #aa8888;
-    }
-    .player-card .player-row .value {
-      color: #f0f0f0;
-      font-weight: 600;
-    }
-    .player-card .player-row .value.gold {
-      color: #ffd700;
-    }
-    .player-card .player-row .value.green {
-      color: #80ffaa;
-    }
+    .player-card { text-align: left; padding: 4px 0; }
+    .player-card .player-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
+    .player-card .player-row .label { color: #aa8888; }
+    .player-card .player-row .value { color: #f0f0f0; font-weight: 600; }
+    .player-card .player-row .value.gold { color: #ffd700; }
+    .player-card .player-row .value.green { color: #80ffaa; }
     .player-card .player-avatar-big {
       width: 80px;
       height: 80px;
@@ -1344,70 +811,24 @@
       font-size: 40px;
       overflow: hidden;
     }
-    .player-card .player-avatar-big img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .player-card .player-name-big {
-      text-align: center;
-      font-size: 20px;
-      font-weight: 700;
-      color: #ffd700;
-      margin-bottom: 3px;
-    }
-    .player-card .player-title-big {
-      text-align: center;
-      font-size: 13px;
-      color: #aa8888;
-      margin-bottom: 10px;
-    }
-    .player-card .admin-actions {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid #2a1a1a;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      justify-content: center;
-    }
-    .player-card .admin-actions .btn {
-      padding: 4px 12px;
-      font-size: 11px;
-      flex: 0 1 auto;
-    }
-    .player-card .admin-actions .admin-label {
-      color: #ff6b6b;
-      font-size: 11px;
-      width: 100%;
-      text-align: center;
-      margin-bottom: 4px;
-    }
+    .player-card .player-avatar-big img { width: 100%; height: 100%; object-fit: cover; }
+    .player-card .player-name-big { text-align: center; font-size: 20px; font-weight: 700; color: #ffd700; margin-bottom: 3px; }
+    .player-card .player-title-big { text-align: center; font-size: 13px; color: #aa8888; margin-bottom: 10px; }
+    .player-card .admin-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid #2a1a1a; display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+    .player-card .admin-actions .btn { padding: 4px 12px; font-size: 11px; flex: 0 1 auto; }
+    .player-card .admin-actions .admin-label { color: #ff6b6b; font-size: 11px; width: 100%; text-align: center; margin-bottom: 4px; }
 
-    /* Скрытые элементы */
-    .avatar-upload-area {
-      display: none !important;
-    }
-    #avatarFileInput {
-      display: none !important;
-    }
-    #uploadAvatarBtn {
-      display: none !important;
-    }
-    #clearAvatarBtn {
-      display: none !important;
-    }
-    #avatarPreview {
-      display: none !important;
-    }
-    #avatarPreviewEmoji {
-      display: none !important;
-    }
+    .avatar-upload-area { display: none !important; }
+    #avatarFileInput { display: none !important; }
+    #uploadAvatarBtn { display: none !important; }
+    #clearAvatarBtn { display: none !important; }
+    #avatarPreview { display: none !important; }
+    #avatarPreviewEmoji { display: none !important; }
 
     .banned-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.95);
+      background: rgba(0,0,0,0.95);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1417,16 +838,8 @@
       font-size: 24px;
       font-weight: 700;
     }
-    .banned-overlay .ban-icon {
-      font-size: 80px;
-      margin-bottom: 20px;
-    }
-    .banned-overlay .ban-sub {
-      font-size: 16px;
-      color: #aa8888;
-      font-weight: 400;
-      margin-top: 10px;
-    }
+    .banned-overlay .ban-icon { font-size: 80px; margin-bottom: 20px; }
+    .banned-overlay .ban-sub { font-size: 16px; color: #aa8888; font-weight: 400; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -1782,126 +1195,69 @@
   </div>
 
   <script>
-    // ====================================================================
-    // FIREBASE КОНФИГУРАЦИЯ И ИНИЦИАЛИЗАЦИЯ
-    // ====================================================================
-    const firebaseConfig = {
-      apiKey: "AIzaSyDyJFvaxHph1rXpZ91yH4KxL2BaM-gP8Jc",
-      authDomain: "ww-casino-3b23b.firebaseapp.com",
-      projectId: "ww-casino-3b23b",
-      storageBucket: "ww-casino-3b23b.firebasestorage.app",
-      messagingSenderId: "131433531874",
-      appId: "1:131433531874:web:2fee31c643a167a92051bb",
-      measurementId: "G-1EWEPTNPP2"
-    };
+    // ================================================================
+    // 🔑 SUPABASE КОНФИГУРАЦИЯ
+    // ================================================================
+    const SUPABASE_URL = 'https://hekznvhlisyslfqurihq.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhla3pudmhsaXlzeWxmcXVyaWhxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NTczMTgsImV4cCI6MjEwMjUzMzMxOH0.lT04Jr4Dj5VEjTHYUQ0ownWP5yaDAccGfNs56Pqlvjc';
+    
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('✅ Supabase подключен');
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const analytics = firebase.analytics();
-
-    console.log('🔥 Firebase инициализирован');
-
-    // ====================================================================
+    // ================================================================
     // ЛОКАЛИЗАЦИЯ
+    // ================================================================
     const translations = {
       ru: {
-        top: 'Топ',
-        settings: 'Настройки',
-        deposit: 'Пополнить',
-        bj_name: 'Блэкджек',
-        bj_desc: 'Классика',
-        coin_name: 'Монетка',
-        coin_desc: '50/50',
-        crash_name: 'Краш',
-        crash_desc: 'x100',
-        mine_name: 'Минное поле',
-        mine_desc: '3x3-9x9',
-        back: 'Назад к играм',
-        bet: 'Ставка',
-        allin: 'ALL IN',
-        dealer: '🎩 Дилер',
-        player: '👤 Игрок',
-        points: 'Очки',
-        hit: '📥 Взять',
-        stand: '✋ Хватит',
-        deal: '🃏 Раздать',
-        choose_side: 'Выберите сторону',
-        heads: '🦅 Орел',
-        tails: '🪙 Решка',
-        bet_btn: '📈 Ставка',
-        cashout: '💰 Забрать',
-        bombs: 'Бомб',
-        max_bet: 'Макс ставка',
-        multiplier: 'Множитель',
-        opened: 'Открыто',
-        bombs_left: 'Бомб',
-        settings_title: 'Настройки',
-        language_select: 'Выберите язык / Select language:',
-        current_lang: 'Текущий язык:',
-        close: 'Закрыть',
+        top: 'Топ', settings: 'Настройки', deposit: 'Пополнить',
+        bj_name: 'Блэкджек', bj_desc: 'Классика',
+        coin_name: 'Монетка', coin_desc: '50/50',
+        crash_name: 'Краш', crash_desc: 'x100',
+        mine_name: 'Минное поле', mine_desc: '3x3-9x9',
+        back: 'Назад к играм', bet: 'Ставка', allin: 'ALL IN',
+        dealer: '🎩 Дилер', player: '👤 Игрок', points: 'Очки',
+        hit: '📥 Взять', stand: '✋ Хватит', deal: '🃏 Раздать',
+        choose_side: 'Выберите сторону', heads: '🦅 Орел', tails: '🪙 Решка',
+        bet_btn: '📈 Ставка', cashout: '💰 Забрать',
+        bombs: 'Бомб', max_bet: 'Макс ставка', multiplier: 'Множитель',
+        opened: 'Открыто', bombs_left: 'Бомб',
+        settings_title: 'Настройки', language_select: 'Выберите язык / Select language:',
+        current_lang: 'Текущий язык:', close: 'Закрыть',
         payment_processing: 'Платеж оформляется',
         processing_text: 'Обработка запроса...',
         processing_sub: 'Не закрывайте окно',
-        payment_success: 'Платеж оформлен',
-        great: 'Отлично',
-        deposit_title: 'Пополнение',
-        select_amount: 'Выберите сумму',
-        deposit_btn: 'Пополнить',
-        deposit_limit: 'Лимит пополнения',
-        available: 'Доступно',
-        reset_in: 'Сброс через',
-        profile_title: 'Профиль',
-        click_to_change: 'Нажмите для смены',
-        nickname: 'Никнейм',
-        title_label: 'Титул:',
-        operations: 'Операций',
-        total_deposited: 'Всего пополнено',
-        current_balance: 'Текущий баланс',
-        wins_label: 'Выигрышей',
-        ref_link: 'Реферальная ссылка',
-        copy: '📋 Копировать',
-        history_label: '📋 История операций',
-        show_all: 'Показать все',
+        payment_success: 'Платеж оформлен', great: 'Отлично',
+        deposit_title: 'Пополнение', select_amount: 'Выберите сумму',
+        deposit_btn: 'Пополнить', deposit_limit: 'Лимит пополнения',
+        available: 'Доступно', reset_in: 'Сброс через',
+        profile_title: 'Профиль', click_to_change: 'Нажмите для смены',
+        nickname: 'Никнейм', title_label: 'Титул:',
+        operations: 'Операций', total_deposited: 'Всего пополнено',
+        current_balance: 'Текущий баланс', wins_label: 'Выигрышей',
+        ref_link: 'Реферальная ссылка', copy: '📋 Копировать',
+        history_label: '📋 История операций', show_all: 'Показать все',
         no_operations: 'Нет операций',
-        admin_btn: '🔑 Админ',
-        admin_panel: '⚙️ Админ панель',
-        search_by_id: '🔍 Поиск по ID:',
-        find_btn: 'Найти',
-        balance_short: 'Баланс',
-        title_short: 'Титул',
+        admin_btn: '🔑 Админ', admin_panel: '⚙️ Админ панель',
+        search_by_id: '🔍 Поиск по ID:', find_btn: 'Найти',
+        balance_short: 'Баланс', title_short: 'Титул',
         player_title_label: 'Титул игрока:',
-        player_title: 'Игрок',
-        vip_title: 'VIP',
-        admin_title: 'Администратор',
-        legend_title: 'Легенда',
-        master_title: 'Мастер',
-        apply_btn: 'Применить',
-        give_usd: 'Выдать USD',
-        give_rub: 'Выдать RUB',
-        take_usd: 'Забрать USD',
-        take_rub: 'Забрать RUB',
-        ban_btn: '🚫 Забанить',
-        unban_btn: '✅ Разбанить',
-        reset_account: '🔄 Обнулить аккаунт',
-        reset_limit: '🔄 Сбросить лимит',
-        save_btn: '💾 Сохранить',
-        full_history: '📋 Полная история',
-        top_players: 'Топ игроков',
-        by_balance: '💰 По балансу',
-        by_wins: '🏆 По выигрышам',
-        by_refs: '👥 По рефералам',
+        player_title: 'Игрок', vip_title: 'VIP',
+        admin_title: 'Администратор', legend_title: 'Легенда',
+        master_title: 'Мастер', apply_btn: 'Применить',
+        give_usd: 'Выдать USD', give_rub: 'Выдать RUB',
+        take_usd: 'Забрать USD', take_rub: 'Забрать RUB',
+        ban_btn: '🚫 Забанить', unban_btn: '✅ Разбанить',
+        reset_account: '🔄 Обнулить аккаунт', reset_limit: '🔄 Сбросить лимит',
+        save_btn: '💾 Сохранить', full_history: '📋 Полная история',
+        top_players: 'Топ игроков', by_balance: '💰 По балансу',
+        by_wins: '🏆 По выигрышам', by_refs: '👥 По рефералам',
         player_card_title: '👤 Карточка игрока',
         banned_text: 'Ваш аккаунт заблокирован',
         banned_sub: 'Обратитесь к администратору для разблокировки',
-        balance_short_leader: 'Баланс',
-        wins_short: 'Выигрыши',
-        refs_short: 'Рефералы',
-        status: 'Статус',
-        active: 'Активен',
-        banned: 'Забанен',
-        game_soon: 'Скоро',
-        admin_access: 'Доступ получен!',
-        invalid_code: 'Неверный код доступа',
+        balance_short_leader: 'Баланс', wins_short: 'Выигрыши',
+        refs_short: 'Рефералы', status: 'Статус',
+        active: 'Активен', banned: 'Забанен',
+        admin_access: 'Доступ получен!', invalid_code: 'Неверный код доступа',
         deposit_min: 'Минимальная сумма: 1 RUB',
         deposit_min_usd: 'Минимальная сумма: 0.01 USD',
         enter_amount: 'Введите сумму больше 0',
@@ -1916,120 +1272,69 @@
         max_bet_reached: 'Максимальная ставка: $',
         game_active: 'Игра началась! Открывайте клетки',
         bomb_hit: '💥 Бомба! Вы проиграли',
-        win_text: 'ПОБЕДА!',
-        cashout_text: 'Вы забрали',
-        crash_text: 'Идет...',
-        crash_result: 'Краш!',
-        coin_result_win: 'Вы выиграли!',
-        coin_result_lose: 'Вы проиграли',
+        win_text: 'ПОБЕДА!', cashout_text: 'Вы забрали',
+        crash_text: 'Идет...', crash_result: 'Краш!',
+        coin_result_win: 'Вы выиграли!', coin_result_lose: 'Вы проиграли',
         bj_win: 'БЛЭКДЖЕК! Вы выиграли',
         bj_dealer_bust: 'Дилер перебрал! Вы выиграли',
-        bj_win_hand: 'Вы выиграли!',
-        bj_push: 'Ничья. Ставка возвращена',
-        bj_lose: 'Дилер выиграл',
-        bj_bust: 'Перебор! Вы проиграли',
+        bj_win_hand: 'Вы выиграли!', bj_push: 'Ничья. Ставка возвращена',
+        bj_lose: 'Дилер выиграл', bj_bust: 'Перебор! Вы проиграли',
         synced: '✅ Данные синхронизированы с облаком',
         sync_error: '❌ Ошибка синхронизации',
-        connecting: '🔄 Подключение к облаку...'
+        connecting: '🔄 Подключение к облаку...',
+        waiting_deal: 'Ожидание раздачи',
+        no_history: 'Нет истории'
       },
       en: {
-        top: 'Top',
-        settings: 'Settings',
-        deposit: 'Deposit',
-        bj_name: 'Blackjack',
-        bj_desc: 'Classic',
-        coin_name: 'Coin',
-        coin_desc: '50/50',
-        crash_name: 'Crash',
-        crash_desc: 'x100',
-        mine_name: 'Minefield',
-        mine_desc: '3x3-9x9',
-        back: '← Back to games',
-        bet: 'Bet',
-        allin: 'ALL IN',
-        dealer: '🎩 Dealer',
-        player: '👤 Player',
-        points: 'Points',
-        hit: '📥 Hit',
-        stand: '✋ Stand',
-        deal: '🃏 Deal',
-        choose_side: 'Choose side',
-        heads: '🦅 Heads',
-        tails: '🪙 Tails',
-        bet_btn: '📈 Bet',
-        cashout: '💰 Cashout',
-        bombs: 'Bombs',
-        max_bet: 'Max bet',
-        multiplier: 'Multiplier',
-        opened: 'Opened',
-        bombs_left: 'Bombs',
-        settings_title: 'Settings',
-        language_select: 'Select language / Выберите язык:',
-        current_lang: 'Current language:',
-        close: 'Close',
+        top: 'Top', settings: 'Settings', deposit: 'Deposit',
+        bj_name: 'Blackjack', bj_desc: 'Classic',
+        coin_name: 'Coin', coin_desc: '50/50',
+        crash_name: 'Crash', crash_desc: 'x100',
+        mine_name: 'Minefield', mine_desc: '3x3-9x9',
+        back: '← Back to games', bet: 'Bet', allin: 'ALL IN',
+        dealer: '🎩 Dealer', player: '👤 Player', points: 'Points',
+        hit: '📥 Hit', stand: '✋ Stand', deal: '🃏 Deal',
+        choose_side: 'Choose side', heads: '🦅 Heads', tails: '🪙 Tails',
+        bet_btn: '📈 Bet', cashout: '💰 Cashout',
+        bombs: 'Bombs', max_bet: 'Max bet', multiplier: 'Multiplier',
+        opened: 'Opened', bombs_left: 'Bombs',
+        settings_title: 'Settings', language_select: 'Select language / Выберите язык:',
+        current_lang: 'Current language:', close: 'Close',
         payment_processing: 'Payment processing',
         processing_text: 'Processing request...',
         processing_sub: 'Do not close the window',
-        payment_success: 'Payment completed',
-        great: 'Great',
-        deposit_title: 'Deposit',
-        select_amount: 'Select amount',
-        deposit_btn: 'Deposit',
-        deposit_limit: 'Deposit limit',
-        available: 'Available',
-        reset_in: 'Reset in',
-        profile_title: 'Profile',
-        click_to_change: 'Click to change',
-        nickname: 'Nickname',
-        title_label: 'Title:',
-        operations: 'Operations',
-        total_deposited: 'Total deposited',
-        current_balance: 'Current balance',
-        wins_label: 'Wins',
-        ref_link: 'Referral link',
-        copy: '📋 Copy',
-        history_label: '📋 Transaction history',
-        show_all: 'Show all',
+        payment_success: 'Payment completed', great: 'Great',
+        deposit_title: 'Deposit', select_amount: 'Select amount',
+        deposit_btn: 'Deposit', deposit_limit: 'Deposit limit',
+        available: 'Available', reset_in: 'Reset in',
+        profile_title: 'Profile', click_to_change: 'Click to change',
+        nickname: 'Nickname', title_label: 'Title:',
+        operations: 'Operations', total_deposited: 'Total deposited',
+        current_balance: 'Current balance', wins_label: 'Wins',
+        ref_link: 'Referral link', copy: '📋 Copy',
+        history_label: '📋 Transaction history', show_all: 'Show all',
         no_operations: 'No operations',
-        admin_btn: '🔑 Admin',
-        admin_panel: '⚙️ Admin panel',
-        search_by_id: '🔍 Search by ID:',
-        find_btn: 'Find',
-        balance_short: 'Balance',
-        title_short: 'Title',
+        admin_btn: '🔑 Admin', admin_panel: '⚙️ Admin panel',
+        search_by_id: '🔍 Search by ID:', find_btn: 'Find',
+        balance_short: 'Balance', title_short: 'Title',
         player_title_label: 'Player title:',
-        player_title: 'Player',
-        vip_title: 'VIP',
-        admin_title: 'Administrator',
-        legend_title: 'Legend',
-        master_title: 'Master',
-        apply_btn: 'Apply',
-        give_usd: 'Give USD',
-        give_rub: 'Give RUB',
-        take_usd: 'Take USD',
-        take_rub: 'Take RUB',
-        ban_btn: '🚫 Ban',
-        unban_btn: '✅ Unban',
-        reset_account: '🔄 Reset account',
-        reset_limit: '🔄 Reset limit',
-        save_btn: '💾 Save',
-        full_history: '📋 Full history',
-        top_players: 'Top players',
-        by_balance: '💰 By balance',
-        by_wins: '🏆 By wins',
-        by_refs: '👥 By referrals',
+        player_title: 'Player', vip_title: 'VIP',
+        admin_title: 'Administrator', legend_title: 'Legend',
+        master_title: 'Master', apply_btn: 'Apply',
+        give_usd: 'Give USD', give_rub: 'Give RUB',
+        take_usd: 'Take USD', take_rub: 'Take RUB',
+        ban_btn: '🚫 Ban', unban_btn: '✅ Unban',
+        reset_account: '🔄 Reset account', reset_limit: '🔄 Reset limit',
+        save_btn: '💾 Save', full_history: '📋 Full history',
+        top_players: 'Top players', by_balance: '💰 By balance',
+        by_wins: '🏆 By wins', by_refs: '👥 By referrals',
         player_card_title: '👤 Player card',
         banned_text: 'Your account has been banned',
         banned_sub: 'Contact administrator to unblock',
-        balance_short_leader: 'Balance',
-        wins_short: 'Wins',
-        refs_short: 'Referrals',
-        status: 'Status',
-        active: 'Active',
-        banned: 'Banned',
-        game_soon: 'Coming soon',
-        admin_access: 'Access granted!',
-        invalid_code: 'Invalid access code',
+        balance_short_leader: 'Balance', wins_short: 'Wins',
+        refs_short: 'Referrals', status: 'Status',
+        active: 'Active', banned: 'Banned',
+        admin_access: 'Access granted!', invalid_code: 'Invalid access code',
         deposit_min: 'Minimum amount: 1 RUB',
         deposit_min_usd: 'Minimum amount: 0.01 USD',
         enter_amount: 'Enter amount greater than 0',
@@ -2044,21 +1349,18 @@
         max_bet_reached: 'Maximum bet: $',
         game_active: 'Game started! Open cells',
         bomb_hit: '💥 Bomb! You lost',
-        win_text: 'VICTORY!',
-        cashout_text: 'You cashed out',
-        crash_text: 'Running...',
-        crash_result: 'Crash!',
-        coin_result_win: 'You won!',
-        coin_result_lose: 'You lost',
+        win_text: 'VICTORY!', cashout_text: 'You cashed out',
+        crash_text: 'Running...', crash_result: 'Crash!',
+        coin_result_win: 'You won!', coin_result_lose: 'You lost',
         bj_win: 'BLACKJACK! You won',
         bj_dealer_bust: 'Dealer bust! You won',
-        bj_win_hand: 'You won!',
-        bj_push: 'Push. Bet returned',
-        bj_lose: 'Dealer won',
-        bj_bust: 'Bust! You lost',
+        bj_win_hand: 'You won!', bj_push: 'Push. Bet returned',
+        bj_lose: 'Dealer won', bj_bust: 'Bust! You lost',
         synced: '✅ Data synced with cloud',
         sync_error: '❌ Sync error',
-        connecting: '🔄 Connecting to cloud...'
+        connecting: '🔄 Connecting to cloud...',
+        waiting_deal: 'Waiting for deal',
+        no_history: 'No history'
       }
     };
 
@@ -2093,11 +1395,13 @@
       document.querySelector('h1').textContent = '♛ WW CASINO';
     }
 
-    // ====================================================================
-    // Глобальные переменные
+    // ================================================================
+    // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+    // ================================================================
     const EXCHANGE_RATE = 83.99;
     const MAX_DEPOSIT = 10000;
     let nextPlayerId = 1;
+    let currentUserId = null;
 
     // ===== ЛИМИТ ПОПОЛНЕНИЯ =====
     function getDailyLimit() {
@@ -2164,8 +1468,9 @@
     setInterval(() => { updateTimerDisplay();
       updateRemainingDisplay(); }, 1000);
 
-    // ====================================================================
-
+    // ================================================================
+    // ОСНОВНЫЕ ПЕРЕМЕННЫЕ
+    // ================================================================
     let usdBalance = 0.00;
     let totalTransactions = 0;
     let totalDepositedUSD = 0;
@@ -2181,29 +1486,24 @@
     let referrals = 0;
     let currentPlayerId = null;
     let isBanned = false;
+    let players = [];
+    let telegramUser = null;
 
-    // Блэкджек
+    // Игровые переменные
     let deck = [];
     let playerHand = [];
     let dealerHand = [];
     let gameActive = false;
     let gameFinished = false;
-
-    // Монетка
     let coinFlipping = false;
-
-    // Краш
     let crashRunning = false;
     let crashMultiplier = 1.00;
     let crashBetPlaced = false;
     let crashHistory = [];
-    let crashAnimId = null;
     let crashStartTime = 0;
     let crashCanvas = null;
     let crashCtx = null;
     let crashPoints = [];
-
-    // Минное поле
     let mineSize = 3;
     let mineBombs = 1;
     let mineGrid = [];
@@ -2213,82 +1513,33 @@
     let mineMultiplier = 1.00;
     let mineMaxBet = 5000;
 
-    // Список игроков
-    let players = [];
-    let telegramUser = null;
-    let currentUserId = null;
+    // ================================================================
+    // SUPABASE ФУНКЦИИ (ВМЕСТО FIREBASE)
+    // ================================================================
 
-    // ====================================================================
-    // FIREBASE ФУНКЦИИ
-    // ====================================================================
-
-    // Получить или создать пользователя в Firestore
-    async function getOrCreateUser(userId, nickname) {
-      try {
-        const userRef = db.collection('users').doc(userId);
-        const doc = await userRef.get();
-        
-        if (doc.exists) {
-          const data = doc.data();
-          return data;
-        } else {
-          // Создаем нового пользователя
-          const newUser = {
-            nickname: nickname || 'Игрок',
-            balance: 0,
-            wins: 0,
-            referrals: 0,
-            title: 'Игрок',
-            banned: false,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-          };
-          await userRef.set(newUser);
-          return newUser;
-        }
-      } catch (error) {
-        console.error('Ошибка получения пользователя:', error);
-        return null;
-      }
-    }
-
-    // Сохранить данные пользователя в Firestore
-    async function syncUserData(userId) {
-      if (!userId) return;
-      try {
-        const userRef = db.collection('users').doc(userId);
-        await userRef.update({
-          nickname: profileNickname,
-          balance: usdBalance,
-          wins: wins,
-          referrals: referrals,
-          title: profileTitle,
-          banned: isBanned,
-          lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        console.log('✅ Данные синхронизированы с Firestore');
-        showToast(t('synced'));
-      } catch (error) {
-        console.error('Ошибка синхронизации:', error);
-        showToast(t('sync_error'), 'error');
-      }
-    }
-
-    // Загрузить данные из Firestore
     async function loadUserData(userId) {
       if (!userId) return;
       try {
-        const userRef = db.collection('users').doc(userId);
-        const doc = await userRef.get();
+        const { data, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)
+          .single();
         
-        if (doc.exists) {
-          const data = doc.data();
+        if (error && error.code !== 'PGRST116') {
+          console.error('Ошибка загрузки:', error);
+          showToast(t('sync_error'), 'error');
+          return;
+        }
+        
+        if (data) {
           usdBalance = data.balance || 0;
           wins = data.wins || 0;
           referrals = data.referrals || 0;
           profileNickname = data.nickname || 'Игрок';
           profileTitle = data.title || 'Игрок';
           isBanned = data.banned || false;
+          refCode = data.ref_code || 'FaWW';
           
           if (isBanned) {
             document.getElementById('bannedOverlay').classList.remove('hidden');
@@ -2296,66 +1547,150 @@
             document.getElementById('bannedOverlay').classList.add('hidden');
           }
           
+          await loadHistory(userId);
           updateUI();
           showToast(t('synced'));
           return data;
+        } else {
+          await createUser(userId);
         }
       } catch (error) {
-        console.error('Ошибка загрузки данных:', error);
+        console.error('Ошибка:', error);
         showToast(t('sync_error'), 'error');
-        return null;
       }
     }
 
-    // Создать или обновить игрока в рейтинге
-    async function syncLeaderboard(userId, playerData) {
+    async function createUser(userId) {
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .insert({
+            id: userId,
+            nickname: profileNickname,
+            balance: 0,
+            wins: 0,
+            referrals: 0,
+            title: 'Игрок',
+            banned: false,
+            ref_code: 'FaWW'
+          })
+          .select()
+          .single();
+        
+        if (error) throw error;
+        showToast('✅ Новый пользователь создан');
+        updateUI();
+      } catch (error) {
+        console.error('Ошибка создания:', error);
+        showToast('❌ Ошибка создания пользователя', 'error');
+      }
+    }
+
+    async function syncUserData(userId) {
       if (!userId) return;
       try {
-        const leaderboardRef = db.collection('leaderboard').doc(userId);
-        await leaderboardRef.set({
-          ...playerData,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        const { error } = await supabase
+          .from('users')
+          .update({
+            nickname: profileNickname,
+            balance: usdBalance,
+            wins: wins,
+            referrals: referrals,
+            title: profileTitle,
+            banned: isBanned,
+            ref_code: refCode
+          })
+          .eq('id', userId);
+        
+        if (error) throw error;
+        console.log('✅ Данные синхронизированы');
+        showToast(t('synced'));
       } catch (error) {
-        console.error('Ошибка синхронизации рейтинга:', error);
+        console.error('Ошибка синхронизации:', error);
+        showToast(t('sync_error'), 'error');
       }
     }
 
-    // Получить топ игроков
+    async function loadHistory(userId) {
+      if (!userId) return;
+      try {
+        const { data, error } = await supabase
+          .from('history')
+          .select('*')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(50);
+        
+        if (error) throw error;
+        
+        if (data) {
+          history = data.map(item => ({
+            amount: item.amount,
+            type: item.type,
+            date: item.date,
+            time: item.time
+          }));
+          renderProfileHistory();
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки истории:', error);
+      }
+    }
+
+    async function addHistorySupabase(amountUSD, type) {
+      const now = new Date();
+      const time = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+      const date = now.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
+      
+      history.push({ amount: amountUSD, type, time, date });
+      saveData();
+      renderProfileHistory();
+      
+      if (currentUserId) {
+        try {
+          await supabase
+            .from('history')
+            .insert({
+              user_id: currentUserId,
+              amount: amountUSD,
+              type: type,
+              date: date,
+              time: time
+            });
+        } catch (error) {
+          console.error('Ошибка сохранения истории:', error);
+        }
+      }
+    }
+
     async function getTopPlayers(sortBy = 'balance', limit = 50) {
       try {
-        let query = db.collection('leaderboard');
+        const { data, error } = await supabase
+          .from('users')
+          .select('id, nickname, balance, wins, referrals, title')
+          .eq('banned', false)
+          .order(sortBy, { ascending: false })
+          .limit(limit);
         
-        if (sortBy === 'balance') {
-          query = query.orderBy('balance', 'desc');
-        } else if (sortBy === 'wins') {
-          query = query.orderBy('wins', 'desc');
-        } else if (sortBy === 'referrals') {
-          query = query.orderBy('referrals', 'desc');
-        }
-        
-        const snapshot = await query.limit(limit).get();
-        const players = [];
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          data.id = doc.id;
-          players.push(data);
-        });
-        return players;
+        if (error) throw error;
+        return data || [];
       } catch (error) {
-        console.error('Ошибка получения топа:', error);
+        console.error('Ошибка топа:', error);
         return [];
       }
     }
 
-    // Утилита: показать уведомление
     function showToast(message, type = 'success') {
       const colors = {
         success: '#80ffaa',
         error: '#ff6b6b',
         info: '#88aabb'
       };
+      
+      document.querySelectorAll('.toast-message').forEach(el => el.remove());
+      
       const toast = document.createElement('div');
+      toast.className = 'toast-message';
       toast.style.cssText = `
         position: fixed;
         bottom: 20px;
@@ -2369,8 +1704,8 @@
         font-size: 14px;
         z-index: 9999;
         box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        animation: fadeSlideIn 0.3s ease;
         max-width: 90%;
+        animation: fadeSlideIn 0.3s ease;
       `;
       toast.textContent = message;
       document.body.appendChild(toast);
@@ -2381,8 +1716,10 @@
       }, 3000);
     }
 
-    // ====================================================================
-    // РАБОТА С ИГРОКАМИ
+    // ================================================================
+    // ЛОКАЛЬНЫЕ ФУНКЦИИ (без изменений)
+    // ================================================================
+    
     function getNextPlayerId() {
       try {
         const saved = localStorage.getItem('wwNextPlayerId');
@@ -2420,6 +1757,46 @@
 
     function savePlayers() {
       try { localStorage.setItem('wwCasinoPlayers', JSON.stringify(players)); } catch (e) {}
+    }
+
+    function loadData() {
+      try {
+        const saved = localStorage.getItem('wwCasinoData');
+        if (saved) {
+          const data = JSON.parse(saved);
+          usdBalance = data.usdBalance || 0;
+          totalTransactions = data.totalTransactions || 0;
+          totalDepositedUSD = data.totalDepositedUSD || 0;
+          wins = data.wins || 0;
+          history = data.history || [];
+          profileNickname = data.profileNickname || 'Игрок';
+          profileTitle = data.profileTitle || 'Игрок';
+          profileAvatar = data.profileAvatar || null;
+          refCode = data.refCode || 'FaWW';
+          referrals = data.referrals || 0;
+          if (data.currentPlayerId) currentPlayerId = data.currentPlayerId;
+        }
+      } catch (e) {}
+      loadPlayers();
+    }
+
+    function saveData() {
+      try {
+        const data = {
+          usdBalance,
+          totalTransactions,
+          totalDepositedUSD,
+          wins,
+          history,
+          profileNickname,
+          profileTitle,
+          profileAvatar,
+          refCode,
+          referrals,
+          currentPlayerId
+        };
+        localStorage.setItem('wwCasinoData', JSON.stringify(data));
+      } catch (e) {}
     }
 
     function registerOrUpdatePlayer(name, balance, wins, refs, title, telegramId) {
@@ -2470,369 +1847,10 @@
 
     function findPlayerById(id) { return players.find(p => p.id === id); }
 
-    // ===== АДМИН ФУНКЦИИ =====
-    function updateFoundPlayerInfo() {
-      const idInput = document.getElementById('adminPlayerId');
-      const id = parseInt(idInput ? idInput.value : 1);
-      const player = findPlayerById(id);
-      const infoEl = document.getElementById('adminFoundPlayerInfo');
-      if (player && infoEl) {
-        infoEl.style.display = 'block';
-        document.getElementById('adminFoundPlayerName').textContent = player.name;
-        document.getElementById('adminFoundPlayerBalance').textContent = player.balance.toFixed(2);
-        document.getElementById('adminFoundPlayerTitle').textContent = player.title || 'Игрок';
-        const statusEl = document.getElementById('adminFoundPlayerStatus');
-        if (player.banned) {
-          statusEl.textContent = '🚫 ' + t('banned');
-          statusEl.style.color = '#ff6b6b';
-        } else {
-          statusEl.textContent = '✅ ' + t('active');
-          statusEl.style.color = '#80ffaa';
-        }
-      } else if (infoEl) {
-        infoEl.style.display = 'none';
-      }
-    }
-
-    function renderLeaderboardModal(sortBy = 'balance') {
-      const player = players.find(p => p.telegramId === (telegramUser ? telegramUser.id : null) || p.name === profileNickname);
-      if (player) {
-        player.title = profileTitle;
-        player.balance = usdBalance;
-        player.wins = wins;
-        player.referrals = referrals;
-        currentPlayerId = player.id;
-        savePlayers();
-      } else {
-        const tgId = telegramUser ? telegramUser.id : null;
-        registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
-        const newPlayer = players.find(p => p.telegramId === tgId || p.name === profileNickname);
-        if (newPlayer) currentPlayerId = newPlayer.id;
-      }
-
-      if (players.length === 0) {
-        document.getElementById('leaderboardModalContent').innerHTML =
-          `<div style="color:#665555;text-align:center;padding:20px 0;">${t('no_players')}</div>`;
-        return;
-      }
-
-      let sorted = [...players];
-      if (sortBy === 'balance') sorted.sort((a, b) => b.balance - a.balance);
-      else if (sortBy === 'wins') sorted.sort((a, b) => b.wins - a.wins);
-      else if (sortBy === 'refs') sorted.sort((a, b) => b.referrals - a.referrals);
-
-      const labels = {
-        balance: t('balance_short_leader'),
-        wins: t('wins_short'),
-        refs: t('refs_short')
-      };
-
-      let html =
-        `<table class="leaderboard-table"><thead><tr><th>#</th><th>ID</th><th>${t('nickname')}</th><th>${labels[sortBy] || 'Value'}</th><th>${t('title_short')}</th><th>${t('status')}</th></tr></thead><tbody>`;
-      sorted.forEach((player, index) => {
-        const isHighlight = player.id === currentPlayerId;
-        const value = sortBy === 'balance' ? '$' + player.balance.toFixed(2) : sortBy === 'wins' ? player.wins : player
-          .referrals;
-        const playerId = player.id !== undefined ? player.id : '?';
-        const status = player.banned ? '🚫' : '✅';
-        html += `
-          <tr class="${isHighlight ? 'highlight' : ''}" data-player="${encodeURIComponent(player.name)}" data-id="${player.id}">
-            <td class="rank">${index + 1}</td>
-            <td style="color:#665555;font-size:11px;">#${playerId}</td>
-            <td class="name">${player.name}</td>
-            <td class="value">${value}</td>
-            <td style="color:#ffd700;font-size:10px;">${player.title || 'Игрок'}</td>
-            <td style="font-size:10px;">${status}</td>
-          </tr>
-        `;
-      });
-      html += '</tbody></table>';
-      document.getElementById('leaderboardModalContent').innerHTML = html;
-
-      document.querySelectorAll('#leaderboardModalContent .leaderboard-table tbody tr').forEach(row => {
-        row.addEventListener('click', function() {
-          const name = decodeURIComponent(this.dataset.player);
-          const player = players.find(p => p.name === name);
-          if (player) showPlayerCard(player);
-        });
-      });
-    }
-
-    function showPlayerCard(player) {
-      const content = document.getElementById('playerCardContent');
-      if (!content) return;
-
-      const isAdmin = adminAccess;
-      const isSelf = player.id === currentPlayerId;
-
-      let adminHtml = '';
-      if (isAdmin && !isSelf) {
-        adminHtml = `
-          <div class="admin-actions">
-            <div class="admin-label">⚙️ ${t('admin_panel')}</div>
-            <button class="btn btn-warning" onclick="adminGiveBalanceById(${player.id}, 100)">+100 USD</button>
-            <button class="btn btn-warning" onclick="adminGiveBalanceById(${player.id}, 500)">+500 USD</button>
-            <button class="btn btn-danger" onclick="adminTakeBalanceById(${player.id}, 100)">-100 USD</button>
-            <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'Администратор')">👑 ${t('admin_title')}</button>
-            <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'VIP')">⭐ ${t('vip_title')}</button>
-            <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'Игрок')">${t('player_title')}</button>
-            <button class="btn btn-danger" onclick="adminBanPlayerById(${player.id})">🚫 ${t('ban_btn')}</button>
-            <button class="btn btn-success" onclick="adminUnbanPlayerById(${player.id})">✅ ${t('unban_btn')}</button>
-            <button class="btn btn-warning" onclick="adminResetPlayerById(${player.id})">🔄 ${t('reset_account')}</button>
-          </div>
-        `;
-      }
-
-      const playerId = player.id !== undefined ? player.id : '?';
-      const statusText = player.banned ? '🚫 ' + t('banned') : '✅ ' + t('active');
-
-      content.innerHTML = `
-        <div class="player-card">
-          <div class="player-avatar-big">${player.avatar || '👤'}</div>
-          <div class="player-name-big">${player.name}</div>
-          <div class="player-title-big">${player.title || 'Игрок'}</div>
-          <div class="player-row"><span class="label">🆔 ID</span><span class="value gold">#${playerId}</span></div>
-          <div class="player-row"><span class="label">💰 ${t('balance_short')}</span><span class="value gold">$${player.balance.toFixed(2)}</span></div>
-          <div class="player-row"><span class="label">🏆 ${t('wins_short')}</span><span class="value green">${player.wins}</span></div>
-          <div class="player-row"><span class="label">👥 ${t('refs_short')}</span><span class="value">${player.referrals || 0}</span></div>
-          <div class="player-row"><span class="label">📅 ${t('reg_date') || 'Регистрация'}</span><span class="value">${player.regDate || '--'}</span></div>
-          <div class="player-row"><span class="label">🕐 ${t('last_login') || 'Последний вход'}</span><span class="value">${player.lastLogin || '--'}</span></div>
-          <div class="player-row"><span class="label">🎂 ${t('age') || 'Возраст'}</span><span class="value">${player.age || 25} лет</span></div>
-          <div class="player-row"><span class="label">📍 ${t('city') || 'Город'}</span><span class="value">${player.city || 'Не указан'}</span></div>
-          <div class="player-row"><span class="label">📊 ${t('status')}</span><span class="value">${statusText}</span></div>
-          ${player.telegramId ? `<div class="player-row"><span class="label">🆔 Telegram ID</span><span class="value">${player.telegramId}</span></div>` : ''}
-          ${adminHtml}
-        </div>
-      `;
-      document.getElementById('playerCardModalOverlay').classList.add('active');
-    }
-
-    // ===== АДМИН ДЕЙСТВИЯ =====
-    window.adminGiveBalanceById = function(id, amount) {
-      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
-      const player = findPlayerById(id);
-      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
-      player.balance += amount;
-      savePlayers();
-      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
-      const overlay = document.getElementById('playerCardModalOverlay');
-      if (overlay.classList.contains('active')) {
-        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
-        if (currentPlayer) showPlayerCard(currentPlayer);
-      }
-      updateFoundPlayerInfo();
-      if (player.id === currentPlayerId) {
-        usdBalance = player.balance;
-        const balanceEl = document.getElementById('profileBalance');
-        if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
-        saveData();
-        syncUserData(currentUserId);
-      }
-      alert(`✅ ${player.name} (ID: ${player.id}) получено +${amount} USD. ${t('new_balance') || 'Новый баланс'}: $${player.balance.toFixed(2)}`);
-    };
-
-    window.adminTakeBalanceById = function(id, amount) {
-      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
-      const player = findPlayerById(id);
-      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
-      if (player.balance < amount) {
-        alert(`❌ ${t('not_enough')}! ${t('available_short') || 'Доступно'}: $${player.balance.toFixed(2)}`);
-        return;
-      }
-      player.balance -= amount;
-      savePlayers();
-      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
-      const overlay = document.getElementById('playerCardModalOverlay');
-      if (overlay.classList.contains('active')) {
-        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
-        if (currentPlayer) showPlayerCard(currentPlayer);
-      }
-      updateFoundPlayerInfo();
-      if (player.id === currentPlayerId) {
-        usdBalance = player.balance;
-        const balanceEl = document.getElementById('profileBalance');
-        if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
-        saveData();
-        syncUserData(currentUserId);
-      }
-      alert(`✅ ${player.name} (ID: ${player.id}) списано -${amount} USD. ${t('new_balance') || 'Новый баланс'}: $${player.balance.toFixed(2)}`);
-    };
-
-    window.adminSetTitleById = function(id, title) {
-      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
-      const player = findPlayerById(id);
-      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
-      player.title = title;
-      savePlayers();
-      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
-      const overlay = document.getElementById('playerCardModalOverlay');
-      if (overlay.classList.contains('active')) {
-        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
-        if (currentPlayer) showPlayerCard(currentPlayer);
-      }
-      updateFoundPlayerInfo();
-      if (player.id === currentPlayerId) {
-        profileTitle = title;
-        const titleDisplay = document.getElementById('profileTitleDisplay');
-        if (titleDisplay) titleDisplay.textContent = title;
-        saveData();
-        syncUserData(currentUserId);
-      }
-      alert(`✅ ${t('title_changed') || 'Титул изменен'}: ${player.name} (ID: ${player.id}) -> "${title}"`);
-    };
-
-    window.adminBanPlayerById = function(id) {
-      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
-      const player = findPlayerById(id);
-      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
-      if (player.banned) { alert('⚠️ ' + t('already_banned') || 'Игрок уже забанен'); return; }
-      player.banned = true;
-      savePlayers();
-      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
-      const overlay = document.getElementById('playerCardModalOverlay');
-      if (overlay.classList.contains('active')) {
-        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
-        if (currentPlayer) showPlayerCard(currentPlayer);
-      }
-      updateFoundPlayerInfo();
-      if (player.id === currentPlayerId) {
-        isBanned = true;
-        document.getElementById('bannedOverlay').classList.remove('hidden');
-        syncUserData(currentUserId);
-      }
-      alert(`✅ ${t('banned_user') || 'Игрок забанен'}: ${player.name} (ID: ${player.id})`);
-    };
-
-    window.adminUnbanPlayerById = function(id) {
-      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
-      const player = findPlayerById(id);
-      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
-      if (!player.banned) { alert('⚠️ ' + t('not_banned') || 'Игрок не забанен'); return; }
-      player.banned = false;
-      savePlayers();
-      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
-      const overlay = document.getElementById('playerCardModalOverlay');
-      if (overlay.classList.contains('active')) {
-        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
-        if (currentPlayer) showPlayerCard(currentPlayer);
-      }
-      updateFoundPlayerInfo();
-      if (player.id === currentPlayerId) {
-        isBanned = false;
-        document.getElementById('bannedOverlay').classList.add('hidden');
-        syncUserData(currentUserId);
-      }
-      alert(`✅ ${t('unbanned_user') || 'Игрок разбанен'}: ${player.name} (ID: ${player.id})`);
-    };
-
-    window.adminResetPlayerById = function(id) {
-      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
-      const player = findPlayerById(id);
-      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
-      if (!confirm(`⚠️ ${t('reset_confirm') || 'Вы уверены?'} ${player.name} (ID: ${player.id})? ${t('irreversible') || 'Это действие необратимо!'}`))
-        return;
-      const oldBalance = player.balance;
-      player.balance = 0;
-      player.wins = 0;
-      player.referrals = 0;
-      savePlayers();
-      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
-      const overlay = document.getElementById('playerCardModalOverlay');
-      if (overlay.classList.contains('active')) {
-        const currentPlayer = players.find(p => p.name === document.querySelector('.player-name-big')?.textContent);
-        if (currentPlayer) showPlayerCard(currentPlayer);
-      }
-      updateFoundPlayerInfo();
-      if (player.id === currentPlayerId) {
-        usdBalance = 0;
-        wins = 0;
-        referrals = 0;
-        const balanceEl = document.getElementById('profileBalance');
-        if (balanceEl) balanceEl.textContent = '0.00 $';
-        const winsEl = document.getElementById('profileWins');
-        if (winsEl) winsEl.textContent = '0';
-        saveData();
-        syncUserData(currentUserId);
-        updateUI();
-      }
-      alert(`✅ ${t('reset_done') || 'Аккаунт обнулен'} ${player.name} (ID: ${player.id}). ${t('removed') || 'Было списано'} $${oldBalance.toFixed(2)}`);
-    };
-
-    // ===== ALL IN =====
-    function setBjAllIn() {
-      const input = document.getElementById('bjBetAmount');
-      if (input) input.value = Math.floor(usdBalance);
-    }
-
-    function setCoinAllIn() {
-      const input = document.getElementById('coinBetAmount');
-      if (input) input.value = Math.min(Math.floor(usdBalance), 10000);
-    }
-
-    function setCrashAllIn() {
-      const input = document.getElementById('crashBetAmount');
-      if (input) input.value = Math.min(Math.floor(usdBalance), 50000);
-    }
-
-    function setMineAllIn() {
-      const input = document.getElementById('mineBetAmount');
-      if (input) input.value = Math.min(Math.floor(usdBalance), mineMaxBet);
-    }
-
-    // ===== ЗАГРУЗКА =====
-    function loadData() {
-      try {
-        const saved = localStorage.getItem('wwCasinoData');
-        if (saved) {
-          const data = JSON.parse(saved);
-          usdBalance = data.usdBalance || 0;
-          totalTransactions = data.totalTransactions || 0;
-          totalDepositedUSD = data.totalDepositedUSD || 0;
-          wins = data.wins || 0;
-          history = data.history || [];
-          profileNickname = data.profileNickname || 'Игрок';
-          profileTitle = data.profileTitle || 'Игрок';
-          profileAvatar = data.profileAvatar || null;
-          refCode = data.refCode || 'FaWW';
-          referrals = data.referrals || 0;
-          if (data.currentPlayerId) currentPlayerId = data.currentPlayerId;
-        }
-      } catch (e) {}
-      try {
-        const savedQuick = localStorage.getItem('wwCasinoQuickAmounts');
-        if (savedQuick) { quickAmounts = JSON.parse(savedQuick); } else { quickAmounts = [1000, 2000, 5000, 7000, 10000]; }
-      } catch (e) { quickAmounts = [1000, 2000, 5000, 7000, 10000]; }
-      loadPlayers();
-      const tgId = telegramUser ? telegramUser.id : null;
-      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
-    }
-
-    function saveData() {
-      try {
-        const data = {
-          usdBalance,
-          totalTransactions,
-          totalDepositedUSD,
-          wins,
-          history,
-          profileNickname,
-          profileTitle,
-          profileAvatar,
-          refCode,
-          referrals,
-          currentPlayerId
-        };
-        localStorage.setItem('wwCasinoData', JSON.stringify(data));
-      } catch (e) {}
-      const tgId = telegramUser ? telegramUser.id : null;
-      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
-      savePlayers();
-    }
-
-    function saveQuickAmounts() {
-      try { localStorage.setItem('wwCasinoQuickAmounts', JSON.stringify(quickAmounts)); } catch (e) {}
-    }
-
+    // ================================================================
+    // UI ФУНКЦИИ
+    // ================================================================
+    
     function updateUI() {
       const el = document.getElementById('headerBalance');
       if (!el) return;
@@ -2854,7 +1872,6 @@
         totalDeposited: document.getElementById('profileTotalDeposited'),
         balance: document.getElementById('profileBalance'),
         wins: document.getElementById('profileWins'),
-        since: document.getElementById('profileSince'),
         titleDisplay: document.getElementById('profileTitleDisplay')
       };
       if (els.totalTransactions) els.totalTransactions.textContent = totalTransactions;
@@ -2862,15 +1879,9 @@
       if (els.balance) els.balance.textContent = usdBalance.toFixed(2) + ' $';
       if (els.wins) els.wins.textContent = wins;
       if (els.titleDisplay) els.titleDisplay.textContent = profileTitle;
-      if (els.since && (els.since.textContent === '--' || !els.since.textContent)) {
-        const now = new Date();
-        els.since.textContent = now.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
-      }
       renderProfileHistory();
       const refLink = document.getElementById('refLink');
       if (refLink) refLink.textContent = 'ww-casino.com/ref/' + refCode;
-      const tgId = telegramUser ? telegramUser.id : null;
-      registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
     }
 
     function renderProfileHistory(limit = 5) {
@@ -2946,19 +1957,13 @@
     }
 
     function addHistory(amountUSD, type) {
-      const now = new Date();
-      const time = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-      const date = now.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
-      history.push({ amount: amountUSD, type, time, date });
-      saveData();
-      renderProfileHistory();
+      addHistorySupabase(amountUSD, type);
     }
 
     function addBalance(amount, currency, recordHistory = true) {
       if (isNaN(amount) || amount <= 0) return false;
       let usdAmount;
-      if (currency === 'USD') { usdAmount = amount; } else if (currency === 'RUB') { usdAmount = amount / EXCHANGE_RATE; } else
-        return false;
+      if (currency === 'USD') { usdAmount = amount; } else if (currency === 'RUB') { usdAmount = amount / EXCHANGE_RATE; } else return false;
 
       const used = getDailyLimit();
       const remaining = MAX_DEPOSIT - used;
@@ -2984,8 +1989,7 @@
     function takeBalance(amount, currency, recordHistory = true) {
       if (isNaN(amount) || amount <= 0) return false;
       let usdAmount;
-      if (currency === 'USD') { usdAmount = amount; } else if (currency === 'RUB') { usdAmount = amount / EXCHANGE_RATE; } else
-        return false;
+      if (currency === 'USD') { usdAmount = amount; } else if (currency === 'RUB') { usdAmount = amount / EXCHANGE_RATE; } else return false;
       if (usdAmount > usdBalance) {
         alert(`${t('not_enough')} ${t('available_short') || 'Доступно'}: ${usdBalance.toFixed(2)} USD`);
         return false;
@@ -3000,8 +2004,32 @@
       syncUserData(currentUserId);
       return true;
     }
+    // ================================================================
+    // ALL IN
+    // ================================================================
+    function setBjAllIn() {
+      const input = document.getElementById('bjBetAmount');
+      if (input) input.value = Math.floor(usdBalance);
+    }
 
-    // ===== ОБЩИЕ ФУНКЦИИ =====
+    function setCoinAllIn() {
+      const input = document.getElementById('coinBetAmount');
+      if (input) input.value = Math.min(Math.floor(usdBalance), 10000);
+    }
+
+    function setCrashAllIn() {
+      const input = document.getElementById('crashBetAmount');
+      if (input) input.value = Math.min(Math.floor(usdBalance), 50000);
+    }
+
+    function setMineAllIn() {
+      const input = document.getElementById('mineBetAmount');
+      if (input) input.value = Math.min(Math.floor(usdBalance), mineMaxBet);
+    }
+
+    // ================================================================
+    // БЛЭКДЖЕК
+    // ================================================================
     function createDeck() {
       const suits = ['♠', '♥', '♦', '♣'];
       const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
@@ -3058,7 +2086,7 @@
       let dealerHTML = '';
       let dealerValue = 0;
       if (dealerHand.length === 0) {
-        dealerHTML = '<span style="color:#665555;font-size:13px;">' + t('waiting_deal') || 'Ожидание раздачи' + '</span>';
+        dealerHTML = '<span style="color:#665555;font-size:13px;">' + t('waiting_deal') + '</span>';
       } else {
         for (let i = 0; i < dealerHand.length; i++) {
           if (i === 0 && gameActive && !gameFinished) {
@@ -3078,7 +2106,7 @@
 
       let playerHTML = '';
       if (playerHand.length === 0) {
-        playerHTML = '<span style="color:#665555;font-size:13px;">' + t('waiting_deal') || 'Ожидание раздачи' + '</span>';
+        playerHTML = '<span style="color:#665555;font-size:13px;">' + t('waiting_deal') + '</span>';
       } else {
         for (const card of playerHand) {
           playerHTML += getCardDisplay(card);
@@ -3214,7 +2242,9 @@
       syncUserData(currentUserId);
     }
 
-    // ===== МОНЕТКА =====
+    // ================================================================
+    // МОНЕТКА
+    // ================================================================
     function flipCoin(choice) {
       if (coinFlipping) return;
       if (isBanned) { alert('❌ ' + t('banned_text')); return; }
@@ -3263,11 +2293,12 @@
       }, 600);
     }
 
-    // ===== КРАШ =====
+    // ================================================================
+    // КРАШ
+    // ================================================================
     function initCrashCanvas() {
       const canvas = document.getElementById('crashCanvas');
       if (!canvas) return;
-      const rect = canvas.parentElement.getBoundingClientRect();
       canvas.width = canvas.parentElement.clientWidth || 400;
       canvas.height = 200;
       crashCanvas = canvas;
@@ -3411,10 +2442,12 @@
         const isHigh = parseFloat(item) > 2;
         html += `<span class="crash-item ${isHigh ? 'high' : ''}">${item}x</span>`;
       });
-      el.innerHTML = html || '<span style="color:#665555;font-size:11px;">' + t('no_history') || 'Нет истории' + '</span>';
+      el.innerHTML = html || '<span style="color:#665555;font-size:11px;">' + t('no_history') + '</span>';
     }
 
-    // ===== МИННОЕ ПОЛЕ =====
+    // ================================================================
+    // МИННОЕ ПОЛЕ
+    // ================================================================
     function initMinefield() {
       const sizeEls = document.querySelectorAll('#mineSizeSelect button');
       sizeEls.forEach(el => {
@@ -3602,7 +2635,9 @@
       syncUserData(currentUserId);
     }
 
-    // ===== НАВИГАЦИЯ =====
+    // ================================================================
+    // НАВИГАЦИЯ
+    // ================================================================
     function showGame(gameId) {
       const menu = document.getElementById('gameMenu');
       if (menu) menu.style.display = 'none';
@@ -3644,7 +2679,268 @@
     function closeLeaderboardModal() { document.getElementById('leaderboardModalOverlay').classList.remove('active'); }
     function closePlayerCard() { document.getElementById('playerCardModalOverlay').classList.remove('active'); }
 
-    // ===== UI =====
+    // ================================================================
+    // АДМИН ФУНКЦИИ
+    // ================================================================
+    function updateFoundPlayerInfo() {
+      const idInput = document.getElementById('adminPlayerId');
+      const id = parseInt(idInput ? idInput.value : 1);
+      const player = findPlayerById(id);
+      const infoEl = document.getElementById('adminFoundPlayerInfo');
+      if (player && infoEl) {
+        infoEl.style.display = 'block';
+        document.getElementById('adminFoundPlayerName').textContent = player.name;
+        document.getElementById('adminFoundPlayerBalance').textContent = player.balance.toFixed(2);
+        document.getElementById('adminFoundPlayerTitle').textContent = player.title || 'Игрок';
+        const statusEl = document.getElementById('adminFoundPlayerStatus');
+        if (player.banned) {
+          statusEl.textContent = '🚫 ' + t('banned');
+          statusEl.style.color = '#ff6b6b';
+        } else {
+          statusEl.textContent = '✅ ' + t('active');
+          statusEl.style.color = '#80ffaa';
+        }
+      } else if (infoEl) {
+        infoEl.style.display = 'none';
+      }
+    }
+
+    function renderLeaderboardModal(sortBy = 'balance') {
+      const player = players.find(p => p.telegramId === (telegramUser ? telegramUser.id : null) || p.name === profileNickname);
+      if (player) {
+        player.title = profileTitle;
+        player.balance = usdBalance;
+        player.wins = wins;
+        player.referrals = referrals;
+        currentPlayerId = player.id;
+        savePlayers();
+      } else {
+        const tgId = telegramUser ? telegramUser.id : null;
+        registerOrUpdatePlayer(profileNickname, usdBalance, wins, referrals, profileTitle, tgId);
+        const newPlayer = players.find(p => p.telegramId === tgId || p.name === profileNickname);
+        if (newPlayer) currentPlayerId = newPlayer.id;
+      }
+
+      if (players.length === 0) {
+        document.getElementById('leaderboardModalContent').innerHTML =
+          `<div style="color:#665555;text-align:center;padding:20px 0;">${t('no_players')}</div>`;
+        return;
+      }
+
+      let sorted = [...players];
+      if (sortBy === 'balance') sorted.sort((a, b) => b.balance - a.balance);
+      else if (sortBy === 'wins') sorted.sort((a, b) => b.wins - a.wins);
+      else if (sortBy === 'refs') sorted.sort((a, b) => b.referrals - a.referrals);
+
+      const labels = {
+        balance: t('balance_short_leader'),
+        wins: t('wins_short'),
+        refs: t('refs_short')
+      };
+
+      let html =
+        `<table class="leaderboard-table"><thead><tr><th>#</th><th>ID</th><th>${t('nickname')}</th><th>${labels[sortBy] || 'Value'}</th><th>${t('title_short')}</th><th>${t('status')}</th></tr></thead><tbody>`;
+      sorted.forEach((player, index) => {
+        const isHighlight = player.id === currentPlayerId;
+        const value = sortBy === 'balance' ? '$' + player.balance.toFixed(2) : sortBy === 'wins' ? player.wins : player
+          .referrals;
+        const playerId = player.id !== undefined ? player.id : '?';
+        const status = player.banned ? '🚫' : '✅';
+        html += `
+          <tr class="${isHighlight ? 'highlight' : ''}" data-player="${encodeURIComponent(player.name)}" data-id="${player.id}">
+            <td class="rank">${index + 1}</td>
+            <td style="color:#665555;font-size:11px;">#${playerId}</td>
+            <td class="name">${player.name}</td>
+            <td class="value">${value}</td>
+            <td style="color:#ffd700;font-size:10px;">${player.title || 'Игрок'}</td>
+            <td style="font-size:10px;">${status}</td>
+          </tr>
+        `;
+      });
+      html += '</tbody></table>';
+      document.getElementById('leaderboardModalContent').innerHTML = html;
+
+      document.querySelectorAll('#leaderboardModalContent .leaderboard-table tbody tr').forEach(row => {
+        row.addEventListener('click', function() {
+          const name = decodeURIComponent(this.dataset.player);
+          const player = players.find(p => p.name === name);
+          if (player) showPlayerCard(player);
+        });
+      });
+    }
+
+    function showPlayerCard(player) {
+      const content = document.getElementById('playerCardContent');
+      if (!content) return;
+
+      const isAdmin = adminAccess;
+      const isSelf = player.id === currentPlayerId;
+
+      let adminHtml = '';
+      if (isAdmin && !isSelf) {
+        adminHtml = `
+          <div class="admin-actions">
+            <div class="admin-label">⚙️ ${t('admin_panel')}</div>
+            <button class="btn btn-warning" onclick="adminGiveBalanceById(${player.id}, 100)">+100 USD</button>
+            <button class="btn btn-warning" onclick="adminGiveBalanceById(${player.id}, 500)">+500 USD</button>
+            <button class="btn btn-danger" onclick="adminTakeBalanceById(${player.id}, 100)">-100 USD</button>
+            <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'Администратор')">👑 ${t('admin_title')}</button>
+            <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'VIP')">⭐ ${t('vip_title')}</button>
+            <button class="btn btn-gray" onclick="adminSetTitleById(${player.id}, 'Игрок')">${t('player_title')}</button>
+            <button class="btn btn-danger" onclick="adminBanPlayerById(${player.id})">🚫 ${t('ban_btn')}</button>
+            <button class="btn btn-success" onclick="adminUnbanPlayerById(${player.id})">✅ ${t('unban_btn')}</button>
+            <button class="btn btn-warning" onclick="adminResetPlayerById(${player.id})">🔄 ${t('reset_account')}</button>
+          </div>
+        `;
+      }
+
+      const playerId = player.id !== undefined ? player.id : '?';
+      const statusText = player.banned ? '🚫 ' + t('banned') : '✅ ' + t('active');
+
+      content.innerHTML = `
+        <div class="player-card">
+          <div class="player-avatar-big">${player.avatar || '👤'}</div>
+          <div class="player-name-big">${player.name}</div>
+          <div class="player-title-big">${player.title || 'Игрок'}</div>
+          <div class="player-row"><span class="label">🆔 ID</span><span class="value gold">#${playerId}</span></div>
+          <div class="player-row"><span class="label">💰 ${t('balance_short')}</span><span class="value gold">$${player.balance.toFixed(2)}</span></div>
+          <div class="player-row"><span class="label">🏆 ${t('wins_short')}</span><span class="value green">${player.wins}</span></div>
+          <div class="player-row"><span class="label">👥 ${t('refs_short')}</span><span class="value">${player.referrals || 0}</span></div>
+          <div class="player-row"><span class="label">📅 ${t('reg_date') || 'Регистрация'}</span><span class="value">${player.regDate || '--'}</span></div>
+          <div class="player-row"><span class="label">🕐 ${t('last_login') || 'Последний вход'}</span><span class="value">${player.lastLogin || '--'}</span></div>
+          <div class="player-row"><span class="label">🎂 ${t('age') || 'Возраст'}</span><span class="value">${player.age || 25} лет</span></div>
+          <div class="player-row"><span class="label">📍 ${t('city') || 'Город'}</span><span class="value">${player.city || 'Не указан'}</span></div>
+          <div class="player-row"><span class="label">📊 ${t('status')}</span><span class="value">${statusText}</span></div>
+          ${player.telegramId ? `<div class="player-row"><span class="label">🆔 Telegram ID</span><span class="value">${player.telegramId}</span></div>` : ''}
+          ${adminHtml}
+        </div>
+      `;
+      document.getElementById('playerCardModalOverlay').classList.add('active');
+    }
+
+    // АДМИН ДЕЙСТВИЯ
+    window.adminGiveBalanceById = function(id, amount) {
+      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
+      player.balance += amount;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        usdBalance = player.balance;
+        const balanceEl = document.getElementById('profileBalance');
+        if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
+        saveData();
+        syncUserData(currentUserId);
+      }
+      alert(`✅ ${player.name} (ID: ${player.id}) +${amount} USD. Новый баланс: $${player.balance.toFixed(2)}`);
+    };
+
+    window.adminTakeBalanceById = function(id, amount) {
+      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
+      if (player.balance < amount) {
+        alert(`❌ ${t('not_enough')}! Доступно: $${player.balance.toFixed(2)}`);
+        return;
+      }
+      player.balance -= amount;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        usdBalance = player.balance;
+        const balanceEl = document.getElementById('profileBalance');
+        if (balanceEl) balanceEl.textContent = usdBalance.toFixed(2) + ' $';
+        saveData();
+        syncUserData(currentUserId);
+      }
+      alert(`✅ ${player.name} (ID: ${player.id}) -${amount} USD. Новый баланс: $${player.balance.toFixed(2)}`);
+    };
+
+    window.adminSetTitleById = function(id, title) {
+      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
+      player.title = title;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        profileTitle = title;
+        const titleDisplay = document.getElementById('profileTitleDisplay');
+        if (titleDisplay) titleDisplay.textContent = title;
+        saveData();
+        syncUserData(currentUserId);
+      }
+      alert(`✅ Титул изменен: ${player.name} (ID: ${player.id}) -> "${title}"`);
+    };
+
+    window.adminBanPlayerById = function(id) {
+      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
+      if (player.banned) { alert('⚠️ ' + t('already_banned') || 'Игрок уже забанен'); return; }
+      player.banned = true;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        isBanned = true;
+        document.getElementById('bannedOverlay').classList.remove('hidden');
+        syncUserData(currentUserId);
+      }
+      alert(`✅ Игрок забанен: ${player.name} (ID: ${player.id})`);
+    };
+
+    window.adminUnbanPlayerById = function(id) {
+      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
+      if (!player.banned) { alert('⚠️ ' + t('not_banned') || 'Игрок не забанен'); return; }
+      player.banned = false;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        isBanned = false;
+        document.getElementById('bannedOverlay').classList.add('hidden');
+        syncUserData(currentUserId);
+      }
+      alert(`✅ Игрок разбанен: ${player.name} (ID: ${player.id})`);
+    };
+
+    window.adminResetPlayerById = function(id) {
+      if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
+      const player = findPlayerById(id);
+      if (!player) { alert('❌ ' + t('player_not_found') || 'Игрок не найден'); return; }
+      if (!confirm(`⚠️ Вы уверены? ${player.name} (ID: ${player.id})? Это действие необратимо!`)) return;
+      const oldBalance = player.balance;
+      player.balance = 0;
+      player.wins = 0;
+      player.referrals = 0;
+      savePlayers();
+      renderLeaderboardModal(document.querySelector('#lbTabsModal .tab.active')?.dataset?.tab || 'balance');
+      updateFoundPlayerInfo();
+      if (player.id === currentPlayerId) {
+        usdBalance = 0;
+        wins = 0;
+        referrals = 0;
+        const balanceEl = document.getElementById('profileBalance');
+        if (balanceEl) balanceEl.textContent = '0.00 $';
+        const winsEl = document.getElementById('profileWins');
+        if (winsEl) winsEl.textContent = '0';
+        saveData();
+        syncUserData(currentUserId);
+        updateUI();
+      }
+      alert(`✅ Аккаунт обнулен ${player.name} (ID: ${player.id}). Было списано $${oldBalance.toFixed(2)}`);
+    };
+
+    // ================================================================
+    // UI ФУНКЦИИ (модалки и пр.)
+    // ================================================================
     function renderQuickAmounts() {
       const container = document.getElementById('quickAmountsContainer');
       if (!container) return;
@@ -3699,13 +2995,8 @@
       alert('✅ ' + t('profile_saved'));
     }
 
-    function openSettings() {
-      document.getElementById('settingsModalOverlay').classList.add('active');
-    }
-
-    function closeSettings() {
-      document.getElementById('settingsModalOverlay').classList.remove('active');
-    }
+    function openSettings() { document.getElementById('settingsModalOverlay').classList.add('active'); }
+    function closeSettings() { document.getElementById('settingsModalOverlay').classList.remove('active'); }
 
     function openDepositModal() {
       document.getElementById('depositModalOverlay').classList.add('active');
@@ -3769,7 +3060,34 @@
       if (success) success.classList.add('hidden');
     }
 
-    // ===== ИНИЦИАЛИЗАЦИЯ =====
+    function initTelegram() {
+      if (window.Telegram && window.Telegram.WebApp) {
+        Telegram.WebApp.expand();
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        if (user) {
+          telegramUser = user;
+          const username = user.username || user.first_name || user.id || 'Игрок';
+          profileNickname = username;
+          try {
+            const saved = localStorage.getItem('wwCasinoData');
+            if (saved) {
+              const data = JSON.parse(saved);
+              data.profileNickname = username;
+              data.telegramId = user.id;
+              localStorage.setItem('wwCasinoData', JSON.stringify(data));
+            } else {
+              localStorage.setItem('wwCasinoData', JSON.stringify({ profileNickname: username, telegramId: user.id }));
+            }
+          } catch (e) {}
+          return user;
+        }
+      }
+      return null;
+    }
+
+    // ================================================================
+    // ИНИЦИАЛИЗАЦИЯ
+    // ================================================================
     document.addEventListener('DOMContentLoaded', async function() {
       // Загрузка языка
       const savedLang = localStorage.getItem('wwLang');
@@ -3789,7 +3107,6 @@
       }
       currentUserId = userId;
 
-      // Показываем уведомление о подключении
       showToast(t('connecting'), 'info');
 
       loadData();
@@ -3807,7 +3124,7 @@
         document.getElementById('bannedOverlay').classList.remove('hidden');
       }
 
-      // Загружаем данные из Firestore
+      // Загружаем данные из Supabase
       await loadUserData(userId);
 
       // ===== ОБРАБОТЧИКИ =====
@@ -3919,7 +3236,7 @@
           }
           const input = document.getElementById('adminAmountGive');
           if (input) input.value = '';
-          alert(`✅ ${player.name} (ID: ${player.id}) +${val} USD. ${t('new_balance') || 'Новый баланс'}: $${player.balance.toFixed(2)}`);
+          alert(`✅ ${player.name} (ID: ${player.id}) +${val} USD. Новый баланс: $${player.balance.toFixed(2)}`);
         } else alert('❌ ' + t('enter_amount'));
       });
 
@@ -3945,7 +3262,7 @@
           }
           const input = document.getElementById('adminAmountGive');
           if (input) input.value = '';
-          alert(`✅ ${player.name} (ID: ${player.id}) +${val} RUB. ${t('new_balance') || 'Новый баланс'}: $${player.balance.toFixed(2)}`);
+          alert(`✅ ${player.name} (ID: ${player.id}) +${val} RUB. Новый баланс: $${player.balance.toFixed(2)}`);
         } else alert('❌ ' + t('enter_amount'));
       });
 
@@ -3957,7 +3274,7 @@
         if (!player) { alert(`❌ ${t('player_not_found') || 'Игрок не найден'} ID ${id}`); return; }
         const val = parseFloat(document.getElementById('adminAmountTake')?.value || 0);
         if (!isNaN(val) && val > 0) {
-          if (player.balance < val) { alert(`❌ ${t('not_enough')} ${t('available_short') || 'Доступно'}: $${player.balance.toFixed(2)}`);
+          if (player.balance < val) { alert(`❌ ${t('not_enough')} Доступно: $${player.balance.toFixed(2)}`);
             return; }
           player.balance -= val;
           savePlayers();
@@ -3972,7 +3289,7 @@
           }
           const input = document.getElementById('adminAmountTake');
           if (input) input.value = '';
-          alert(`✅ ${player.name} (ID: ${player.id}) -${val} USD. ${t('new_balance') || 'Новый баланс'}: $${player.balance.toFixed(2)}`);
+          alert(`✅ ${player.name} (ID: ${player.id}) -${val} USD. Новый баланс: $${player.balance.toFixed(2)}`);
         } else alert('❌ ' + t('enter_amount'));
       });
 
@@ -3985,7 +3302,7 @@
         const val = parseFloat(document.getElementById('adminAmountTake')?.value || 0);
         if (!isNaN(val) && val > 0) {
           const usdAmount = val / EXCHANGE_RATE;
-          if (player.balance < usdAmount) { alert(`❌ ${t('not_enough')} ${t('available_short') || 'Доступно'}: $${player.balance.toFixed(2)}`);
+          if (player.balance < usdAmount) { alert(`❌ ${t('not_enough')} Доступно: $${player.balance.toFixed(2)}`);
             return; }
           player.balance -= usdAmount;
           savePlayers();
@@ -4000,7 +3317,7 @@
           }
           const input = document.getElementById('adminAmountTake');
           if (input) input.value = '';
-          alert(`✅ ${player.name} (ID: ${player.id}) -${val} RUB. ${t('new_balance') || 'Новый баланс'}: $${player.balance.toFixed(2)}`);
+          alert(`✅ ${player.name} (ID: ${player.id}) -${val} RUB. Новый баланс: $${player.balance.toFixed(2)}`);
         } else alert('❌ ' + t('enter_amount'));
       });
 
@@ -4020,7 +3337,7 @@
           document.getElementById('bannedOverlay').classList.remove('hidden');
           syncUserData(currentUserId);
         }
-        alert(`✅ ${t('banned_user') || 'Игрок забанен'}: ${player.name} (ID: ${player.id})`);
+        alert(`✅ Игрок забанен: ${player.name} (ID: ${player.id})`);
       });
 
       document.getElementById('adminUnbanBtn')?.addEventListener('click', function() {
@@ -4039,7 +3356,7 @@
           document.getElementById('bannedOverlay').classList.add('hidden');
           syncUserData(currentUserId);
         }
-        alert(`✅ ${t('unbanned_user') || 'Игрок разбанен'}: ${player.name} (ID: ${player.id})`);
+        alert(`✅ Игрок разбанен: ${player.name} (ID: ${player.id})`);
       });
 
       document.getElementById('adminResetPlayerBtn')?.addEventListener('click', function() {
@@ -4048,8 +3365,7 @@
         const id = parseInt(idInput ? idInput.value : 1);
         const player = findPlayerById(id);
         if (!player) { alert(`❌ ${t('player_not_found') || 'Игрок не найден'} ID ${id}`); return; }
-        if (!confirm(`⚠️ ${t('reset_confirm') || 'Вы уверены?'} ${player.name} (ID: ${player.id})? ${t('irreversible') || 'Это действие необратимо!'}`))
-          return;
+        if (!confirm(`⚠️ Вы уверены? ${player.name} (ID: ${player.id})? Это действие необратимо!`)) return;
         const oldBalance = player.balance;
         player.balance = 0;
         player.wins = 0;
@@ -4069,12 +3385,12 @@
           syncUserData(currentUserId);
           updateUI();
         }
-        alert(`✅ ${t('reset_done') || 'Аккаунт обнулен'} ${player.name} (ID: ${player.id}). ${t('removed') || 'Было списано'} $${oldBalance.toFixed(2)}`);
+        alert(`✅ Аккаунт обнулен ${player.name} (ID: ${player.id}). Было списано $${oldBalance.toFixed(2)}`);
       });
 
       document.getElementById('adminResetLimitBtn')?.addEventListener('click', function() {
         if (!adminAccess) { alert('❌ ' + t('admin_access')); return; }
-        if (confirm('⚠️ ' + (t('reset_limit_confirm') || 'Вы уверены, что хотите сбросить дневной лимит пополнения?'))) {
+        if (confirm('⚠️ Вы уверены, что хотите сбросить дневной лимит пополнения?')) {
           resetDailyLimit();
           alert('✅ ' + t('limit_reset'));
           updateRemainingDisplay();
@@ -4259,32 +3575,6 @@
         initCrashCanvas();
       }
     });
-
-    // Функция для Telegram
-    function initTelegram() {
-      if (window.Telegram && window.Telegram.WebApp) {
-        Telegram.WebApp.expand();
-        const user = Telegram.WebApp.initDataUnsafe.user;
-        if (user) {
-          telegramUser = user;
-          const username = user.username || user.first_name || user.id || 'Игрок';
-          profileNickname = username;
-          try {
-            const saved = localStorage.getItem('wwCasinoData');
-            if (saved) {
-              const data = JSON.parse(saved);
-              data.profileNickname = username;
-              data.telegramId = user.id;
-              localStorage.setItem('wwCasinoData', JSON.stringify(data));
-            } else {
-              localStorage.setItem('wwCasinoData', JSON.stringify({ profileNickname: username, telegramId: user.id }));
-            }
-          } catch (e) {}
-          return user;
-        }
-      }
-      return null;
-    }
   </script>
 </body>
 </html>
