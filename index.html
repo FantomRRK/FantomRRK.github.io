@@ -3601,5 +3601,79 @@
     
     console.log('✅ ФИКС РАБОТАЕТ!');
   </script>
+    <!-- ============================================================ -->
+  <!-- 🔧 ФИНАЛЬНЫЙ ФИКС - ВСЕ КНОПКИ РАБОТАЮТ -->
+  <!-- ============================================================ -->
+  <script>
+    console.log('🚀 ФИНАЛЬНЫЙ ФИКС ЗАГРУЖЕН!');
+    
+    // Ждем загрузки DOM
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('✅ DOM загружен');
+        
+        // Функция для открытия модалок
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.add('active');
+                console.log(`✅ Открыта модалка: ${id}`);
+            } else {
+                console.error(`❌ Модалка не найдена: ${id}`);
+            }
+        }
+        
+        // Функция для закрытия модалок
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('active');
+                console.log(`✅ Закрыта модалка: ${id}`);
+            }
+        }
+        
+        // Навешиваем обработчики на все кнопки
+        document.getElementById('profileBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal('profileModalOverlay');
+        });
+        
+        document.getElementById('settingsBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal('settingsModalOverlay');
+        });
+        
+        document.getElementById('depositBtnHeader')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal('depositModalOverlay');
+        });
+        
+        document.getElementById('leaderboardHeaderBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal('leaderboardModalOverlay');
+        });
+        
+        // Закрытие модалок по крестику
+        document.querySelectorAll('.modal-close-icon').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const modal = this.closest('.modal-overlay');
+                if (modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+        
+        // Закрытие по клику на фон
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+        
+        console.log('✅ Все обработчики повешены!');
+        console.log('✅ Кнопки должны работать!');
+    });
+  </script>
 </body>
 </html>
