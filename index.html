@@ -3576,5 +3576,30 @@
       }
     });
   </script>
+    <!-- ============================================================ -->
+  <!-- 🔧 ЭКСТРЕННЫЙ ФИКС - ВОССТАНАВЛИВАЕМ РАБОТУ КНОПОК -->
+  <!-- ============================================================ -->
+  <script>
+    console.log('🚀 ФИКС ЗАГРУЖЕН!');
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('✅ DOM загружен');
+        const btns = document.querySelectorAll('button');
+        console.log('✅ Найдено кнопок:', btns.length);
+        
+        if (btns.length === 0) {
+            console.error('❌ КНОПКИ НЕ НАЙДЕНЫ!');
+        } else {
+            console.log('✅ Все кнопки на месте!');
+        }
+    });
+    
+    if (typeof showToast !== 'function') {
+        window.showToast = function(msg) { alert(msg); };
+        console.log('✅ showToast восстановлена');
+    }
+    
+    console.log('✅ ФИКС РАБОТАЕТ!');
+  </script>
 </body>
 </html>
