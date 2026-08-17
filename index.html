@@ -3579,104 +3579,156 @@
       }
     });
   </script>
-    <!-- ============================================================ -->
-  <!-- 🔧 ЭКСТРЕННЫЙ ФИКС - ВОССТАНАВЛИВАЕМ РАБОТУ КНОПОК -->
-  <!-- ============================================================ -->
   <script>
-    console.log('🚀 ФИКС ЗАГРУЖЕН!');
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('✅ DOM загружен');
-        const btns = document.querySelectorAll('button');
-        console.log('✅ Найдено кнопок:', btns.length);
-        
-        if (btns.length === 0) {
-            console.error('❌ КНОПКИ НЕ НАЙДЕНЫ!');
-        } else {
-            console.log('✅ Все кнопки на месте!');
-        }
+// ============================================================
+// 🔥 ТОТАЛЬНЫЙ ФИКС — ПЕРЕЗАПУСК ВСЕГО
+// ============================================================
+console.log('🔥 ТОТАЛЬНЫЙ ФИКС ЗАГРУЖЕН');
+
+// Ждём загрузку страницы
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ DOM загружен');
+
+    // === 1. ФИКСИМ ИГРЫ ===
+    document.querySelectorAll('.game-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            const game = this.dataset.game;
+            console.log('🎮 Открываем игру:', game);
+            document.getElementById('gameMenu').style.display = 'none';
+            const target = document.getElementById('game' + game.charAt(0).toUpperCase() + game.slice(1));
+            if (target) target.classList.add('active');
+        });
     });
-    
-    if (typeof showToast !== 'function') {
-        window.showToast = function(msg) { alert(msg); };
-        console.log('✅ showToast восстановлена');
+
+    document.querySelectorAll('.game-back').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('gameMenu').style.display = 'grid';
+            document.querySelectorAll('.game-content').forEach(el => el.classList.remove('active'));
+        });
+    });
+
+    // === 2. ФИКСИМ ТОП ===
+    const leaderboardBtn = document.getElementById('leaderboardHeaderBtn');
+    if (leaderboardBtn) {
+        leaderboardBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🏆 Открываем топ');
+            document.getElementById('leaderboardModalOverlay').classList.add('active');
+            renderLeaderboardModal('balance');
+        });
     }
-    
-    console.log('✅ ФИКС РАБОТАЕТ!');
-  </script>
-    <!-- ============================================================ -->
-  <!-- 🔧 ФИНАЛЬНЫЙ ФИКС - ВСЕ КНОПКИ РАБОТАЮТ -->
-  <!-- ============================================================ -->
-  <script>
-    console.log('🚀 ФИНАЛЬНЫЙ ФИКС ЗАГРУЖЕН!');
-    
-    // Ждем загрузки DOM
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('✅ DOM загружен');
-        
-        // Функция для открытия модалок
-        function openModal(id) {
-            const modal = document.getElementById(id);
-            if (modal) {
-                modal.classList.add('active');
-                console.log(`✅ Открыта модалка: ${id}`);
-            } else {
-                console.error(`❌ Модалка не найдена: ${id}`);
+
+    // === 3. ФИКСИМ ПОПОЛНЕНИЕ ===
+    const depositBtn = document.getElementById('depositBtnHeader');
+    if (depositBtn) {
+        depositBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('💰 Открываем пополнение');
+            document.getElementById('depositModalOverlay').classList.add('active');
+        });
+    }
+
+    const depositConfirm = document.getElementById('depositConfirmBtn');
+    if (depositConfirm) {
+        depositConfirm.addEventListener('click', function() {
+            const amount = parseFloat(document.getElementById('depositAmountInput').value);
+            const currency = document.getElementById('depositCurrencySelect').value;
+            if (isNaN(amount) || amount <= 0) {
+                alert('Введите сумму больше 0');
+                return;
             }
-        }
-        
-        // Функция для закрытия модалок
-        function closeModal(id) {
-            const modal = document.getElementById(id);
-            if (modal) {
-                modal.classList.remove('active');
-                console.log(`✅ Закрыта модалка: ${id}`);
-            }
-        }
-        
-        // Навешиваем обработчики на все кнопки
-        document.getElementById('profileBtn')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            openModal('profileModalOverlay');
+            startDeposit(amount, currency);
         });
-        
-        document.getElementById('settingsBtn')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            openModal('settingsModalOverlay');
+    }
+
+    // Быстрые суммы
+    document.querySelectorAll('.quick-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.quick-item').forEach(el => el.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('depositAmountInput').value = this.dataset.amount;
         });
-        
-        document.getElementById('depositBtnHeader')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            openModal('depositModalOverlay');
-        });
-        
-        document.getElementById('leaderboardHeaderBtn')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            openModal('leaderboardModalOverlay');
-        });
-        
-        // Закрытие модалок по крестику
-        document.querySelectorAll('.modal-close-icon').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const modal = this.closest('.modal-overlay');
-                if (modal) {
-                    modal.classList.remove('active');
-                }
-            });
-        });
-        
-        // Закрытие по клику на фон
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
-            });
-        });
-        
-        console.log('✅ Все обработчики повешены!');
-        console.log('✅ Кнопки должны работать!');
     });
-  </script>
+
+    // === 4. ФИКСИМ ПРОФИЛЬ ===
+    const profileBtn = document.getElementById('profileBtn');
+    if (profileBtn) {
+        profileBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('👤 Открываем профиль');
+            document.getElementById('profileModalOverlay').classList.add('active');
+        });
+    }
+
+    document.getElementById('profileSaveBtn')?.addEventListener('click', function() {
+        const nick = document.getElementById('profileNickname').value.trim();
+        if (nick) profileNickname = nick;
+        saveData();
+        syncUserData(currentUserId);
+        alert('✅ Профиль сохранен!');
+    });
+
+    // === 5. ФИКСИМ НАСТРОЙКИ ===
+    document.getElementById('settingsBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('settingsModalOverlay').classList.add('active');
+    });
+
+    // === 6. ФИКСИМ ВАЛЮТУ (RUB/USD) ===
+    document.getElementById('headerBalance')?.addEventListener('click', function() {
+        showRub = !showRub;
+        updateUI();
+        console.log('💱 Валюта переключена:', showRub ? 'RUB' : 'USD');
+    });
+
+    // === 7. ФИКСИМ ЗАКРЫТИЕ МОДАЛОК ===
+    document.querySelectorAll('.modal-close-icon').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const modal = this.closest('.modal-overlay');
+            if (modal) modal.classList.remove('active');
+        });
+    });
+
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('active');
+        });
+    });
+
+    // === 8. ФИКСИМ РЕФЕРАЛКУ ===
+    document.getElementById('copyRefBtn')?.addEventListener('click', function() {
+        const text = document.getElementById('refLink').textContent;
+        navigator.clipboard?.writeText(text).then(() => {
+            alert('📋 Ссылка скопирована!');
+        }).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            alert('📋 Ссылка скопирована!');
+        });
+    });
+
+    // === 9. ФИКСИМ ИСТОРИЮ ===
+    document.getElementById('showHistoryBtn')?.addEventListener('click', function() {
+        renderFullHistory();
+        document.getElementById('historyModalOverlay').classList.add('active');
+    });
+
+    console.log('✅ ВСЕ КНОПКИ ПОЧИНЕНЫ!');
+});
+
+// === 10. ФИКСИМ ТАЙМЕР ЛИМИТА ===
+setInterval(() => {
+    updateTimerDisplay();
+    updateRemainingDisplay();
+}, 1000);
+
+console.log('🔥 ТОТАЛЬНЫЙ ФИКС ГОТОВ!');
+</script>
 </body>
 </html>
